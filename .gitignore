@@ -1,0 +1,95 @@
+# Arquivos de log e temporários gerados
+*.log
+*.swp
+*.lock
+
+# Arquivos gerados pelo sistema operacional
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Icon?
+ehthumbs.db
+Thumbs.db
+
+# Arquivos de configuração de IDEs e editores
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+.history
+.atom/
+
+# Flutter & Dart - Arquivos gerados pelo Pub e pelo build
+.metadata # <--- ADICIONADO
+.dart_tool/
+.packages
+.pub-cache/
+/build/
+
+# Ferramentas do Flutter
+.flutter-plugins
+.flutter-plugins-dependencies
+
+# Arquivos gerados pelo Android Studio / IntelliJ
+/android/.gradle
+/android/app/build
+/android/app/debug/
+/android/app/profile/
+/android/app/release/
+captures/
+
+# Arquivos gerados pelo Xcode
+/ios/Pods/
+/ios/Flutter/App.framework
+/ios/Flutter/engine
+/ios/Flutter/flutter_assets
+/ios/Flutter/.last_build_id
+/ios/Runner.xcworkspace/
+/ios/Runner/Assets.xcassets/
+/ios/ServiceDefinitions.json
+/ios/Podfile.lock
+/DerivedData/
+.symlinks/
+native_debug.log
+native_debug_xxxx_xx_xx.log
+
+# Arquivos de build para a Web
+/web/.dart_tool/
+/web/build/
+
+# Arquivos de testes de integração e capturas de tela
+integration_test/screenshots/
+Screenshot*.png # <--- ADICIONADO
+Screenshot*.jpeg
+Screenshot*.jpg
+
+# Símbolos de depuração e mapas de ofuscação
+app.*.symbols
+app.*.map.json
+
+#####################################################################
+# ARQUIVOS SENSÍVEIS E DE CONFIGURAÇÃO LOCAL - NÃO ENVIAR!
+#####################################################################
+
+# Chaves de assinatura do Android (essencial para a Play Store)
+/android/app/*.jks
+/android/app/*.keystore
+/android/key.properties
+
+# Chaves de API, segredos e arquivos de ambiente
+*.env
+.env
+.env.*
+!.env.example
+
+# Propriedades locais que podem conter caminhos do SDK ou chaves
+/android/local.properties
+/ios/local.properties
+
+# Configurações de serviços da Google (Firebase, etc.)
+# Cuidado ao adicionar *.json. Se precisar, use um nome específico.
+/android/app/google-services.json -> Este pode ser enviado
+*service-account*.json -> NÃO ENVIE
