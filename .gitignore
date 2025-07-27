@@ -78,6 +78,7 @@ app.*.map.json
 /android/app/*.jks
 /android/app/*.keystore
 /android/key.properties
+/android/keystore/*
 
 # Chaves de API, segredos e arquivos de ambiente
 *.env
