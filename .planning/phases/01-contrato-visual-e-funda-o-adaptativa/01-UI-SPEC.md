@@ -30,6 +30,8 @@ created: 2026-08-10
 
 A assinatura deve ser reconhecível em cinco pontos: seleção da navegação, ação primária, foco de campo, progresso ativo e linha de valor/cópia. Cor não substitui ícone, rótulo ou texto de estado.
 
+**Foco visual:** antes da execução, o campo da tarefa que estiver ativo e a ação primária formam o primeiro plano visual, com o campo identificado pelo anel de foco e a CTA pelo accent reservado. Após a execução, o resultado técnico passa a ser o ponto focal da tela; ações, estado e explicação permanecem visualmente subordinados à evidência produzida.
+
 **Fonte:** decisões D-05 a D-08 e D-11 de `01-CONTEXT.md`; direção fechada neste UI-SPEC por discrição delegada.
 
 ---
@@ -64,8 +66,7 @@ Todos os valores são logical pixels e múltiplos de 4.
 | Token | Value | Usage |
 |-------|-------|-------|
 | `spaceXs` | 4 | lacuna de ícone pequeno, chip e metadado inline |
-| `spaceSm` | 8 | itens relacionados, conteúdo interno de chip, estado e valor |
-| `spaceMdSm` | 12 | ícone + rótulo, botões irmãos e linhas de métrica |
+| `spaceSm` | 8 | itens relacionados, conteúdo interno de chip, ícone + rótulo, botões irmãos e linhas de métrica |
 | `spaceMd` | 16 | padding compacto, campos consecutivos e conteúdo de card compacto |
 | `spaceLg` | 24 | padding de card confortável e separação entre seções |
 | `spaceXl` | 32 | padding de página expandida e grupos principais |
@@ -76,13 +77,13 @@ Todos os valores são logical pixels e múltiplos de 4.
 
 - Padding horizontal de página: 16 em compacta, 24 em média e 32 em expandida.
 - Padding de card: 16 em compacta; 24 quando a largura interna for pelo menos 600.
-- Gap entre campos: 16. Gap entre seções: 24. Gap entre cards de resultado repetidos: 12.
+- Gap entre campos: `spaceMd` (16). Gap entre seções: `spaceLg` (24). Gap entre cards de resultado repetidos: `spaceMd` (16).
 - Padding deve ser simétrico, salvo alinhamento intencional de conteúdo leading em listas.
 - Não usar valores 6, 10, 14, 18, 20 ou outros fora da escala em layout novo.
 
 **Exceptions:** 48 × 48 é tamanho mínimo de alvo de toque, não spacing. Divisores podem ter 1 logical pixel. O anel de foco pode ter 2 logical pixels.
 
-**Fonte:** D-15/D-16 de `01-CONTEXT.md`; escala fechada neste UI-SPEC a partir dos padrões existentes de 8/12/16.
+**Fonte:** D-15/D-16 de `01-CONTEXT.md`; escala fechada neste UI-SPEC nos tokens 4/8/16/24/32/48/64.
 
 ---
 
@@ -345,7 +346,7 @@ Copy é direta, técnica, cordial e em português do Brasil. Preferir voz ativa,
 
 Regras adicionais:
 
-- CTAs de ferramenta usam verbo + objeto: “Calcular rede”, “Analisar capacidade”, “Gerar hashes”. “Calcular” isolado pode permanecer apenas durante a migração incremental da Phase 2.
+- CTAs de ferramenta usam sempre verbo + objeto: “Calcular rede”, “Analisar capacidade”, “Gerar hashes”. “Calcular” isolado não é permitido, inclusive durante a migração incremental da Phase 2.
 - “Limpar” é ação secundária reversível da sessão, sem modal de confirmação; deve ficar disabled quando não houver conteúdo.
 - Não colocar ponto final em labels, títulos ou botões. Mensagens completas usam pontuação.
 - Corrigir cirurgicamente o título atual “Network Calculator” para “Calculadora de Rede” nesta fase; nenhuma outra lógica da tela muda por essa correção.
@@ -396,6 +397,7 @@ Regras adicionais:
 
 - Tema escuro não apresenta body text ou todos os labels em verde; verde ocupa apenas os elementos reservados.
 - Temas claro e escuro mantêm a mesma hierarquia e os mesmos papéis semânticos.
+- Antes da execução, campo ativo + CTA primária constituem o foco visual; após a execução, o resultado técnico assume o foco e os controles permanecem subordinados.
 - Cards estáticos não projetam sombra; borda/surface shift é suficiente para reconhecer a camada.
 - Focus, disabled, error e selected são distinguíveis por forma/ícone/texto e passam contraste.
 
@@ -497,7 +499,7 @@ Somente componentes do Flutter Material SDK e código local entram no contrato. 
 | `01-CONTEXT.md` | D-01 a D-18: navegação, identidade, primitives, estados, responsividade, acessibilidade e teste |
 | `01-RESEARCH.md` | stack Flutter/M3, `LayoutBuilder`, `IndexedStack`, tema semântico, sem package novo, matriz de testes e boundary incremental |
 | `REQUIREMENTS.md` | UI-01 a UI-09 e Definition of Done |
-| Codebase | três destinos atuais, temas claro/escuro, padrões 8/12/16, copy de hash e gaps de responsividade existentes |
+| Codebase | três destinos atuais, temas claro/escuro, padrões de spacing aproveitáveis em 8/16, copy de hash e gaps de responsividade existentes |
 | UI-SPEC defaults | paleta exata, escala 4–64, radius 4/8/12, elevation 0/2, max widths 720/960 e copy canônica |
 
 ---
