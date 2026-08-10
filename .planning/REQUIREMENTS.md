@@ -118,16 +118,59 @@
 
 ## Traceability
 
-Roadmap creation will map every v1 requirement to exactly one phase.
-
 | Requirement | Phase | Status |
 |-------------|-------|--------|
+| UI-01 | Phase 1 | Pending |
+| UI-02 | Phase 1 | Pending |
+| UI-03 | Phase 1 | Pending |
+| UI-04 | Phase 1 | Pending |
+| UI-05 | Phase 1 | Pending |
+| UI-06 | Phase 1 | Pending |
+| UI-07 | Phase 1 | Pending |
+| UI-08 | Phase 1 | Pending |
+| UI-09 | Phase 1 | Pending |
+| PRES-01 | Phase 2 | Pending |
+| PRES-02 | Phase 2 | Pending |
+| PRES-03 | Phase 2 | Pending |
+| PRES-04 | Phase 2 | Pending |
+| DIAG-01 | Phase 3 | Pending |
+| DIAG-02 | Phase 3 | Pending |
+| DIAG-03 | Phase 3 | Pending |
+| DIAG-04 | Phase 3 | Pending |
+| DIAG-05 | Phase 3 | Pending |
+| DIAG-06 | Phase 3 | Pending |
+| DIAG-07 | Phase 3 | Pending |
+| DIAG-08 | Phase 3 | Pending |
+| DIAG-09 | Phase 3 | Pending |
+| DIAG-10 | Phase 3 | Pending |
+| DIAG-11 | Phase 3 | Pending |
+| DIAG-12 | Phase 3 | Pending |
+| DIAG-13 | Phase 3 | Pending |
+| DIAG-14 | Phase 3 | Pending |
+| DIAG-15 | Phase 3 | Pending |
+| QUAL-01 | Phase 3 | Pending |
+| QUAL-02 | Phase 3 | Pending |
+| QUAL-03 | Phase 3 | Pending |
+| QUAL-04 | Phase 3 | Pending |
+| QUAL-05 | Phase 3 | Pending |
+| QUAL-06 | Phase 3 | Pending |
+| QUAL-07 | Phase 3 | Pending |
+| QUAL-08 | Phase 3 | Pending |
+| QUAL-09 | Phase 4 | Pending |
+| DOC-01 | Phase 4 | Pending |
+| DOC-02 | Phase 4 | Pending |
+| DOC-03 | Phase 4 | Pending |
+| DOC-04 | Phase 4 | Pending |
+| GATE-01 | Phase 5 | Pending |
+| GATE-02 | Phase 5 | Pending |
 
 **Coverage:**
 - v1 requirements: 43 total
-- Mapped to phases: 0
-- Unmapped: 43
+- Mapped to phases: 43
+- Unmapped: 0
+- Duplicate mappings: 0
+- v2 `SPD-*` requirements remain outside the current phase mappings.
 
 ---
 *Requirements defined: 2026-08-10*
-*Last updated: 2026-08-10 after initial definition*
+*Last updated: 2026-08-10 after roadmap creation*
