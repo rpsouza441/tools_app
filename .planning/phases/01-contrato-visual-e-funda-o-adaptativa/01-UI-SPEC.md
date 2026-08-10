@@ -1,7 +1,7 @@
 ---
 phase: 1
 slug: contrato-visual-e-funda-o-adaptativa
-status: draft
+status: approved
 shadcn_initialized: false
 preset: none
 created: 2026-08-10
@@ -506,11 +506,11 @@ Somente componentes do Flutter Material SDK e código local entram no contrato. 
 
 ## Checker Sign-Off
 
-- [ ] Dimension 1 Copywriting: PASS
-- [ ] Dimension 2 Visuals: PASS
-- [ ] Dimension 3 Color: PASS
-- [ ] Dimension 4 Typography: PASS
-- [ ] Dimension 5 Spacing: PASS
-- [ ] Dimension 6 Registry Safety: PASS
+- [x] Dimension 1 Copywriting: VERIFIED
+- [x] Dimension 2 Visuals: VERIFIED
+- [x] Dimension 3 Color: VERIFIED
+- [x] Dimension 4 Typography: VERIFIED
+- [x] Dimension 5 Spacing: VERIFIED
+- [x] Dimension 6 Registry Safety: VERIFIED
 
-**Approval:** pending
+**Approval:** approved on 2026-08-10 — UI checker completed with 6/6 dimensions VERIFIED and no recommendations.

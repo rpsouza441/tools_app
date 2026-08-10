@@ -566,21 +566,15 @@ Future<void> copyValue(BuildContext context, String value) async {
 | # | Claim | Section | Risk if Wrong |
 |---|-------|---------|---------------|
 | A1 | Testes alvo por task devem concluir em menos de 30 segundos. | Exact Testing Strategy | Baixo; o planner pode ajustar o sampling sem alterar arquitetura. |
-| A2 | Windows + Flutter 3.44.x deve ser o produtor inicial dos goldens se nenhum CI canônico for definido. | Open Questions | Médio; gerar baselines em host diferente pode causar diffs de rasterização. |
+| A2 | Windows + Flutter 3.44.x é o produtor inicial aprovado dos goldens enquanto não houver CI canônico. | Open Questions (RESOLVED) | Médio; gerar baselines em host diferente pode causar diffs de rasterização. |
 
-Todos os valores visuais discricionários (radius, elevation, spacing e max width) devem ser fechados pelo `01-UI-SPEC.md` após renderização, em vez de serem tratados como fatos nesta pesquisa. [VERIFIED: codebase grep]
+Todos os valores visuais discricionários (radius, elevation, spacing e max width) foram fechados pelo `01-UI-SPEC.md` aprovado e estão registrados abaixo, em vez de permanecerem como suposições desta pesquisa. [VERIFIED: 01-UI-SPEC.md, UI checker 6/6]
 
-## Open Questions
+## Open Questions (RESOLVED)
 
-1. **Quais valores finais de spacing, radius, elevation e max content width o UI-SPEC aprovará?**
-   - What we know: 16 px de padding/spacing e radius 8/12 já aparecem nas screens; o contexto delega a decisão final após validação visual. [VERIFIED: codebase grep]
-   - What's unclear: a combinação final ainda não foi renderizada nem aprovada. [VERIFIED: codebase grep]
-   - Recommendation: o UI-SPEC deve comparar no mínimo 360/720/1024 e então travar uma escala curta; nenhuma task de implementação deve inventar valores fora dela. [VERIFIED: codebase grep]
+1. **RESOLVED — valores finais de spacing, radius, elevation e max content width:** o UI-SPEC aprovado fixa spacing em 4/8/16/24/32/48/64 logical pixels, radius em 4/8/12, elevation 0 para superfícies estáticas e 2 somente para menus, dropdowns e SnackBar, largura máxima de 960 para `ToolScaffold`/resultado amplo e 720 para formulário e texto explicativo. Nenhuma task pode introduzir valores visuais fora desse contrato sem nova revisão explícita do UI-SPEC. [VERIFIED: 01-UI-SPEC.md, UI checker 6/6]
 
-2. **Qual ambiente será canônico para atualizar goldens?**
-   - What we know: custom fonts podem diferir por plataforma e o workspace atual é Windows com Flutter 3.44.0. [CITED: https://api.flutter.dev/flutter/flutter_test/matchesGoldenFile.html] [VERIFIED: local SDK metadata]
-   - What's unclear: não há CI/configuração de golden detectada. [VERIFIED: codebase grep]
-   - Recommendation: declarar Windows + Flutter 3.44.x como produtor inicial ou, se CI futuro usar outro host, gerar/aprovar nele e proibir updates casuais cross-platform. [ASSUMED]
+2. **RESOLVED — ambiente canônico inicial dos goldens:** Windows com Flutter 3.44.x, DPR 1, tamanho físico fixo por baseline, animações concluídas e nenhuma fonte ou rede remota. Atualizações exigem revisão visual explícita nesse ambiente; se um CI futuro se tornar o produtor canônico, os baselines devem ser regenerados e aprovados nele antes de proibir updates cross-platform casuais. [VERIFIED: 01-UI-SPEC.md, UI checker 6/6]
 
 ## Environment Availability
 
