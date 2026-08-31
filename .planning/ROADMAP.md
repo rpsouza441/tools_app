@@ -127,7 +127,7 @@ Gap-closure:
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Contrato visual e fundação adaptativa | 5/11 | Gap-closure planned | - |
+| 1. Contrato visual e fundação adaptativa | 5/11 | Gap-closure pendente | - |
 | 2. Migração segura das ferramentas atuais | 0/TBD | Not started | - |
 | 3. Diagnóstico de Internet completo e resiliente | 0/TBD | Not started | - |
 | 4. Validação Android e documentação transparente | 0/TBD | Not started | - |
