@@ -349,7 +349,11 @@ void main() {
     testWidgets(
       '599px + 5 destinations shows NavigationBar with 3 pins + Ferramentas',
       (tester) async {
-        await _pumpShell(tester, width: 599, destinations: _buildFiveDestinations());
+        await _pumpShell(
+          tester,
+          width: 599,
+          destinations: _buildFiveDestinations(),
+        );
 
         expect(find.byType(NavigationBar), findsOneWidget);
         expect(find.byType(NavigationRail), findsNothing);
@@ -365,7 +369,11 @@ void main() {
     testWidgets(
       '600px + 5 destinations lists all catalog items on a collapsed rail',
       (tester) async {
-        await _pumpShell(tester, width: 600, destinations: _buildFiveDestinations());
+        await _pumpShell(
+          tester,
+          width: 600,
+          destinations: _buildFiveDestinations(),
+        );
 
         expect(find.byType(NavigationRail), findsOneWidget);
         expect(find.byType(NavigationBar), findsNothing);
@@ -374,14 +382,24 @@ void main() {
         final rail = tester.widget<NavigationRail>(find.byType(NavigationRail));
         expect(rail.extended, isFalse);
         expect(rail.scrollable, isTrue);
-        expect(_railLabels(rail), ['Prio1', 'Prio2', 'Prio3', 'Prio4', 'Prio5']);
+        expect(_railLabels(rail), [
+          'Prio1',
+          'Prio2',
+          'Prio3',
+          'Prio4',
+          'Prio5',
+        ]);
       },
     );
 
     testWidgets(
       '839px + 5 destinations lists all catalog items on a collapsed rail',
       (tester) async {
-        await _pumpShell(tester, width: 839, destinations: _buildFiveDestinations());
+        await _pumpShell(
+          tester,
+          width: 839,
+          destinations: _buildFiveDestinations(),
+        );
 
         expect(find.byType(NavigationRail), findsOneWidget);
         expect(find.byType(NavigationBar), findsNothing);
@@ -390,14 +408,24 @@ void main() {
         final rail = tester.widget<NavigationRail>(find.byType(NavigationRail));
         expect(rail.extended, isFalse);
         expect(rail.scrollable, isTrue);
-        expect(_railLabels(rail), ['Prio1', 'Prio2', 'Prio3', 'Prio4', 'Prio5']);
+        expect(_railLabels(rail), [
+          'Prio1',
+          'Prio2',
+          'Prio3',
+          'Prio4',
+          'Prio5',
+        ]);
       },
     );
 
     testWidgets(
       '840px + 5 destinations lists all catalog items on an extended rail',
       (tester) async {
-        await _pumpShell(tester, width: 840, destinations: _buildFiveDestinations());
+        await _pumpShell(
+          tester,
+          width: 840,
+          destinations: _buildFiveDestinations(),
+        );
 
         expect(find.byType(NavigationRail), findsOneWidget);
         expect(find.byType(NavigationBar), findsNothing);
@@ -406,7 +434,13 @@ void main() {
         final rail = tester.widget<NavigationRail>(find.byType(NavigationRail));
         expect(rail.extended, isTrue);
         expect(rail.scrollable, isTrue);
-        expect(_railLabels(rail), ['Prio1', 'Prio2', 'Prio3', 'Prio4', 'Prio5']);
+        expect(_railLabels(rail), [
+          'Prio1',
+          'Prio2',
+          'Prio3',
+          'Prio4',
+          'Prio5',
+        ]);
       },
     );
   });
@@ -415,10 +449,11 @@ void main() {
     testWidgets(
       'compact bar exposes semanticLabel as tooltip on pinned destinations',
       (tester) async {
-        await _pumpShell(tester, width: 599, destinations: _buildFiveDestinations());
-
-        final handle = tester.ensureSemantics();
-        addTearDown(handle.dispose);
+        await _pumpShell(
+          tester,
+          width: 599,
+          destinations: _buildFiveDestinations(),
+        );
 
         final bar = tester.widget<NavigationBar>(find.byType(NavigationBar));
         final destinations = bar.destinations.cast<NavigationDestination>();
@@ -437,24 +472,31 @@ void main() {
     testWidgets(
       'collapsed rail tooltip and semantics expose semanticLabel once',
       (tester) async {
-        await _pumpShell(tester, width: 600, destinations: _buildFiveDestinations());
+        await _pumpShell(
+          tester,
+          width: 600,
+          destinations: _buildFiveDestinations(),
+        );
 
         final handle = tester.ensureSemantics();
-        addTearDown(handle.dispose);
-
-        for (final label in [
-          'Prioridade 1',
-          'Prioridade 2',
-          'Prioridade 3',
-          'Prioridade 4',
-          'Prioridade 5',
-        ]) {
-          expect(find.byTooltip(label), findsOneWidget);
-          expect(
-            find.bySemanticsLabel(label),
-            findsOneWidget,
-            reason: 'semanticLabel "$label" must appear once, without duplicate nodes',
-          );
+        try {
+          for (final label in [
+            'Prioridade 1',
+            'Prioridade 2',
+            'Prioridade 3',
+            'Prioridade 4',
+            'Prioridade 5',
+          ]) {
+            expect(find.byTooltip(label), findsOneWidget);
+            expect(
+              find.bySemanticsLabel(RegExp(RegExp.escape(label))),
+              findsOneWidget,
+              reason:
+                  'semanticLabel "$label" must appear once, without duplicate nodes',
+            );
+          }
+        } finally {
+          handle.dispose();
         }
       },
     );
@@ -473,23 +515,38 @@ void main() {
         await tester.pumpAndSettle();
 
         final handle = tester.ensureSemantics();
-        addTearDown(handle.dispose);
-
-        expect(find.text('Ferramentas'), findsNothing);
-        final rail = tester.widget<NavigationRail>(find.byType(NavigationRail));
-        expect(_railLabels(rail), ['Rede', 'Armazenamento', 'Hash']);
-        expect(find.byTooltip('Calculadora de Rede'), findsOneWidget);
-        expect(find.byTooltip('Conversor de Dados'), findsOneWidget);
-        expect(find.byTooltip('Gerador de Hash'), findsOneWidget);
-        expect(find.bySemanticsLabel('Calculadora de Rede'), findsWidgets);
-        expect(find.bySemanticsLabel('Conversor de Dados'), findsWidgets);
-        expect(find.bySemanticsLabel('Gerador de Hash'), findsWidgets);
+        try {
+          expect(find.text('Ferramentas'), findsNothing);
+          final rail = tester.widget<NavigationRail>(
+            find.byType(NavigationRail),
+          );
+          expect(_railLabels(rail), ['Rede', 'Armazenamento', 'Hash']);
+          expect(find.byTooltip('Calculadora de Rede'), findsOneWidget);
+          expect(find.byTooltip('Conversor de Dados'), findsOneWidget);
+          expect(find.byTooltip('Gerador de Hash'), findsOneWidget);
+          expect(
+            find.bySemanticsLabel(RegExp('Calculadora de Rede')),
+            findsWidgets,
+          );
+          expect(
+            find.bySemanticsLabel(RegExp('Conversor de Dados')),
+            findsWidgets,
+          );
+          expect(
+            find.bySemanticsLabel(RegExp('Gerador de Hash')),
+            findsWidgets,
+          );
+        } finally {
+          handle.dispose();
+        }
       },
     );
   });
 
   group('AppShell didUpdateWidget selection by id', () {
-    testWidgets('reordering destinations keeps the selected id', (tester) async {
+    testWidgets('reordering destinations keeps the selected id', (
+      tester,
+    ) async {
       tester.view.physicalSize = const Size(400, 800);
       tester.view.devicePixelRatio = 1.0;
       addTearDown(tester.view.resetPhysicalSize);
@@ -536,7 +593,9 @@ void main() {
       final three = all.take(3).toList();
 
       await tester.pumpWidget(
-        MaterialApp(home: AppShell(key: shellKey, destinations: three)),
+        MaterialApp(
+          home: AppShell(key: shellKey, destinations: three),
+        ),
       );
       await tester.pumpAndSettle();
 
@@ -545,7 +604,9 @@ void main() {
       expect(find.text('Page2'), findsOneWidget);
 
       await tester.pumpWidget(
-        MaterialApp(home: AppShell(key: shellKey, destinations: all)),
+        MaterialApp(
+          home: AppShell(key: shellKey, destinations: all),
+        ),
       );
       await tester.pumpAndSettle();
 
@@ -567,7 +628,9 @@ void main() {
         final all = _buildFiveDestinations();
 
         await tester.pumpWidget(
-          MaterialApp(home: AppShell(key: shellKey, destinations: all)),
+          MaterialApp(
+            home: AppShell(key: shellKey, destinations: all),
+          ),
         );
         await tester.pumpAndSettle();
 

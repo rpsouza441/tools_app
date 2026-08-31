@@ -22,10 +22,10 @@ class AppDestination {
   /// Stable, unique identifier for this destination.
   final String id;
 
-  /// pt-BR label shown in navigation items.
+  /// Short pt-BR label shown in navigation items.
   final String label;
 
-  /// Accessibility label for screen readers.
+  /// Full name for tooltips and screen readers.
   final String semanticLabel;
 
   /// Icon shown when the destination is not selected.
@@ -47,10 +47,10 @@ class AppDestination {
 }
 
 /// The canonical list of app destinations in display order.
-final List<AppDestination> appDestinations = [
+final List<AppDestination> appDestinations = List.unmodifiable([
   AppDestination(
     id: 'network_calculator',
-    label: 'Calculadora de Rede',
+    label: 'Rede',
     semanticLabel: 'Calculadora de Rede',
     icon: Icons.network_check_outlined,
     selectedIcon: Icons.network_check,
@@ -60,7 +60,7 @@ final List<AppDestination> appDestinations = [
   ),
   AppDestination(
     id: 'data_converter',
-    label: 'Conversor de Dados',
+    label: 'Armazenamento',
     semanticLabel: 'Conversor de Dados',
     icon: Icons.storage_outlined,
     selectedIcon: Icons.storage,
@@ -70,7 +70,7 @@ final List<AppDestination> appDestinations = [
   ),
   AppDestination(
     id: 'hash_generator',
-    label: 'Gerador de Hash',
+    label: 'Hash',
     semanticLabel: 'Gerador de Hash',
     icon: Icons.tag_outlined,
     selectedIcon: Icons.tag,
@@ -78,7 +78,7 @@ final List<AppDestination> appDestinations = [
     compactPriority: 3,
     pageBuilder: _buildHashGenerator,
   ),
-];
+]);
 
 Widget _buildNetworkCalculator(BuildContext context) =>
     const NetworkCalculatorScreen();

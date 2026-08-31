@@ -7,8 +7,8 @@ import 'package:tools_app/design_system/app_breakpoints.dart';
 ///
 /// Uses [IndexedStack] to preserve page state across navigation and resizes.
 ///
-/// When [destinations] has 5+ items, only the 3 with lowest [compactPriority]
-/// are pinned; the rest are collected under a "Ferramentas" overflow item.
+/// Overflow ("Ferramentas") applies only to the compact [NavigationBar] when
+/// [destinations] has 5+ items. Medium and expanded rails list the full catalog.
 class AppShell extends StatefulWidget {
   const AppShell({super.key, required this.destinations});
 
@@ -19,14 +19,18 @@ class AppShell extends StatefulWidget {
 }
 
 class _AppShellState extends State<AppShell> {
-  int _selectedIndex = 0;
+  late String _selectedId;
+  final Map<String, Widget> _pagesById = {};
 
-  /// Whether overflow mode is active (5+ destinations).
-  bool get _useOverflow => widget.destinations.length > 4;
+  /// GlobalKey for IndexedStack to preserve state across layout changes.
+  final GlobalKey _stackKey = GlobalKey();
+
+  /// Whether compact NavigationBar overflow is active (5+ destinations).
+  bool get _barUsesOverflow => widget.destinations.length > 4;
 
   /// The pinned destinations (top 3 by compactPriority) when in overflow mode.
   List<AppDestination> get _pinnedDestinations {
-    if (!_useOverflow) return widget.destinations;
+    if (!_barUsesOverflow) return widget.destinations;
     final sorted = List<AppDestination>.from(widget.destinations)
       ..sort((a, b) => a.compactPriority.compareTo(b.compactPriority));
     return sorted.take(3).toList();
@@ -34,64 +38,89 @@ class _AppShellState extends State<AppShell> {
 
   /// The overflow destinations (not pinned) when in overflow mode.
   List<AppDestination> get _overflowDestinations {
-    if (!_useOverflow) return [];
-    final pinned = _pinnedDestinations;
-    return widget.destinations.where((d) => !pinned.contains(d)).toList();
+    if (!_barUsesOverflow) return [];
+    final pinnedIds = _pinnedDestinations.map((d) => d.id).toSet();
+    return widget.destinations.where((d) => !pinnedIds.contains(d.id)).toList();
   }
 
-  /// Maps the selected index to the actual destination index in widget.destinations.
-  int get _actualDestinationIndex {
-    if (!_useOverflow) return _selectedIndex;
-    if (_selectedIndex < _pinnedDestinations.length) {
-      // Find the index in widget.destinations for this pinned destination
-      final pinned = _pinnedDestinations[_selectedIndex];
-      return widget.destinations.indexOf(pinned);
-    }
-    // Ferramentas is selected — show the last selected overflow item
-    return _overflowSelectedActualIndex;
+  int get _catalogIndex {
+    final index = widget.destinations.indexWhere((d) => d.id == _selectedId);
+    if (index >= 0) return index;
+    return 0;
   }
 
-  /// Tracks which overflow item is currently selected (actual index).
-  int _overflowSelectedActualIndex = -1;
+  int get _barSelectedIndex {
+    if (!_barUsesOverflow) return _catalogIndex;
+    final pinIndex = _pinnedDestinations.indexWhere((d) => d.id == _selectedId);
+    if (pinIndex >= 0) return pinIndex;
+    return _pinnedDestinations.length;
+  }
 
-  late List<Widget> _pages;
-
-  /// GlobalKey for IndexedStack to preserve state across layout changes.
-  final GlobalKey _stackKey = GlobalKey();
+  List<Widget> get _pages {
+    return [
+      for (final destination in widget.destinations)
+        _pagesById[destination.id]!,
+    ];
+  }
 
   @override
   void initState() {
     super.initState();
-    _buildPages();
-    if (_useOverflow) {
-      // Default overflow selection to first overflow item
-      _overflowSelectedActualIndex = widget.destinations.indexOf(
-        _overflowDestinations.first,
-      );
-    }
+    _selectedId = widget.destinations.first.id;
+    _reconcilePages();
   }
 
   @override
   void didUpdateWidget(AppShell oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.destinations != widget.destinations) {
-      _buildPages();
+    if (!_sameCatalog(oldWidget.destinations, widget.destinations)) {
+      _reconcilePages();
+      _normalizeSelection();
     }
   }
 
-  void _buildPages() {
-    _pages = widget.destinations.map((d) => d.pageBuilder(context)).toList();
+  bool _sameCatalog(List<AppDestination> previous, List<AppDestination> next) {
+    if (identical(previous, next)) return true;
+    if (previous.length != next.length) return false;
+    for (var i = 0; i < previous.length; i++) {
+      if (previous[i].id != next[i].id) return false;
+    }
+    return true;
   }
 
-  void _onDestinationSelected(int index) {
+  void _reconcilePages() {
+    final nextIds = widget.destinations.map((d) => d.id).toSet();
+    _pagesById.removeWhere((id, _) => !nextIds.contains(id));
+    for (final destination in widget.destinations) {
+      _pagesById.putIfAbsent(
+        destination.id,
+        () => destination.pageBuilder(context),
+      );
+    }
+  }
+
+  void _normalizeSelection() {
+    if (widget.destinations.isEmpty) return;
+    if (!widget.destinations.any((d) => d.id == _selectedId)) {
+      _selectedId = widget.destinations.first.id;
+    }
+  }
+
+  void _onBarDestinationSelected(int index) {
+    if (_barUsesOverflow && index == _pinnedDestinations.length) {
+      _showOverflowMenu();
+      return;
+    }
     setState(() {
-      if (_useOverflow && index == _pinnedDestinations.length) {
-        // Ferramentas tapped — show overflow menu
-        _selectedIndex = index;
-        _showOverflowMenu();
-      } else {
-        _selectedIndex = index;
-      }
+      _selectedId = _barUsesOverflow
+          ? _pinnedDestinations[index].id
+          : widget.destinations[index].id;
+    });
+  }
+
+  void _onRailDestinationSelected(int index) {
+    setState(() {
+      _selectedId = widget.destinations[index].id;
     });
   }
 
@@ -99,7 +128,6 @@ class _AppShellState extends State<AppShell> {
     showModalBottomSheet<void>(
       context: context,
       builder: (sheetContext) {
-        // Group by category
         final grouped = <AppDestinationCategory, List<AppDestination>>{};
         for (final d in _overflowDestinations) {
           grouped.putIfAbsent(d.category, () => []).add(d);
@@ -125,10 +153,7 @@ class _AppShellState extends State<AppShell> {
                     onTap: () {
                       Navigator.pop(sheetContext);
                       setState(() {
-                        _overflowSelectedActualIndex = widget.destinations
-                            .indexOf(d);
-                        // Keep Ferramentas selected
-                        _selectedIndex = _pinnedDestinations.length;
+                        _selectedId = d.id;
                       });
                     },
                   ),
@@ -146,9 +171,7 @@ class _AppShellState extends State<AppShell> {
     return LayoutBuilder(
       builder: (context, constraints) {
         final widthClass = AppBreakpoints.classify(constraints.maxWidth);
-        final pageIndex = _useOverflow
-            ? _actualDestinationIndex
-            : _selectedIndex;
+        final pageIndex = _catalogIndex;
 
         final body = IndexedStack(
           key: _stackKey,
@@ -190,13 +213,14 @@ class _AppShellState extends State<AppShell> {
   NavigationBar _buildNavigationBar() {
     final destinations = <NavigationDestination>[];
 
-    if (_useOverflow) {
+    if (_barUsesOverflow) {
       for (final d in _pinnedDestinations) {
         destinations.add(
           NavigationDestination(
             icon: Icon(d.icon),
             selectedIcon: Icon(d.selectedIcon),
             label: d.label,
+            tooltip: d.semanticLabel,
           ),
         );
       }
@@ -214,54 +238,58 @@ class _AppShellState extends State<AppShell> {
             icon: Icon(d.icon),
             selectedIcon: Icon(d.selectedIcon),
             label: d.label,
+            tooltip: d.semanticLabel,
           ),
         );
       }
     }
 
     return NavigationBar(
-      selectedIndex: _selectedIndex,
-      onDestinationSelected: _onDestinationSelected,
+      selectedIndex: _barSelectedIndex,
+      onDestinationSelected: _onBarDestinationSelected,
       destinations: destinations,
     );
   }
 
-  NavigationRail _buildNavigationRail({required bool extended}) {
-    final railDestinations = <NavigationRailDestination>[];
+  Widget _railIcon(
+    AppDestination destination, {
+    required bool selected,
+    required bool extended,
+  }) {
+    final icon = Icon(
+      selected ? destination.selectedIcon : destination.icon,
+      semanticLabel: extended ? null : destination.semanticLabel,
+    );
+    if (extended) return icon;
+    return Tooltip(
+      message: destination.semanticLabel,
+      excludeFromSemantics: true,
+      child: icon,
+    );
+  }
 
-    if (_useOverflow) {
-      for (final d in _pinnedDestinations) {
-        railDestinations.add(
-          NavigationRailDestination(
-            icon: Icon(d.icon),
-            selectedIcon: Icon(d.selectedIcon),
-            label: Text(d.label),
+  NavigationRail _buildNavigationRail({required bool extended}) {
+    final railDestinations = <NavigationRailDestination>[
+      for (final destination in widget.destinations)
+        NavigationRailDestination(
+          icon: _railIcon(destination, selected: false, extended: extended),
+          selectedIcon: _railIcon(
+            destination,
+            selected: true,
+            extended: extended,
           ),
-        );
-      }
-      railDestinations.add(
-        const NavigationRailDestination(
-          icon: Icon(Icons.build_outlined),
-          selectedIcon: Icon(Icons.build),
-          label: Text('Ferramentas'),
+          label: Text(
+            destination.label,
+            semanticsLabel: extended ? destination.semanticLabel : null,
+          ),
         ),
-      );
-    } else {
-      for (final d in widget.destinations) {
-        railDestinations.add(
-          NavigationRailDestination(
-            icon: Icon(d.icon),
-            selectedIcon: Icon(d.selectedIcon),
-            label: Text(d.label),
-          ),
-        );
-      }
-    }
+    ];
 
     return NavigationRail(
       extended: extended,
-      selectedIndex: _selectedIndex,
-      onDestinationSelected: _onDestinationSelected,
+      scrollable: true,
+      selectedIndex: _catalogIndex,
+      onDestinationSelected: _onRailDestinationSelected,
       destinations: railDestinations,
     );
   }
