@@ -12,13 +12,12 @@ Oferecer diagnósticos técnicos úteis e honestos em uma interface clara, sem o
 
 ### Validated
 
-(None yet — ship to validate)
+- ✓ Modernizar a arquitetura visual e a navegação do aplicativo com Material 3, temas claro/escuro, responsividade e acessibilidade, sem reescrita total. — Phase 1 (fundação compartilhada; telas de produção migram na Phase 2)
+- ✓ Criar componentes reutilizáveis para entrada, execução, métricas, resultados, cópia, carregamento e estados de falha. — Phase 1
 
 ### Active
 
-- [ ] Modernizar a arquitetura visual e a navegação do aplicativo com Material 3, temas claro/escuro, responsividade e acessibilidade, sem reescrita total.
 - [ ] Preservar e migrar sem regressões a calculadora IPv4, o conversor de armazenamento e o gerador de hashes.
-- [ ] Criar componentes reutilizáveis para entrada, execução, métricas, resultados, cópia, carregamento e estados de falha.
 - [ ] Entregar diagnóstico básico de conectividade com transporte, IPv4 local, IP público, gateway quando disponível e testes de alcance/latência com método explicitado.
 - [ ] Suportar múltiplas amostras, mínimo/média/máximo, perdas ou falhas, resultados parciais, última execução e resumo copiável/compartilhável.
 - [ ] Garantir timeout, cancelamento, lifecycle Android e lógica de medição testável fora dos widgets.
@@ -63,7 +62,7 @@ Oferecer diagnósticos técnicos úteis e honestos em uma interface clara, sem o
 
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
-| Evoluir a UI antes ou em fatias compatíveis com o diagnóstico, sem reescrita total | Reduz risco e mantém as ferramentas atuais utilizáveis durante a migração | — Pending |
+| Evoluir a UI antes ou em fatias compatíveis com o diagnóstico, sem reescrita total | Reduz risco e mantém as ferramentas atuais utilizáveis durante a migração | Phase 1 entregou shell adaptativo, tokens, primitives e galeria; as três telas migram na Phase 2 |
 | Tratar conectividade, gateway, IP público e probes como adaptadores independentes | Isola limitações de plataforma e torna falhas, fallbacks e testes controláveis | — Pending |
 | Exibir o método real de latência em vez de chamar todo probe de ping | Evita alegações tecnicamente incorretas e melhora a confiança do usuário | — Pending |
 | Condicionar speed test a infraestrutura legal, estável e testável | Evita dependência frágil, custos imprevistos e resultados enganosos | — Pending |
@@ -87,4 +86,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-08-10 after initialization*
+*Last updated: 2026-08-31 after Phase 1*

@@ -11,7 +11,7 @@ Este milestone evolui o aplicativo sem reescrita total: primeiro estabelece e im
 - Integer phases (1, 2, 3): planned milestone work
 - Decimal phases (2.1, 2.2): urgent insertions, marked as `INSERTED`
 
-- [ ] **Phase 1: Contrato visual e fundação adaptativa** - Definir o UI-SPEC e tornar a base visual, a navegação e os estados compartilhados adaptativos e acessíveis.
+- [x] **Phase 1: Contrato visual e fundação adaptativa** - Definir o UI-SPEC e tornar a base visual, a navegação e os estados compartilhados adaptativos e acessíveis. (completed 2026-08-31)
 - [ ] **Phase 2: Migração segura das ferramentas atuais** - Levar as três ferramentas existentes à nova fundação sem perda funcional.
 - [ ] **Phase 3: Diagnóstico de Internet completo e resiliente** - Entregar o fluxo de diagnóstico transparente, progressivo, cancelável e testável de ponta a ponta.
 - [ ] **Phase 4: Validação Android e documentação transparente** - Comprovar os cenários Android reais e documentar capacidades, permissões, terceiros e privacidade.
@@ -32,7 +32,7 @@ Este milestone evolui o aplicativo sem reescrita total: primeiro estabelece e im
   3. Usuário pode operar a interface em tema claro ou escuro, sempre em português do Brasil, sem perder contraste, significado ou confirmação acessível ao copiar valores.
   4. Usuário pode usar alvos de toque acessíveis, leitor de tela e fonte ampliada sem perder conteúdo, ações ou compreensão em larguras compactas e largas.
 
-**Plans:** 11/11 plans executed
+**Plans:** 11/11 plans complete
 
 Executed (original):
 
@@ -132,7 +132,7 @@ Gap-closure:
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Contrato visual e fundação adaptativa | 11/11 | Awaiting verification |  |
+| 1. Contrato visual e fundação adaptativa | 11/11 | Complete    | 2026-08-31 |
 | 2. Migração segura das ferramentas atuais | 0/TBD | Not started | - |
 | 3. Diagnóstico de Internet completo e resiliente | 0/TBD | Not started | - |
 | 4. Validação Android e documentação transparente | 0/TBD | Not started | - |
