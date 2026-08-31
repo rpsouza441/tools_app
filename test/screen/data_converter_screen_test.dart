@@ -128,7 +128,10 @@ void main() {
         await tester.pumpAndSettle();
 
         expect(find.text('Por que a capacidade parece menor?'), findsOneWidget);
-        expect(find.text('931 GiB'), findsOneWidget);
+        expect(
+          find.textContaining('931 GiB', findRichText: true),
+          findsOneWidget,
+        );
       },
     );
   });

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tools_app/main.dart';
+import 'package:tools_app/screen/data_converter_screen.dart';
 import 'package:tools_app/screen/hash_generator_screen.dart';
 import 'package:tools_app/screen/network_calculator_screen.dart';
 import 'package:tools_app/theme/theme.dart';
@@ -66,12 +67,18 @@ void main() {
 
         expect(
           find.descendant(
-            of: find.byType(AppBar),
+            of: find.byType(DataConverterScreen),
             matching: find.text('Conversor de Armazenamento'),
           ),
           findsOneWidget,
         );
-        expect(find.text('Analisar Capacidade'), findsOneWidget);
+        expect(
+          find.descendant(
+            of: find.byType(DataConverterScreen),
+            matching: find.text('Analisar capacidade'),
+          ),
+          findsOneWidget,
+        );
         expect(
           find.widgetWithText(TextField, 'Valor Anunciado'),
           findsOneWidget,
