@@ -111,7 +111,30 @@ Gap-closure:
   4. Usuário consulta o último resultado da sessão e copia ou compartilha um resumo com timestamp, contexto de rede, métricas, proveniência, falhas e limitações, sem criar histórico persistente.
   5. Usuário utiliza o diagnóstico sem localização, telemetria ou envio de resultados a analytics e recebe comportamento previsível em sucesso, timeout, offline, resposta inválida, cancelamento, troca de rede, lifecycle e falhas parciais.
 
-**Plans:** TBD
+**Plans:** 7 plans
+
+**Wave 1**
+
+- [ ] 03-01-PLAN.md — Contratos, sessão com stubs e testes de domínio
+- [ ] 03-02-PLAN.md — Snapshot Android (Kotlin + canal) e permissões main
+
+**Wave 2** *(blocked on 03-01)*
+
+- [ ] 03-03-PLAN.md — Destino Diagnóstico e tela Iniciar/Cancelar/Repetir
+- [ ] 03-04-PLAN.md — dio e IPv4 público (ipify)
+
+**Wave 3** *(blocked on 03-04)*
+
+- [ ] 03-05-PLAN.md — Probes TCP do gateway e HTTPS de internet
+
+**Wave 4** *(blocked on 03-02, 03-03, 03-04, 03-05)*
+
+- [ ] 03-06-PLAN.md — Bindings de produção e honestidade da UI
+
+**Wave 5** *(blocked on 03-06)*
+
+- [ ] 03-07-PLAN.md — Lifecycle, troca de rede, copiar/compartilhar, QUAL-08
+
 **UI hint:** yes
 
 ### Phase 4: Validação Android e documentação transparente
@@ -151,7 +174,7 @@ Gap-closure:
 |-------|----------------|--------|-----------|
 | 1. Contrato visual e fundação adaptativa | 11/11 | Complete    | 2026-08-31 |
 | 2. Migração segura das ferramentas atuais | 4/4 | Complete    | 2026-08-31 |
-| 3. Diagnóstico de Internet completo e resiliente | 0/TBD | Not started | - |
+| 3. Diagnóstico de Internet completo e resiliente | 0/7 | Not started | - |
 | 4. Validação Android e documentação transparente | 0/TBD | Not started | - |
 | 5. Gate de viabilidade do speed test | 0/TBD | Not started | - |
 
