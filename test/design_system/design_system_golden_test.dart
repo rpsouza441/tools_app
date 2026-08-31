@@ -8,6 +8,12 @@ import 'design_system_gallery.dart';
 
 /// Golden tests for design system visual regression protection.
 ///
+/// Canonical golden path (override of 01-04-PLAN frontmatter `test/goldens/`):
+/// `matchesGoldenFile('goldens/....png')` resolves relative to this file as
+/// `test/design_system/goldens/`. That is the only canonical location.
+/// Do NOT create `test/goldens/`. PNG regeneration is not visual approval
+/// (plan 01-11).
+///
 /// Produces 4 baseline PNGs:
 /// - primitives_compact_light: 360x800, light theme, gallery only
 /// - primitives_compact_dark: 360x800, dark theme, gallery only
@@ -109,8 +115,9 @@ void main() {
   });
 }
 
-/// Fake destinations for golden tests.
-/// Uses simple widgets as pages to avoid production screen dependencies.
+/// Five catalog-order destinations for golden fixtures.
+/// Page 0 is the gallery. Short labels + full semanticLabels.
+/// Avoids production screen dependencies.
 final List<AppDestination> _fakeDestinations = [
   AppDestination(
     id: 'gallery',
@@ -123,23 +130,43 @@ final List<AppDestination> _fakeDestinations = [
     pageBuilder: (_) => const DesignSystemGallery(),
   ),
   AppDestination(
-    id: 'page_two',
-    label: 'Página 2',
-    semanticLabel: 'Página de Teste 2',
-    icon: Icons.science_outlined,
-    selectedIcon: Icons.science,
-    category: AppDestinationCategory.armazenamento,
+    id: 'network_calculator',
+    label: 'Rede',
+    semanticLabel: 'Calculadora de Rede',
+    icon: Icons.network_check_outlined,
+    selectedIcon: Icons.network_check,
+    category: AppDestinationCategory.rede,
     compactPriority: 2,
-    pageBuilder: (_) => const Center(child: Text('Página 2')),
+    pageBuilder: (_) => const Center(child: Text('Rede')),
   ),
   AppDestination(
-    id: 'page_three',
-    label: 'Página 3',
-    semanticLabel: 'Página de Teste 3',
-    icon: Icons.settings_outlined,
-    selectedIcon: Icons.settings,
-    category: AppDestinationCategory.hash,
+    id: 'data_converter',
+    label: 'Armazenamento',
+    semanticLabel: 'Conversor de Dados',
+    icon: Icons.storage_outlined,
+    selectedIcon: Icons.storage,
+    category: AppDestinationCategory.armazenamento,
     compactPriority: 3,
-    pageBuilder: (_) => const Center(child: Text('Página 3')),
+    pageBuilder: (_) => const Center(child: Text('Armazenamento')),
+  ),
+  AppDestination(
+    id: 'hash_generator',
+    label: 'Hash',
+    semanticLabel: 'Gerador de Hash',
+    icon: Icons.tag_outlined,
+    selectedIcon: Icons.tag,
+    category: AppDestinationCategory.hash,
+    compactPriority: 4,
+    pageBuilder: (_) => const Center(child: Text('Hash')),
+  ),
+  AppDestination(
+    id: 'extra',
+    label: 'Extra',
+    semanticLabel: 'Destino extra de teste',
+    icon: Icons.science_outlined,
+    selectedIcon: Icons.science,
+    category: AppDestinationCategory.rede,
+    compactPriority: 5,
+    pageBuilder: (_) => const Center(child: Text('Extra')),
   ),
 ];

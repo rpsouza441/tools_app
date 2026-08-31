@@ -1,97 +1,96 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:tools_app/app/app_destinations.dart';
+import 'package:tools_app/app/app_shell.dart';
 import 'package:tools_app/design_system/app_tokens.dart';
+import 'package:tools_app/design_system/copy_value_action.dart';
+import 'package:tools_app/design_system/tool_scaffold.dart';
+import 'package:tools_app/design_system/tool_sections.dart';
+import 'package:tools_app/design_system/tool_status_panel.dart';
 import 'package:tools_app/theme/theme.dart';
 
 import 'design_system_gallery.dart';
 
-/// Minimal fixture destinations for accessibility testing.
-/// Avoids production screen dependencies for isolation.
-const _fixtureDestinations = [
-  _FakeDestination(
+/// Five catalog-order [AppDestination]s for the public a11y fixture.
+/// Page 0 is [DesignSystemGallery]. Short labels + full [semanticLabel]s.
+final List<AppDestination> _publicDestinations = [
+  AppDestination(
+    id: 'gallery',
+    label: 'Galeria',
+    semanticLabel: 'Galeria de Componentes',
+    icon: Icons.palette_outlined,
+    selectedIcon: Icons.palette,
+    category: AppDestinationCategory.rede,
+    compactPriority: 1,
+    pageBuilder: (_) => const DesignSystemGallery(),
+  ),
+  AppDestination(
+    id: 'network_calculator',
     label: 'Rede',
     semanticLabel: 'Calculadora de Rede',
     icon: Icons.network_check_outlined,
     selectedIcon: Icons.network_check,
+    category: AppDestinationCategory.rede,
+    compactPriority: 2,
+    pageBuilder: (_) => const Center(child: Text('Rede')),
   ),
-  _FakeDestination(
-    label: 'Dados',
+  AppDestination(
+    id: 'data_converter',
+    label: 'Armazenamento',
     semanticLabel: 'Conversor de Dados',
     icon: Icons.storage_outlined,
     selectedIcon: Icons.storage,
+    category: AppDestinationCategory.armazenamento,
+    compactPriority: 3,
+    pageBuilder: (_) => const Center(child: Text('Armazenamento')),
   ),
-  _FakeDestination(
+  AppDestination(
+    id: 'hash_generator',
     label: 'Hash',
     semanticLabel: 'Gerador de Hash',
     icon: Icons.tag_outlined,
     selectedIcon: Icons.tag,
+    category: AppDestinationCategory.hash,
+    compactPriority: 4,
+    pageBuilder: (_) => const Center(child: Text('Hash')),
+  ),
+  AppDestination(
+    id: 'extra',
+    label: 'Extra',
+    semanticLabel: 'Destino extra de teste',
+    icon: Icons.science_outlined,
+    selectedIcon: Icons.science,
+    category: AppDestinationCategory.rede,
+    compactPriority: 5,
+    pageBuilder: (_) => const Center(child: Text('Extra')),
   ),
 ];
 
-class _FakeDestination {
-  const _FakeDestination({
-    required this.label,
-    required this.semanticLabel,
-    required this.icon,
-    required this.selectedIcon,
-  });
-
-  final String label;
-  final String semanticLabel;
-  final IconData icon;
-  final IconData selectedIcon;
-}
-
-/// Builds a minimal MaterialApp with the given theme and a NavigationBar shell.
-/// This controlled fixture avoids testing production screens while exercising
-/// theme tokens, tap targets, contrast, and text scaling.
-Widget _buildFixture(ThemeData theme) {
+/// Real public shell + gallery. Does not clone AppShell/ToolScaffold/ToolMetric.
+Widget _buildPublicFixture(ThemeData theme) {
   return MaterialApp(
     theme: theme,
-    home: Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text('Título', style: theme.textTheme.headlineSmall),
-            const SizedBox(height: 16),
-            Text('Corpo do texto', style: theme.textTheme.bodyLarge),
-            const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () {},
-              child: const Text('Ação Principal'),
-            ),
-            const SizedBox(height: 8),
-            TextButton(onPressed: () {}, child: const Text('Ação Secundária')),
-            const SizedBox(height: 8),
-            OutlinedButton(
-              onPressed: () {},
-              child: const Text('Ação Terciária'),
-            ),
-            const SizedBox(height: 16),
-            IconButton(
-              onPressed: () {},
-              icon: const Icon(Icons.settings),
-              tooltip: 'Configurações',
-            ),
-          ],
-        ),
-      ),
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: 0,
-        onDestinationSelected: (_) {},
-        destinations: _fixtureDestinations
-            .map(
-              (d) => NavigationDestination(
-                icon: Icon(d.icon),
-                selectedIcon: Icon(d.selectedIcon),
-                label: d.label,
-              ),
-            )
-            .toList(),
-      ),
-    ),
+    home: AppShell(destinations: _publicDestinations),
   );
+}
+
+Future<void> _pumpSizedFixture(
+  WidgetTester tester, {
+  required double width,
+  required double scale,
+  required ThemeData theme,
+}) async {
+  tester.view.physicalSize = Size(width, 800);
+  tester.view.devicePixelRatio = 1.0;
+  tester.platformDispatcher.textScaleFactorTestValue = scale;
+  addTearDown(() {
+    tester.view.resetPhysicalSize();
+    tester.view.resetDevicePixelRatio();
+    tester.platformDispatcher.clearTextScaleFactorTestValue();
+  });
+  await tester.pumpWidget(_buildPublicFixture(theme));
+  // Loading ToolStatusPanel uses an infinite CircularProgressIndicator.
+  await tester.pump();
 }
 
 void main() {
@@ -257,11 +256,28 @@ void main() {
     });
   });
 
+  group('Public widgets fixture', () {
+    testWidgets(
+      'mounts AppShell, ToolScaffold, ToolMetric, ToolStatusPanel, TechnicalValueRow with copy',
+      (tester) async {
+        await tester.pumpWidget(_buildPublicFixture(lightTheme));
+        await tester.pump();
+
+        expect(find.byType(AppShell), findsOneWidget);
+        expect(find.byType(ToolScaffold), findsOneWidget);
+        expect(find.byType(ToolMetric), findsWidgets);
+        expect(find.byType(ToolStatusPanel), findsWidgets);
+        expect(find.byType(TechnicalValueRow), findsOneWidget);
+        expect(find.byType(CopyValueAction), findsOneWidget);
+      },
+    );
+  });
+
   group('Accessibility guideline tests — light theme', () {
     testWidgets('meets androidTapTargetGuideline', (tester) async {
       final handle = tester.ensureSemantics();
-      await tester.pumpWidget(_buildFixture(lightTheme));
-      await tester.pumpAndSettle();
+      await tester.pumpWidget(_buildPublicFixture(lightTheme));
+      await tester.pump();
 
       await expectLater(tester, meetsGuideline(androidTapTargetGuideline));
       handle.dispose();
@@ -269,8 +285,8 @@ void main() {
 
     testWidgets('meets labeledTapTargetGuideline', (tester) async {
       final handle = tester.ensureSemantics();
-      await tester.pumpWidget(_buildFixture(lightTheme));
-      await tester.pumpAndSettle();
+      await tester.pumpWidget(_buildPublicFixture(lightTheme));
+      await tester.pump();
 
       await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
       handle.dispose();
@@ -278,8 +294,8 @@ void main() {
 
     testWidgets('meets textContrastGuideline', (tester) async {
       final handle = tester.ensureSemantics();
-      await tester.pumpWidget(_buildFixture(lightTheme));
-      await tester.pumpAndSettle();
+      await tester.pumpWidget(_buildPublicFixture(lightTheme));
+      await tester.pump();
 
       await expectLater(tester, meetsGuideline(textContrastGuideline));
       handle.dispose();
@@ -289,8 +305,8 @@ void main() {
   group('Accessibility guideline tests — dark theme', () {
     testWidgets('meets androidTapTargetGuideline', (tester) async {
       final handle = tester.ensureSemantics();
-      await tester.pumpWidget(_buildFixture(darkTheme));
-      await tester.pumpAndSettle();
+      await tester.pumpWidget(_buildPublicFixture(darkTheme));
+      await tester.pump();
 
       await expectLater(tester, meetsGuideline(androidTapTargetGuideline));
       handle.dispose();
@@ -298,8 +314,8 @@ void main() {
 
     testWidgets('meets labeledTapTargetGuideline', (tester) async {
       final handle = tester.ensureSemantics();
-      await tester.pumpWidget(_buildFixture(darkTheme));
-      await tester.pumpAndSettle();
+      await tester.pumpWidget(_buildPublicFixture(darkTheme));
+      await tester.pump();
 
       await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
       handle.dispose();
@@ -307,8 +323,8 @@ void main() {
 
     testWidgets('meets textContrastGuideline', (tester) async {
       final handle = tester.ensureSemantics();
-      await tester.pumpWidget(_buildFixture(darkTheme));
-      await tester.pumpAndSettle();
+      await tester.pumpWidget(_buildPublicFixture(darkTheme));
+      await tester.pump();
 
       await expectLater(tester, meetsGuideline(textContrastGuideline));
       handle.dispose();
@@ -325,20 +341,18 @@ void main() {
         testWidgets(
           'no overflow at ${width.toInt()}px width, ${scale}x scale',
           (tester) async {
-            tester.view.physicalSize = Size(width * 3.0, 800.0 * 3.0);
-            tester.view.devicePixelRatio = 3.0;
-            tester.platformDispatcher.textScaleFactorTestValue = scale;
+            await _pumpSizedFixture(
+              tester,
+              width: width,
+              scale: scale,
+              theme: lightTheme,
+            );
 
-            addTearDown(() {
-              tester.view.resetPhysicalSize();
-              tester.view.resetDevicePixelRatio();
-              tester.platformDispatcher.clearTextScaleFactorTestValue();
-            });
-
-            await tester.pumpWidget(_buildFixture(lightTheme));
-            await tester.pumpAndSettle();
-
-            // Verify no overflow errors were reported
+            expect(find.byType(AppShell), findsOneWidget);
+            expect(find.byType(ToolScaffold), findsOneWidget);
+            expect(find.byType(ToolMetric), findsWidgets);
+            expect(find.byType(ToolStatusPanel), findsWidgets);
+            expect(find.byType(TechnicalValueRow), findsOneWidget);
             expect(tester.takeException(), isNull);
           },
         );
@@ -346,63 +360,96 @@ void main() {
     }
   });
 
-  group('Gallery primitives accessibility — light theme', () {
-    Widget buildGalleryFixture(ThemeData theme) {
-      return MaterialApp(
-        theme: theme,
-        home: const Scaffold(body: DesignSystemGallery()),
+  group('AppShell semantics and overflow chrome', () {
+    testWidgets(
+      '360 Bar with 5 destinations shows Ferramentas and full semanticLabels',
+      (tester) async {
+        final handle = tester.ensureSemantics();
+        await _pumpSizedFixture(
+          tester,
+          width: 360,
+          scale: 1.0,
+          theme: lightTheme,
+        );
+
+        expect(find.byType(NavigationBar), findsOneWidget);
+        expect(
+          find.descendant(
+            of: find.byType(NavigationBar),
+            matching: find.text('Ferramentas'),
+          ),
+          findsOneWidget,
+        );
+        expect(find.byTooltip('Galeria de Componentes'), findsOneWidget);
+        expect(find.byTooltip('Calculadora de Rede'), findsOneWidget);
+        expect(find.byTooltip('Conversor de Dados'), findsOneWidget);
+        handle.dispose();
+      },
+    );
+
+    testWidgets('720 rail shows 5 destinations and does not show Ferramentas', (
+      tester,
+    ) async {
+      final handle = tester.ensureSemantics();
+      await _pumpSizedFixture(
+        tester,
+        width: 720,
+        scale: 1.0,
+        theme: lightTheme,
       );
-    }
 
-    // Note: androidTapTargetGuideline is skipped for the gallery because
-    // SelectableText in TechnicalValueRow renders as a read-only text field
-    // with longPress semantics that is 20px tall. The text itself is not an
-    // interactive control — it's a selectable display value. This is a known
-    // Flutter semantics behavior and not a real accessibility issue.
-
-    testWidgets('gallery meets labeledTapTargetGuideline', (tester) async {
-      final handle = tester.ensureSemantics();
-      await tester.pumpWidget(buildGalleryFixture(lightTheme));
-      await tester.pumpAndSettle();
-
-      await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
+      expect(find.byType(NavigationRail), findsOneWidget);
+      expect(find.byType(NavigationBar), findsNothing);
+      expect(find.text('Ferramentas'), findsNothing);
+      final rail = tester.widget<NavigationRail>(find.byType(NavigationRail));
+      expect(rail.destinations, hasLength(5));
+      expect(rail.extended, isFalse);
+      for (final label in [
+        'Galeria de Componentes',
+        'Calculadora de Rede',
+        'Conversor de Dados',
+        'Gerador de Hash',
+        'Destino extra de teste',
+      ]) {
+        expect(find.byTooltip(label), findsOneWidget);
+        expect(
+          find.bySemanticsLabel(RegExp(RegExp.escape(label))),
+          findsWidgets,
+        );
+      }
       handle.dispose();
     });
 
-    testWidgets('gallery meets textContrastGuideline', (tester) async {
-      final handle = tester.ensureSemantics();
-      await tester.pumpWidget(buildGalleryFixture(lightTheme));
-      await tester.pumpAndSettle();
+    testWidgets(
+      '1024 rail shows 5 destinations and does not show Ferramentas',
+      (tester) async {
+        final handle = tester.ensureSemantics();
+        await _pumpSizedFixture(
+          tester,
+          width: 1024,
+          scale: 1.0,
+          theme: lightTheme,
+        );
 
-      await expectLater(tester, meetsGuideline(textContrastGuideline));
-      handle.dispose();
-    });
-  });
-
-  group('Gallery primitives accessibility — dark theme', () {
-    Widget buildGalleryFixture(ThemeData theme) {
-      return MaterialApp(
-        theme: theme,
-        home: const Scaffold(body: DesignSystemGallery()),
-      );
-    }
-
-    testWidgets('gallery meets labeledTapTargetGuideline', (tester) async {
-      final handle = tester.ensureSemantics();
-      await tester.pumpWidget(buildGalleryFixture(darkTheme));
-      await tester.pumpAndSettle();
-
-      await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
-      handle.dispose();
-    });
-
-    testWidgets('gallery meets textContrastGuideline', (tester) async {
-      final handle = tester.ensureSemantics();
-      await tester.pumpWidget(buildGalleryFixture(darkTheme));
-      await tester.pumpAndSettle();
-
-      await expectLater(tester, meetsGuideline(textContrastGuideline));
-      handle.dispose();
-    });
+        expect(find.byType(NavigationRail), findsOneWidget);
+        expect(find.text('Ferramentas'), findsNothing);
+        final rail = tester.widget<NavigationRail>(find.byType(NavigationRail));
+        expect(rail.destinations, hasLength(5));
+        expect(rail.extended, isTrue);
+        for (final label in [
+          'Galeria de Componentes',
+          'Calculadora de Rede',
+          'Conversor de Dados',
+          'Gerador de Hash',
+          'Destino extra de teste',
+        ]) {
+          expect(
+            find.bySemanticsLabel(RegExp(RegExp.escape(label))),
+            findsWidgets,
+          );
+        }
+        handle.dispose();
+      },
+    );
   });
 }
