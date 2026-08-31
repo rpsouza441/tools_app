@@ -288,12 +288,11 @@ void main() {
           findsOneWidget,
         );
 
-        // Navigate to second tab
-        await tester.tap(find.text('Conversor de Dados'));
+        // Navigate using short catalog labels on the bar
+        await tester.tap(find.text('Armazenamento'));
         await tester.pumpAndSettle();
 
-        // Navigate back to first tab
-        await tester.tap(find.text('Calculadora de Rede'));
+        await tester.tap(find.text('Rede'));
         await tester.pumpAndSettle();
 
         // Result is still there (preserved by IndexedStack)
@@ -303,7 +302,381 @@ void main() {
         );
       },
     );
+
+    testWidgets(
+      'production compact bar uses short labels and full semantic tooltips',
+      (tester) async {
+        tester.view.physicalSize = const Size(360, 800);
+        tester.view.devicePixelRatio = 1.0;
+        addTearDown(tester.view.resetPhysicalSize);
+        addTearDown(tester.view.resetDevicePixelRatio);
+
+        await tester.pumpWidget(const App());
+        await tester.pumpAndSettle();
+
+        expect(find.text('Rede'), findsOneWidget);
+        expect(find.text('Armazenamento'), findsOneWidget);
+        expect(find.text('Hash'), findsOneWidget);
+
+        final bar = tester.widget<NavigationBar>(find.byType(NavigationBar));
+        final destinations = bar.destinations.cast<NavigationDestination>();
+        expect(destinations.map((d) => d.label).toList(), [
+          'Rede',
+          'Armazenamento',
+          'Hash',
+        ]);
+        expect(destinations.map((d) => d.tooltip).toList(), [
+          'Calculadora de Rede',
+          'Conversor de Dados',
+          'Gerador de Hash',
+        ]);
+        expect(find.byTooltip('Calculadora de Rede'), findsOneWidget);
+        expect(find.byTooltip('Conversor de Dados'), findsOneWidget);
+        expect(find.byTooltip('Gerador de Hash'), findsOneWidget);
+
+        expect(
+          find.descendant(
+            of: find.byType(AppBar),
+            matching: find.text('Calculadora de Rede'),
+          ),
+          findsOneWidget,
+        );
+      },
+    );
   });
+
+  group('AppShell growth — 5 destinations at width boundaries', () {
+    testWidgets(
+      '599px + 5 destinations shows NavigationBar with 3 pins + Ferramentas',
+      (tester) async {
+        await _pumpShell(tester, width: 599, destinations: _buildFiveDestinations());
+
+        expect(find.byType(NavigationBar), findsOneWidget);
+        expect(find.byType(NavigationRail), findsNothing);
+        expect(find.text('Prio1'), findsOneWidget);
+        expect(find.text('Prio2'), findsOneWidget);
+        expect(find.text('Prio3'), findsOneWidget);
+        expect(find.text('Ferramentas'), findsOneWidget);
+        expect(find.text('Prio4'), findsNothing);
+        expect(find.text('Prio5'), findsNothing);
+      },
+    );
+
+    testWidgets(
+      '600px + 5 destinations lists all catalog items on a collapsed rail',
+      (tester) async {
+        await _pumpShell(tester, width: 600, destinations: _buildFiveDestinations());
+
+        expect(find.byType(NavigationRail), findsOneWidget);
+        expect(find.byType(NavigationBar), findsNothing);
+        expect(find.text('Ferramentas'), findsNothing);
+
+        final rail = tester.widget<NavigationRail>(find.byType(NavigationRail));
+        expect(rail.extended, isFalse);
+        expect(rail.scrollable, isTrue);
+        expect(_railLabels(rail), ['Prio1', 'Prio2', 'Prio3', 'Prio4', 'Prio5']);
+      },
+    );
+
+    testWidgets(
+      '839px + 5 destinations lists all catalog items on a collapsed rail',
+      (tester) async {
+        await _pumpShell(tester, width: 839, destinations: _buildFiveDestinations());
+
+        expect(find.byType(NavigationRail), findsOneWidget);
+        expect(find.byType(NavigationBar), findsNothing);
+        expect(find.text('Ferramentas'), findsNothing);
+
+        final rail = tester.widget<NavigationRail>(find.byType(NavigationRail));
+        expect(rail.extended, isFalse);
+        expect(rail.scrollable, isTrue);
+        expect(_railLabels(rail), ['Prio1', 'Prio2', 'Prio3', 'Prio4', 'Prio5']);
+      },
+    );
+
+    testWidgets(
+      '840px + 5 destinations lists all catalog items on an extended rail',
+      (tester) async {
+        await _pumpShell(tester, width: 840, destinations: _buildFiveDestinations());
+
+        expect(find.byType(NavigationRail), findsOneWidget);
+        expect(find.byType(NavigationBar), findsNothing);
+        expect(find.text('Ferramentas'), findsNothing);
+
+        final rail = tester.widget<NavigationRail>(find.byType(NavigationRail));
+        expect(rail.extended, isTrue);
+        expect(rail.scrollable, isTrue);
+        expect(_railLabels(rail), ['Prio1', 'Prio2', 'Prio3', 'Prio4', 'Prio5']);
+      },
+    );
+  });
+
+  group('AppShell semanticLabel consumption', () {
+    testWidgets(
+      'compact bar exposes semanticLabel as tooltip on pinned destinations',
+      (tester) async {
+        await _pumpShell(tester, width: 599, destinations: _buildFiveDestinations());
+
+        final handle = tester.ensureSemantics();
+        addTearDown(handle.dispose);
+
+        final bar = tester.widget<NavigationBar>(find.byType(NavigationBar));
+        final destinations = bar.destinations.cast<NavigationDestination>();
+        expect(destinations.length, 4);
+        expect(destinations.take(3).map((d) => d.tooltip).toList(), [
+          'Prioridade 1',
+          'Prioridade 2',
+          'Prioridade 3',
+        ]);
+        expect(find.byTooltip('Prioridade 1'), findsOneWidget);
+        expect(find.byTooltip('Prioridade 2'), findsOneWidget);
+        expect(find.byTooltip('Prioridade 3'), findsOneWidget);
+      },
+    );
+
+    testWidgets(
+      'collapsed rail tooltip and semantics expose semanticLabel once',
+      (tester) async {
+        await _pumpShell(tester, width: 600, destinations: _buildFiveDestinations());
+
+        final handle = tester.ensureSemantics();
+        addTearDown(handle.dispose);
+
+        for (final label in [
+          'Prioridade 1',
+          'Prioridade 2',
+          'Prioridade 3',
+          'Prioridade 4',
+          'Prioridade 5',
+        ]) {
+          expect(find.byTooltip(label), findsOneWidget);
+          expect(
+            find.bySemanticsLabel(label),
+            findsOneWidget,
+            reason: 'semanticLabel "$label" must appear once, without duplicate nodes',
+          );
+        }
+      },
+    );
+
+    testWidgets(
+      'production collapsed rail announces full names without Ferramentas',
+      (tester) async {
+        tester.view.physicalSize = const Size(600, 800);
+        tester.view.devicePixelRatio = 1.0;
+        addTearDown(tester.view.resetPhysicalSize);
+        addTearDown(tester.view.resetDevicePixelRatio);
+
+        await tester.pumpWidget(
+          MaterialApp(home: AppShell(destinations: appDestinations)),
+        );
+        await tester.pumpAndSettle();
+
+        final handle = tester.ensureSemantics();
+        addTearDown(handle.dispose);
+
+        expect(find.text('Ferramentas'), findsNothing);
+        final rail = tester.widget<NavigationRail>(find.byType(NavigationRail));
+        expect(_railLabels(rail), ['Rede', 'Armazenamento', 'Hash']);
+        expect(find.byTooltip('Calculadora de Rede'), findsOneWidget);
+        expect(find.byTooltip('Conversor de Dados'), findsOneWidget);
+        expect(find.byTooltip('Gerador de Hash'), findsOneWidget);
+        expect(find.bySemanticsLabel('Calculadora de Rede'), findsWidgets);
+        expect(find.bySemanticsLabel('Conversor de Dados'), findsWidgets);
+        expect(find.bySemanticsLabel('Gerador de Hash'), findsWidgets);
+      },
+    );
+  });
+
+  group('AppShell didUpdateWidget selection by id', () {
+    testWidgets('reordering destinations keeps the selected id', (tester) async {
+      tester.view.physicalSize = const Size(400, 800);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+
+      const shellKey = ValueKey('shell');
+      final original = _buildFiveDestinations().take(3).toList();
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: AppShell(key: shellKey, destinations: original),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('Prio2'));
+      await tester.pumpAndSettle();
+      expect(find.text('Page2'), findsOneWidget);
+
+      final reordered = [original[1], original[0], original[2]];
+      await tester.pumpWidget(
+        MaterialApp(
+          home: AppShell(key: shellKey, destinations: reordered),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.text('Page2'), findsOneWidget);
+      final stack = tester.widget<IndexedStack>(find.byType(IndexedStack));
+      expect(stack.index, 0);
+      expect(stack.index, lessThan(stack.children.length));
+    });
+
+    testWidgets('growing from 3 to 5 destinations keeps the selected id', (
+      tester,
+    ) async {
+      tester.view.physicalSize = const Size(400, 800);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+
+      const shellKey = ValueKey('shell');
+      final all = _buildFiveDestinations();
+      final three = all.take(3).toList();
+
+      await tester.pumpWidget(
+        MaterialApp(home: AppShell(key: shellKey, destinations: three)),
+      );
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('Prio2'));
+      await tester.pumpAndSettle();
+      expect(find.text('Page2'), findsOneWidget);
+
+      await tester.pumpWidget(
+        MaterialApp(home: AppShell(key: shellKey, destinations: all)),
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.text('Page2'), findsOneWidget);
+      final stack = tester.widget<IndexedStack>(find.byType(IndexedStack));
+      expect(stack.index, inInclusiveRange(0, stack.children.length - 1));
+      expect(stack.children.length, 5);
+    });
+
+    testWidgets(
+      'removing the selected destination falls back to the first remaining id',
+      (tester) async {
+        tester.view.physicalSize = const Size(400, 800);
+        tester.view.devicePixelRatio = 1.0;
+        addTearDown(tester.view.resetPhysicalSize);
+        addTearDown(tester.view.resetDevicePixelRatio);
+
+        const shellKey = ValueKey('shell');
+        final all = _buildFiveDestinations();
+
+        await tester.pumpWidget(
+          MaterialApp(home: AppShell(key: shellKey, destinations: all)),
+        );
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.text('Ferramentas'));
+        await tester.pumpAndSettle();
+        await tester.tap(find.text('Prio5'));
+        await tester.pumpAndSettle();
+        expect(find.text('Page5'), findsOneWidget);
+
+        final remaining = all.take(3).toList();
+        await tester.pumpWidget(
+          MaterialApp(
+            home: AppShell(key: shellKey, destinations: remaining),
+          ),
+        );
+        await tester.pumpAndSettle();
+
+        final stack = tester.widget<IndexedStack>(find.byType(IndexedStack));
+        expect(stack.children.length, 3);
+        expect(stack.index, inInclusiveRange(0, stack.children.length - 1));
+        expect(find.text('Page1'), findsOneWidget);
+        expect(find.byType(NavigationBar), findsOneWidget);
+      },
+    );
+
+    testWidgets(
+      'resize from compact unpinned selection to 600 keeps catalog id on the rail',
+      (tester) async {
+        tester.view.physicalSize = const Size(599, 800);
+        tester.view.devicePixelRatio = 1.0;
+        addTearDown(tester.view.resetPhysicalSize);
+        addTearDown(tester.view.resetDevicePixelRatio);
+
+        await tester.pumpWidget(
+          MaterialApp(home: AppShell(destinations: _buildFiveDestinations())),
+        );
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.text('Ferramentas'));
+        await tester.pumpAndSettle();
+        await tester.tap(find.text('Prio5'));
+        await tester.pumpAndSettle();
+        expect(find.text('Page5'), findsOneWidget);
+
+        tester.view.physicalSize = const Size(600, 800);
+        await tester.pumpAndSettle();
+
+        expect(find.text('Page5'), findsOneWidget);
+        expect(find.byType(NavigationRail), findsOneWidget);
+        expect(find.text('Ferramentas'), findsNothing);
+        final rail = tester.widget<NavigationRail>(find.byType(NavigationRail));
+        expect(rail.destinations.length, 5);
+        expect(rail.selectedIndex, 4);
+      },
+    );
+
+    testWidgets(
+      'resize from compact unpinned selection to 840 keeps catalog id on the rail',
+      (tester) async {
+        tester.view.physicalSize = const Size(599, 800);
+        tester.view.devicePixelRatio = 1.0;
+        addTearDown(tester.view.resetPhysicalSize);
+        addTearDown(tester.view.resetDevicePixelRatio);
+
+        await tester.pumpWidget(
+          MaterialApp(home: AppShell(destinations: _buildFiveDestinations())),
+        );
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.text('Ferramentas'));
+        await tester.pumpAndSettle();
+        await tester.tap(find.text('Prio5'));
+        await tester.pumpAndSettle();
+
+        tester.view.physicalSize = const Size(840, 800);
+        await tester.pumpAndSettle();
+
+        expect(find.text('Page5'), findsOneWidget);
+        final rail = tester.widget<NavigationRail>(find.byType(NavigationRail));
+        expect(rail.extended, isTrue);
+        expect(rail.selectedIndex, 4);
+        expect(find.text('Ferramentas'), findsNothing);
+      },
+    );
+  });
+}
+
+Future<void> _pumpShell(
+  WidgetTester tester, {
+  required double width,
+  required List<AppDestination> destinations,
+}) async {
+  tester.view.physicalSize = Size(width, 800);
+  tester.view.devicePixelRatio = 1.0;
+  addTearDown(tester.view.resetPhysicalSize);
+  addTearDown(tester.view.resetDevicePixelRatio);
+
+  await tester.pumpWidget(
+    MaterialApp(home: AppShell(destinations: destinations)),
+  );
+  await tester.pumpAndSettle();
+}
+
+List<String?> _railLabels(NavigationRail rail) {
+  return rail.destinations.map((d) {
+    final label = d.label;
+    if (label is Text) return label.data;
+    return null;
+  }).toList();
 }
 
 /// Helper: builds 5 fake destinations with distinct compact priorities

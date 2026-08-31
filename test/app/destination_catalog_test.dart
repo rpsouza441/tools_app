@@ -15,11 +15,42 @@ void main() {
       expect(ids, ids2);
     });
 
-    test('labels are in pt-BR', () {
+    test('ids remain the stable production identifiers', () {
+      expect(appDestinations.map((d) => d.id).toList(), [
+        'network_calculator',
+        'data_converter',
+        'hash_generator',
+      ]);
+    });
+
+    test('labels are the short pt-BR catalog names', () {
       final labels = appDestinations.map((d) => d.label).toList();
-      expect(labels, contains('Calculadora de Rede'));
-      expect(labels, contains('Conversor de Dados'));
-      expect(labels, contains('Gerador de Hash'));
+      expect(labels, ['Rede', 'Armazenamento', 'Hash']);
+    });
+
+    test('semanticLabels are the full pt-BR names', () {
+      final semanticLabels = appDestinations
+          .map((d) => d.semanticLabel)
+          .toList();
+      expect(semanticLabels, [
+        'Calculadora de Rede',
+        'Conversor de Dados',
+        'Gerador de Hash',
+      ]);
+    });
+
+    test('appDestinations rejects mutation', () {
+      final originalLength = appDestinations.length;
+      try {
+        expect(
+          () => appDestinations.add(appDestinations.first),
+          throwsUnsupportedError,
+        );
+      } finally {
+        while (appDestinations.length > originalLength) {
+          appDestinations.removeLast();
+        }
+      }
     });
 
     test('each destination has paired icons (filled + outlined)', () {
@@ -51,12 +82,6 @@ void main() {
     test('compactPriority values are assigned', () {
       for (final dest in appDestinations) {
         expect(dest.compactPriority, isA<int>());
-      }
-    });
-
-    test('semanticLabel is provided for each destination', () {
-      for (final dest in appDestinations) {
-        expect(dest.semanticLabel, isNotEmpty);
       }
     });
   });
