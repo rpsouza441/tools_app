@@ -363,55 +363,127 @@ void main() {
   });
 
   group('status', () {
-    final variantData = <ToolStatusVariant, (IconData, String, String)>{
-      ToolStatusVariant.empty: (
-        Icons.inbox_outlined,
-        'Pronto',
-        'Insira os dados e execute a ação.',
-      ),
-      ToolStatusVariant.loading: (
-        Icons.hourglass_empty,
-        'Processando...',
-        'Aguarde a conclusão.',
-      ),
-      ToolStatusVariant.success: (
-        Icons.check_circle_outline,
-        'Concluído',
-        'Resultado disponível abaixo.',
-      ),
-      ToolStatusVariant.failure: (
-        Icons.error_outline,
-        'Falha',
-        'Não foi possível concluir a operação.',
-      ),
-      ToolStatusVariant.offline: (
-        Icons.cloud_off,
-        'Sem conexão',
-        'Verifique sua conexão e tente novamente.',
-      ),
-      ToolStatusVariant.permissionDenied: (
-        Icons.lock_outline,
-        'Permissão necessária',
-        'Conceda a permissão nas configurações.',
-      ),
-      ToolStatusVariant.cancelled: (
-        Icons.cancel_outlined,
-        'Cancelado',
-        'A operação foi cancelada.',
-      ),
-    };
+    // Canonical copy from 01-UI-SPEC.md State Contract — literals in this
+    // file only. Never import or call production _statusMap.
+    const expectedStatus =
+        <
+          ToolStatusVariant,
+          ({
+            IconData? icon,
+            String heading,
+            String body,
+            bool progressIndicator,
+            String iconRole,
+          })
+        >{
+          ToolStatusVariant.empty: (
+            icon: Icons.inbox_outlined,
+            heading: 'Nenhum resultado ainda',
+            body:
+                'Preencha os campos e execute a ferramenta para ver os resultados.',
+            progressIndicator: false,
+            iconRole: 'onSurface',
+          ),
+          ToolStatusVariant.loading: (
+            icon: null,
+            heading: 'Processando',
+            body: 'Aguarde enquanto concluímos esta etapa.',
+            progressIndicator: true,
+            iconRole: 'onSurface',
+          ),
+          ToolStatusVariant.success: (
+            icon: Icons.check_circle_outline,
+            heading: 'Concluído',
+            body: 'Resultado disponível abaixo.',
+            progressIndicator: false,
+            iconRole: 'primary',
+          ),
+          ToolStatusVariant.failure: (
+            icon: Icons.error_outline,
+            heading: 'Não foi possível concluir',
+            body: 'Confira os dados e tente novamente.',
+            progressIndicator: false,
+            iconRole: 'error',
+          ),
+          ToolStatusVariant.offline: (
+            icon: Icons.wifi_off,
+            heading: 'Sem conexão com a internet',
+            body: 'Verifique a conexão e tente novamente.',
+            progressIndicator: false,
+            iconRole: 'onSurface',
+          ),
+          ToolStatusVariant.permissionDenied: (
+            icon: Icons.lock_outline,
+            heading: 'Permissão necessária',
+            body: 'Ative a permissão nas configurações para continuar.',
+            progressIndicator: false,
+            iconRole: 'error',
+          ),
+          ToolStatusVariant.cancelled: (
+            icon: Icons.cancel_outlined,
+            heading: 'Operação cancelada',
+            body: 'Os resultados concluídos continuam disponíveis.',
+            progressIndicator: false,
+            iconRole: 'onSurface',
+          ),
+        };
 
-    for (final entry in variantData.entries) {
-      testWidgets('${entry.key.name} renders correct icon, heading, and body', (
-        tester,
-      ) async {
-        await tester.pumpWidget(_wrap(ToolStatusPanel(variant: entry.key)));
+    Widget wrapStatus(Widget child, ThemeData theme) {
+      return MaterialApp(
+        theme: theme,
+        home: Scaffold(body: child),
+      );
+    }
 
-        final (icon, heading, body) = entry.value;
-        expect(find.byIcon(icon), findsOneWidget);
-        expect(find.text(heading), findsOneWidget);
-        expect(find.text(body), findsOneWidget);
-      });
+    Color roleColor(ColorScheme cs, String role) {
+      return switch (role) {
+        'primary' => cs.primary,
+        'error' => cs.error,
+        _ => cs.onSurface,
+      };
+    }
+
+    for (final themeEntry in <(String, ThemeData)>[
+      ('light', lightTheme),
+      ('dark', darkTheme),
+    ]) {
+      final themeName = themeEntry.$1;
+      final theme = themeEntry.$2;
+
+      for (final entry in expectedStatus.entries) {
+        testWidgets(
+          '${entry.key.name} ($themeName) renders canonical icon, heading, body, and icon role',
+          (tester) async {
+            await tester.pumpWidget(
+              wrapStatus(ToolStatusPanel(variant: entry.key), theme),
+            );
+
+            final expected = entry.value;
+            expect(find.text(expected.heading), findsOneWidget);
+            expect(find.text(expected.body), findsOneWidget);
+
+            if (expected.progressIndicator) {
+              expect(find.byType(ProgressIndicator), findsOneWidget);
+              final indicator = tester.widget<ProgressIndicator>(
+                find.byType(ProgressIndicator),
+              );
+              expect(indicator.color, theme.colorScheme.onSurface);
+            } else {
+              expect(find.byIcon(expected.icon!), findsOneWidget);
+              final iconWidget = tester.widget<Icon>(
+                find.byIcon(expected.icon!),
+              );
+              expect(
+                iconWidget.color,
+                roleColor(theme.colorScheme, expected.iconRole),
+              );
+              if (entry.key == ToolStatusVariant.offline) {
+                expect(iconWidget.color, isNot(theme.colorScheme.error));
+              }
+            }
+          },
+        );
+      }
     }
 
     testWidgets('preservedChild shown for loading variant', (tester) async {
