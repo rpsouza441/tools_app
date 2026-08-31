@@ -15,15 +15,15 @@
 
 ### Interface e navegação
 
-- [ ] **UI-01**: Usuário pode abrir qualquer ferramenta por uma arquitetura de navegação que permaneça clara em largura compacta e larga.
-- [ ] **UI-02**: Usuário recebe NavigationBar, NavigationRail ou home categorizada conforme o espaço disponível e o design contract aprovado.
-- [ ] **UI-03**: Usuário encontra hierarquia consistente de títulos, entradas, ações, cards e resultados em todas as ferramentas.
-- [ ] **UI-04**: Usuário pode usar o aplicativo nos temas claro e escuro sem perda de contraste ou significado.
-- [ ] **UI-05**: Usuário identifica estados vazio, carregando, sucesso, falha, sem conexão, permissão negada e operação cancelada por componentes consistentes.
-- [ ] **UI-06**: Usuário pode tocar ações por alvos de tamanho acessível e navegar com leitores de tela por rótulos semânticos úteis.
-- [ ] **UI-07**: Usuário pode ampliar a fonte sem perder conteúdo, ações ou compreensão em larguras compactas e largas.
-- [ ] **UI-08**: Usuário recebe toda a interface e mensagens do ciclo em português do Brasil.
-- [ ] **UI-09**: Usuário pode copiar valores e resultados por uma ação consistente com confirmação acessível.
+- [x] **UI-01**: Usuário pode abrir qualquer ferramenta por uma arquitetura de navegação que permaneça clara em largura compacta e larga.
+- [x] **UI-02**: Usuário recebe NavigationBar, NavigationRail ou home categorizada conforme o espaço disponível e o design contract aprovado.
+- [x] **UI-03**: Usuário encontra hierarquia consistente de títulos, entradas, ações, cards e resultados em todas as ferramentas.
+- [x] **UI-04**: Usuário pode usar o aplicativo nos temas claro e escuro sem perda de contraste ou significado.
+- [x] **UI-05**: Usuário identifica estados vazio, carregando, sucesso, falha, sem conexão, permissão negada e operação cancelada por componentes consistentes.
+- [x] **UI-06**: Usuário pode tocar ações por alvos de tamanho acessível e navegar com leitores de tela por rótulos semânticos úteis.
+- [x] **UI-07**: Usuário pode ampliar a fonte sem perder conteúdo, ações ou compreensão em larguras compactas e largas.
+- [x] **UI-08**: Usuário recebe toda a interface e mensagens do ciclo em português do Brasil.
+- [x] **UI-09**: Usuário pode copiar valores e resultados por uma ação consistente com confirmação acessível.
 
 ### Preservação das ferramentas
 
@@ -120,15 +120,15 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| UI-01 | Phase 1 | Pending |
-| UI-02 | Phase 1 | Pending |
-| UI-03 | Phase 1 | Pending |
-| UI-04 | Phase 1 | Pending |
-| UI-05 | Phase 1 | Pending |
-| UI-06 | Phase 1 | Pending |
-| UI-07 | Phase 1 | Pending |
-| UI-08 | Phase 1 | Pending |
-| UI-09 | Phase 1 | Pending |
+| UI-01 | Phase 1 | Complete |
+| UI-02 | Phase 1 | Complete |
+| UI-03 | Phase 1 | Complete |
+| UI-04 | Phase 1 | Complete |
+| UI-05 | Phase 1 | Complete |
+| UI-06 | Phase 1 | Complete |
+| UI-07 | Phase 1 | Complete |
+| UI-08 | Phase 1 | Complete |
+| UI-09 | Phase 1 | Complete |
 | PRES-01 | Phase 2 | Pending |
 | PRES-02 | Phase 2 | Pending |
 | PRES-03 | Phase 2 | Pending |
@@ -165,6 +165,7 @@
 | GATE-02 | Phase 5 | Pending |
 
 **Coverage:**
+
 - v1 requirements: 43 total
 - Mapped to phases: 43
 - Unmapped: 0
