@@ -28,7 +28,7 @@
 ### Preservação das ferramentas
 
 - [x] **PRES-01**: Usuário continua calculando redes IPv4 com os mesmos resultados válidos após a migração visual.
-- [ ] **PRES-02**: Usuário continua convertendo armazenamento decimal e binário com os mesmos resultados válidos após a migração visual.
+- [x] **PRES-02**: Usuário continua convertendo armazenamento decimal e binário com os mesmos resultados válidos após a migração visual.
 - [ ] **PRES-03**: Usuário continua gerando hashes MD5, SHA-1, SHA-256 e SHA-512 com os mesmos resultados válidos após a migração visual.
 - [ ] **PRES-04**: Usuário não perde funcionalidades existentes enquanto as três telas são migradas em incrementos verificáveis.
 
@@ -130,7 +130,7 @@
 | UI-08 | Phase 1 | Complete |
 | UI-09 | Phase 1 | Complete |
 | PRES-01 | Phase 2 | Complete |
-| PRES-02 | Phase 2 | Pending |
+| PRES-02 | Phase 2 | Complete |
 | PRES-03 | Phase 2 | Pending |
 | PRES-04 | Phase 2 | Pending |
 | DIAG-01 | Phase 3 | Pending |
