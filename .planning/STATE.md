@@ -28,7 +28,7 @@ See: .planning/PROJECT.md (updated 2026-08-10)
 Phase: 1 of 5 (Contrato visual e fundação adaptativa)
 Plan: 11 of 11 (01-11 visual closed; TalkBack residual)
 Status: Gap-closure — visual human APPROVED; TalkBack not executed; Phase 1 incomplete
-Last activity: 2026-08-31 — 01-11 visual APPROVED; headings onSurface; TalkBack residual; Phase 1 incompleta
+Last activity: 2026-08-31 — re-verification human_needed 24/25; TalkBack residual exclusivo
 
 Progress: [█████████░] 91%
 
@@ -84,7 +84,7 @@ Progress: [█████████░] 91%
 ### Blockers/Concerns
 
 - [Phase 1 Plan 11]: TalkBack real é o único residual do 01-11. Visual APPROVED. Não inventar percurso TalkBack. Não aplicar override.
-- [Phase 1 verification]: Re-verificação oficial pendente após cruzamento 01-11. Não editar VERIFICATION.md/REVIEW.md manualmente. Phase 1 não Complete.
+- [Phase 1 verification]: Re-verificação oficial **human_needed**, score 24/25. Relatório novo em 01-VERIFICATION.md. Phase 1 não Complete. Phase 2 não iniciada.
 - [Phase 1 gap planning]: Goal da Phase 1 reformatado para user story minima (`As a ..., I want to ..., so that ...`) sem alterar Success Criteria, Requirements nem o boundary da Phase 2. `/gsd mvp-phase 1` nao foi executado por completo porque a fase ja esta `mode: mvp` e `in_progress`/`Executed`, e o workflow delegaria a `plan-phase` sem `--gaps`.
 - [Phase 1 Plan 06 UI-03]: Inconsistência documental registrada, não expandida — Phase 1 owns primitives/galeria; Phase 2 owns adoção nas três telas. Não mover UI-03. Não desmarcar REQUIREMENTS.md. Não puxar PRES-*.
 
