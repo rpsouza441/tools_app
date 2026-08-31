@@ -3,9 +3,9 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: verifying
-stopped_at: Phase 2 UAT approved; official re-verification
-last_updated: "2026-08-31T19:40:00.000Z"
-last_activity: "2026-08-31 — Phase 2 HUMAN-UAT complete; awaiting verifier; no Phase 3"
+stopped_at: Phase 2 verifier passed 13/13; awaiting user before transition
+last_updated: "2026-08-31T19:50:00.000Z"
+last_activity: "2026-08-31 — official Phase 2 re-verification passed 13/13; no Phase 3"
 progress:
   total_phases: 5
   completed_phases: 1
@@ -21,14 +21,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-08-31)
 
 **Core value:** Oferecer diagnósticos técnicos úteis e honestos em uma interface clara, sem ocultar limitações de plataforma, método de medição ou falhas parciais.
-**Current focus:** Phase 2 — HUMAN-UAT complete; official re-verification; do not start Phase 3
+**Current focus:** Phase 2 verifier passed 13/13 — wait for user before transition / Phase 3
 
 ## Current Position
 
 Phase: 2 of 5 (Migração segura das ferramentas atuais)
 Plan: 4 of 4 executed
-Status: HUMAN-UAT complete (`approved`). Phase 2 awaits official re-verification. ROADMAP remains `[ ]`.
-Last activity: 2026-08-31 — Phase 2 HUMAN-UAT complete; awaiting verifier; no Phase 3
+Status: Official re-verification **passed** 13/13. ROADMAP Phase 2 remains `[ ]`. No transition. No Phase 3.
+Last activity: 2026-08-31 — official Phase 2 re-verification passed 13/13; no Phase 3
 
 Progress: [████░░░░░░] 20% (1 of 5 phases)
 
@@ -90,7 +90,7 @@ Progress: [████░░░░░░] 20% (1 of 5 phases)
 
 ## Session Continuity
 
-Last session: 2026-08-31T19:25:00.000Z
-Stopped at: Phase 2 verifier human_needed 13/13; awaiting visual + TalkBack
+Last session: 2026-08-31T19:40:00.000Z
+Stopped at: Phase 2 UAT approved; official re-verification
 Resume file: None
-Resume with: Human UAT on production screens (visual + TalkBack). Reply approved if both pass. Do not start Phase 3.
+Resume with: Show verifier result. Do not start Phase 3 or transition until the user sees it.
