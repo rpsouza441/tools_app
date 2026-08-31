@@ -4,6 +4,7 @@ import 'package:tools_app/app/app_destinations.dart';
 import 'package:tools_app/app/app_shell.dart';
 import 'package:tools_app/design_system/app_breakpoints.dart';
 import 'package:tools_app/main.dart';
+import 'package:tools_app/theme/theme.dart';
 
 void main() {
   group('AppBreakpoints', () {
@@ -31,7 +32,10 @@ void main() {
       addTearDown(tester.view.resetDevicePixelRatio);
 
       await tester.pumpWidget(
-        MaterialApp(home: AppShell(destinations: appDestinations)),
+        MaterialApp(
+          theme: lightTheme,
+          home: AppShell(destinations: appDestinations),
+        ),
       );
       await tester.pumpAndSettle();
 
@@ -48,7 +52,10 @@ void main() {
       addTearDown(tester.view.resetDevicePixelRatio);
 
       await tester.pumpWidget(
-        MaterialApp(home: AppShell(destinations: appDestinations)),
+        MaterialApp(
+          theme: lightTheme,
+          home: AppShell(destinations: appDestinations),
+        ),
       );
       await tester.pumpAndSettle();
 
@@ -65,7 +72,10 @@ void main() {
       addTearDown(tester.view.resetDevicePixelRatio);
 
       await tester.pumpWidget(
-        MaterialApp(home: AppShell(destinations: appDestinations)),
+        MaterialApp(
+          theme: lightTheme,
+          home: AppShell(destinations: appDestinations),
+        ),
       );
       await tester.pumpAndSettle();
 
@@ -510,7 +520,10 @@ void main() {
         addTearDown(tester.view.resetDevicePixelRatio);
 
         await tester.pumpWidget(
-          MaterialApp(home: AppShell(destinations: appDestinations)),
+          MaterialApp(
+            theme: lightTheme,
+            home: AppShell(destinations: appDestinations),
+          ),
         );
         await tester.pumpAndSettle();
 
