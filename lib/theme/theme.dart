@@ -28,8 +28,10 @@ const _textTheme = TextTheme(
 // Shared component themes — D-16 tap targets, consistent radii.
 // ──────────────────────────────────────────────────────────────────────────────
 
+const _tokens = AppTokens();
+
 final _buttonShape = RoundedRectangleBorder(
-  borderRadius: BorderRadius.circular(12),
+  borderRadius: BorderRadius.circular(_tokens.radius8),
 );
 
 const _buttonMinSize = Size(48, 48);
@@ -38,7 +40,15 @@ const _buttonMinSize = Size(48, 48);
 ThemeData _applyComponentThemes(ThemeData base) {
   final cs = base.colorScheme;
   return base.copyWith(
+    appBarTheme: AppBarTheme(
+      elevation: 0,
+      scrolledUnderElevation: 0,
+      backgroundColor: cs.surface,
+      foregroundColor: cs.onSurface,
+      surfaceTintColor: Colors.transparent,
+    ),
     navigationBarTheme: NavigationBarThemeData(
+      elevation: 0,
       indicatorColor: cs.primaryContainer,
       iconTheme: WidgetStateProperty.resolveWith((states) {
         if (states.contains(WidgetState.selected)) {
@@ -62,6 +72,7 @@ ThemeData _applyComponentThemes(ThemeData base) {
       }),
     ),
     navigationRailTheme: NavigationRailThemeData(
+      elevation: 0,
       indicatorColor: cs.primaryContainer,
       selectedIconTheme: IconThemeData(color: cs.onPrimaryContainer),
       unselectedIconTheme: IconThemeData(color: cs.onSurfaceVariant),
@@ -77,17 +88,24 @@ ThemeData _applyComponentThemes(ThemeData base) {
       ),
     ),
     cardTheme: CardThemeData(
-      elevation: 1,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      elevation: 0,
+      color: cs.surface,
+      surfaceTintColor: Colors.transparent,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(_tokens.radius12),
+        side: BorderSide(color: cs.outline, width: 1),
+      ),
     ),
     inputDecorationTheme: InputDecorationTheme(
-      border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(_tokens.radius8),
+      ),
       focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(_tokens.radius8),
         borderSide: BorderSide(color: cs.primary, width: 2),
       ),
       errorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(_tokens.radius8),
         borderSide: BorderSide(color: cs.error),
       ),
       labelStyle: TextStyle(color: cs.onSurfaceVariant),
@@ -120,12 +138,18 @@ ThemeData _applyComponentThemes(ThemeData base) {
       ),
     ),
     chipTheme: ChipThemeData(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(_tokens.radius4),
+      ),
       labelStyle: TextStyle(fontSize: 12, color: cs.onSurfaceVariant),
     ),
     snackBarTheme: SnackBarThemeData(
       behavior: SnackBarBehavior.floating,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      elevation: 2,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(_tokens.radius12),
+      ),
     ),
     iconButtonTheme: IconButtonThemeData(
       style: IconButton.styleFrom(minimumSize: _buttonMinSize),
@@ -141,13 +165,25 @@ final ThemeData lightTheme = _applyComponentThemes(
   ThemeData(
     useMaterial3: true,
     brightness: Brightness.light,
-    colorScheme: ColorScheme.fromSeed(
-      seedColor: _greenSeed,
-      brightness: Brightness.light,
-    ),
+    colorScheme:
+        ColorScheme.fromSeed(
+          seedColor: _greenSeed,
+          brightness: Brightness.light,
+        ).copyWith(
+          surface: const Color(0xFFFFFFFF),
+          surfaceContainer: const Color(0xFFEDF3EE),
+          onSurface: const Color(0xFF171D18),
+          onSurfaceVariant: const Color(0xFF47534A),
+          outline: const Color(0xFF707A72),
+          primary: const Color(0xFF006D2C),
+          onPrimary: const Color(0xFFFFFFFF),
+          primaryContainer: const Color(0xFFB8F3C5),
+          onPrimaryContainer: const Color(0xFF002109),
+          error: const Color(0xFFBA1A1A),
+          onError: const Color(0xFFFFFFFF),
+        ),
     textTheme: _textTheme,
-    scaffoldBackgroundColor: const Color(0xFFFBFDF8),
-    appBarTheme: const AppBarTheme(elevation: 0, scrolledUnderElevation: 1),
+    scaffoldBackgroundColor: const Color(0xFFF7F9F7),
     extensions: const <ThemeExtension>[AppTokens()],
   ),
 );
@@ -160,13 +196,25 @@ final ThemeData darkTheme = _applyComponentThemes(
   ThemeData(
     useMaterial3: true,
     brightness: Brightness.dark,
-    colorScheme: ColorScheme.fromSeed(
-      seedColor: _greenSeed,
-      brightness: Brightness.dark,
-    ),
+    colorScheme:
+        ColorScheme.fromSeed(
+          seedColor: _greenSeed,
+          brightness: Brightness.dark,
+        ).copyWith(
+          surface: const Color(0xFF151C17),
+          surfaceContainer: const Color(0xFF1D2820),
+          onSurface: const Color(0xFFE1E9E2),
+          onSurfaceVariant: const Color(0xFFBBC5BC),
+          outline: const Color(0xFF859087),
+          primary: const Color(0xFF50FA7B),
+          onPrimary: const Color(0xFF003913),
+          primaryContainer: const Color(0xFF005321),
+          onPrimaryContainer: const Color(0xFFA7F5B7),
+          error: const Color(0xFFFFB4AB),
+          onError: const Color(0xFF690005),
+        ),
     textTheme: _textTheme,
-    scaffoldBackgroundColor: const Color(0xFF1A1C19),
-    appBarTheme: const AppBarTheme(elevation: 0, scrolledUnderElevation: 1),
+    scaffoldBackgroundColor: const Color(0xFF0F1511),
     extensions: const <ThemeExtension>[AppTokens()],
   ),
 );

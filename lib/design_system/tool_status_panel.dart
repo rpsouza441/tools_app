@@ -17,13 +17,9 @@ enum ToolStatusVariant {
 
 /// Status metadata for rendering a [ToolStatusPanel].
 class _StatusData {
-  const _StatusData({
-    required this.icon,
-    required this.heading,
-    required this.body,
-  });
+  const _StatusData({this.icon, required this.heading, required this.body});
 
-  final IconData icon;
+  final IconData? icon;
   final String heading;
   final String body;
 }
@@ -31,13 +27,12 @@ class _StatusData {
 const _statusMap = <ToolStatusVariant, _StatusData>{
   ToolStatusVariant.empty: _StatusData(
     icon: Icons.inbox_outlined,
-    heading: 'Pronto',
-    body: 'Insira os dados e execute a ação.',
+    heading: 'Nenhum resultado ainda',
+    body: 'Preencha os campos e execute a ferramenta para ver os resultados.',
   ),
   ToolStatusVariant.loading: _StatusData(
-    icon: Icons.hourglass_empty,
-    heading: 'Processando...',
-    body: 'Aguarde a conclusão.',
+    heading: 'Processando',
+    body: 'Aguarde enquanto concluímos esta etapa.',
   ),
   ToolStatusVariant.success: _StatusData(
     icon: Icons.check_circle_outline,
@@ -46,29 +41,32 @@ const _statusMap = <ToolStatusVariant, _StatusData>{
   ),
   ToolStatusVariant.failure: _StatusData(
     icon: Icons.error_outline,
-    heading: 'Falha',
-    body: 'Não foi possível concluir a operação.',
+    heading: 'Não foi possível concluir',
+    body: 'Confira os dados e tente novamente.',
   ),
   ToolStatusVariant.offline: _StatusData(
-    icon: Icons.cloud_off,
-    heading: 'Sem conexão',
-    body: 'Verifique sua conexão e tente novamente.',
+    icon: Icons.wifi_off,
+    heading: 'Sem conexão com a internet',
+    body: 'Verifique a conexão e tente novamente.',
   ),
   ToolStatusVariant.permissionDenied: _StatusData(
     icon: Icons.lock_outline,
     heading: 'Permissão necessária',
-    body: 'Conceda a permissão nas configurações.',
+    body: 'Ative a permissão nas configurações para continuar.',
   ),
   ToolStatusVariant.cancelled: _StatusData(
     icon: Icons.cancel_outlined,
-    heading: 'Cancelado',
-    body: 'A operação foi cancelada.',
+    heading: 'Operação cancelada',
+    body: 'Os resultados concluídos continuam disponíveis.',
   ),
 };
 
 /// Maps a [ToolStatusVariant] to icon + pt-BR heading + body.
 ///
-/// - Color: success uses primary, failure/offline use error, others use onSurface.
+/// - Color: success uses primary; failure and permissionDenied use error;
+///   empty, loading, offline, and cancelled use onSurface (neutral).
+/// - Loading uses an indeterminate [CircularProgressIndicator] when
+///   [ToolStatusPanel.progress] is null; otherwise the indicator is determinate.
 /// - preservedChild: shown below status for loading, failure, and cancelled.
 /// - onRetry: shows retry button only when provided.
 /// - onSettings: shows settings button only when provided.
@@ -100,7 +98,8 @@ class ToolStatusPanel extends StatelessWidget {
   Color _iconColor(ColorScheme cs) {
     return switch (variant) {
       ToolStatusVariant.success => cs.primary,
-      ToolStatusVariant.failure || ToolStatusVariant.offline => cs.error,
+      ToolStatusVariant.failure ||
+      ToolStatusVariant.permissionDenied => cs.error,
       _ => cs.onSurface,
     };
   }
@@ -121,7 +120,18 @@ class ToolStatusPanel extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Icon(data.icon, size: 48, color: color),
+        if (variant == ToolStatusVariant.loading)
+          SizedBox(
+            width: 48,
+            height: 48,
+            child: CircularProgressIndicator(
+              value: progress,
+              color: color,
+              strokeWidth: 3,
+            ),
+          )
+        else
+          Icon(data.icon!, size: 48, color: color),
         SizedBox(height: tokens.spacing8),
         Text(
           data.heading,
@@ -136,10 +146,6 @@ class ToolStatusPanel extends StatelessWidget {
           ),
           textAlign: TextAlign.center,
         ),
-        if (progress != null && variant == ToolStatusVariant.loading) ...[
-          SizedBox(height: tokens.spacing16),
-          LinearProgressIndicator(value: progress),
-        ],
         if (onRetry != null) ...[
           SizedBox(height: tokens.spacing16),
           OutlinedButton.icon(

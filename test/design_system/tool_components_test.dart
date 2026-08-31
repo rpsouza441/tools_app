@@ -463,9 +463,14 @@ void main() {
             expect(find.text(expected.body), findsOneWidget);
 
             if (expected.progressIndicator) {
-              expect(find.byType(ProgressIndicator), findsOneWidget);
+              // byType matches exact runtimeType; CircularProgressIndicator
+              // is a ProgressIndicator subclass.
+              final progressFinder = find.byWidgetPredicate(
+                (widget) => widget is ProgressIndicator,
+              );
+              expect(progressFinder, findsOneWidget);
               final indicator = tester.widget<ProgressIndicator>(
-                find.byType(ProgressIndicator),
+                progressFinder,
               );
               expect(indicator.color, theme.colorScheme.onSurface);
             } else {
