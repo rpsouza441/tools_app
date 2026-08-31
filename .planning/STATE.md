@@ -83,7 +83,7 @@ Progress: [█████████░] 91%
 
 ### Blockers/Concerns
 
-- [Phase 1 Plan 11]: TalkBack real é o único residual do 01-11. Visual APPROVED. Não inventar percurso TalkBack. Não aplicar override.
+- [Phase 1 Plan 11]: TalkBack real é residual. Falha humana de copy no harness (`_NoopCopyWriter` + SnackBar de sucesso) corrigida para `ClipboardCopyWriter`; 01-11 **não aprovado** até reteste. `Calcular rede`/`Limpar` na galeria são samples.
 - [Phase 1 verification]: Re-verificação oficial **human_needed**, score 24/25. Relatório novo em 01-VERIFICATION.md. Phase 1 não Complete. Phase 2 não iniciada.
 - [Phase 1 gap planning]: Goal da Phase 1 reformatado para user story minima (`As a ..., I want to ..., so that ...`) sem alterar Success Criteria, Requirements nem o boundary da Phase 2. `/gsd mvp-phase 1` nao foi executado por completo porque a fase ja esta `mode: mvp` e `in_progress`/`Executed`, e o workflow delegaria a `plan-phase` sem `--gaps`.
 - [Phase 1 Plan 06 UI-03]: Inconsistência documental registrada, não expandida — Phase 1 owns primitives/galeria; Phase 2 owns adoção nas três telas. Não mover UI-03. Não desmarcar REQUIREMENTS.md. Não puxar PRES-*.

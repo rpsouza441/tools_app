@@ -3,7 +3,7 @@ phase: 01-contrato-visual-e-funda-o-adaptativa
 plan: "11"
 subsystem: testing
 tags: [human-verify, android, goldens, talkback-residual, gap-closure]
-status: residual_talkback
+status: residual_talkback_and_copy_retest
 
 requires:
   - phase: 01-contrato-visual-e-funda-o-adaptativa
@@ -60,6 +60,7 @@ completed: 2026-08-31
 
 - Cruzou os sete checks do 01-11 com evidência humana APPROVED, testes automatizados, goldens canônicos e código.
 - Corrigiu headings `Concluído` / `Não foi possível concluir` / `Permissão necessária` para `onSurface` (UI-SPEC: accent/error no ícone).
+- Falha humana: copy no harness mostrava confirmação sem clipboard (`_NoopCopyWriter`). Corrigido para `ClipboardCopyWriter`. **01-11 não aprovado.**
 - Não inventou TalkBack. Não aplicou waiver. Não iniciou Phase 2.
 
 ## Check results
@@ -71,7 +72,7 @@ completed: 2026-08-31
 | 3 Temas | PASS (cruzado) | Humano: app real claro + harness escuro APPROVED (corpo neutro, verde só no acento, cards com borda). Automatizado: `theme_contract_test.dart` hex/elevation/radius. |
 | 4 Texto 200% | PASS (automatizado) | `accessibility_test` 360/720/1024 × 1.0/2.0 em widgets públicos; `tool_metric_reflow_test` 360 + scaler 2.0. Sem gap visual nas evidências. |
 | 5 TalkBack | RESIDUAL | Não executado. Não simulado. Widget tests não substituem. |
-| 6 Anúncios/targets (exceto TalkBack) | PASS (automatizado) | `semanticLabel` uma vez; `Copiar {rótulo}`; `{Rótulo} copiado`; writer real; dispose seguro; SnackBar próprio (`copy_lifecycle_test`); `androidTapTargetGuideline` 48 px. |
+| 6 Anúncios/targets (exceto TalkBack) | **FAIL humano / corrigido no código, 01-11 não aprovado** | Harness usava `_NoopCopyWriter`: SnackBar de sucesso sem clipboard. Corrigido para `ClipboardCopyWriter`. `Calcular rede`/`Limpar` são callbacks vazios deliberados (galeria estática). |
 | 7 Goldens | PASS (cruzado) | Quatro PNGs em `test/design_system/goldens/`. Aprovação humana da direção visual nesta sessão. `shell_medium_light.png` regenerado só após correção dos headings. `test/goldens/` ausente. |
 
 ## Heading color gap
@@ -106,5 +107,5 @@ overrides:
 - Requirements: 01-11 não marca UI-01..UI-09 complete em REQUIREMENTS.md
 - Key links: harness → galeria; main → AppShell
 - Threat model: T-01-G11-01 (sem autoaprovação de TalkBack); T-01-G11-03 (correção de headings autorizada pelo usuário após o checkpoint)
-- 80/20: TalkBack real continua residual
-- Phase 1 permanece incompleta. Phase 2 não iniciada. PRES-* não implementados.
+- 80/20: TalkBack real continua residual; copy do harness precisa de reteste humano após o fix
+- Phase 1 permanece incompleta. Phase 2 não iniciada. PRES-* não implementados. 01-11 **não aprovado**.

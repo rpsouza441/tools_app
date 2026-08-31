@@ -4,14 +4,6 @@ import 'package:tools_app/design_system/tool_scaffold.dart';
 import 'package:tools_app/design_system/tool_sections.dart';
 import 'package:tools_app/design_system/tool_status_panel.dart';
 
-/// Completes immediately without touching the system clipboard.
-class _NoopCopyWriter implements CopyValueWriter {
-  const _NoopCopyWriter();
-
-  @override
-  Future<void> write(String value) async {}
-}
-
 /// Test-only gallery showcasing all design system primitives.
 ///
 /// Renders every component in a controlled, static configuration for:
@@ -19,7 +11,12 @@ class _NoopCopyWriter implements CopyValueWriter {
 /// - Manual TalkBack/accessibility testing
 /// - Visual design review
 ///
-/// Uses static pt-BR text. No network, no real clipboard, no animation loops.
+/// Uses static pt-BR text. No network and no animation loops.
+/// Copy uses [ClipboardCopyWriter] so the harness writes the displayed value
+/// to the system clipboard before showing confirmation.
+///
+/// Primary/secondary actions (`Calcular rede`, `Limpar`) are demonstrative
+/// layout samples with empty callbacks — this gallery is not a calculator.
 ///
 /// Must be placed inside a [Scaffold] or [Material] ancestor for [TextField]
 /// to function correctly. When used inside [AppShell], the shell provides the
@@ -27,7 +24,7 @@ class _NoopCopyWriter implements CopyValueWriter {
 class DesignSystemGallery extends StatelessWidget {
   const DesignSystemGallery({super.key});
 
-  static const CopyValueWriter _copyWriter = _NoopCopyWriter();
+  static const CopyValueWriter _copyWriter = ClipboardCopyWriter();
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +55,7 @@ class DesignSystemGallery extends StatelessWidget {
         ),
         const SizedBox(height: 24),
 
-        // ToolActionGroup with primary and secondary
+        // Demonstrative action group: static layout only, not a calculator.
         ToolActionGroup(
           primary: ElevatedButton(
             onPressed: () {},

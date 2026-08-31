@@ -9,6 +9,9 @@ import '../design_system/design_system_gallery.dart';
 /// Run on a real device with:
 ///   flutter run -t test/manual/design_system_app.dart
 ///
+/// Copy in the gallery uses the real clipboard ([ClipboardCopyWriter]).
+/// `Calcular rede` and `Limpar` are visual samples with empty callbacks.
+///
 /// This file is NEVER imported by production code.
 void main() {
   runApp(const _DesignSystemApp());
