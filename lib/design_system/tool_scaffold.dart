@@ -53,19 +53,16 @@ class ToolScaffold extends StatelessWidget {
                     children: [
                       Semantics(
                         header: true,
-                        child: Text(
-                          title,
-                          style: textTheme.titleLarge,
-                        ),
+                        child: Text(title, style: textTheme.titleLarge),
                       ),
                       if (summary != null) ...[
                         SizedBox(height: tokens.spacing8),
                         Text(
                           summary!,
                           style: textTheme.bodyMedium?.copyWith(
-                            color: Theme.of(context)
-                                .colorScheme
-                                .onSurfaceVariant,
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.onSurfaceVariant,
                           ),
                         ),
                       ],

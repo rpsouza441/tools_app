@@ -56,10 +56,7 @@ class ToolActionGroup extends StatelessWidget {
         primary,
         ?secondary,
         if (onCancel != null)
-          TextButton(
-            onPressed: onCancel,
-            child: const Text('Cancelar'),
-          ),
+          TextButton(onPressed: onCancel, child: const Text('Cancelar')),
       ],
     );
   }
@@ -77,10 +74,7 @@ class ToolResultCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final tokens = Theme.of(context).extension<AppTokens>()!;
     return Card(
-      child: Padding(
-        padding: EdgeInsets.all(tokens.spacing16),
-        child: child,
-      ),
+      child: Padding(padding: EdgeInsets.all(tokens.spacing16), child: child),
     );
   }
 }

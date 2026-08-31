@@ -53,17 +53,12 @@ class DesignSystemGallery extends StatelessWidget {
             onPressed: () {},
             child: const Text('Calcular'),
           ),
-          secondary: TextButton(
-            onPressed: () {},
-            child: const Text('Limpar'),
-          ),
+          secondary: TextButton(onPressed: () {}, child: const Text('Limpar')),
         ),
         const SizedBox(height: 24),
 
         // ToolResultCard with sample result
-        const ToolResultCard(
-          child: Text('Resultado: 192.168.1.0/24'),
-        ),
+        const ToolResultCard(child: Text('Resultado: 192.168.1.0/24')),
         const SizedBox(height: 24),
 
         // ToolMetricLayout with metrics
@@ -76,10 +71,7 @@ class DesignSystemGallery extends StatelessWidget {
         const SizedBox(height: 24),
 
         // TechnicalValueRow
-        const TechnicalValueRow(
-          label: 'Hash',
-          value: 'abc123def456',
-        ),
+        const TechnicalValueRow(label: 'Hash', value: 'abc123def456'),
         const SizedBox(height: 32),
 
         // All 7 ToolStatusPanel variants
@@ -98,10 +90,7 @@ class _StatusPanelShowcase extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Text(
-          'Status Panels',
-          style: Theme.of(context).textTheme.titleLarge,
-        ),
+        Text('Status Panels', style: Theme.of(context).textTheme.titleLarge),
         const SizedBox(height: 16),
         for (final variant in ToolStatusVariant.values) ...[
           Container(

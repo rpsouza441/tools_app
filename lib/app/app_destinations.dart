@@ -83,8 +83,6 @@ final List<AppDestination> appDestinations = [
 Widget _buildNetworkCalculator(BuildContext context) =>
     const NetworkCalculatorScreen();
 
-Widget _buildDataConverter(BuildContext context) =>
-    const DataConverterScreen();
+Widget _buildDataConverter(BuildContext context) => const DataConverterScreen();
 
-Widget _buildHashGenerator(BuildContext context) =>
-    const HashGeneratorScreen();
+Widget _buildHashGenerator(BuildContext context) => const HashGeneratorScreen();

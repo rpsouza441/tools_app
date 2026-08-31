@@ -62,10 +62,7 @@ Widget _buildFixture(ThemeData theme) {
               child: const Text('Ação Principal'),
             ),
             const SizedBox(height: 8),
-            TextButton(
-              onPressed: () {},
-              child: const Text('Ação Secundária'),
-            ),
+            TextButton(onPressed: () {}, child: const Text('Ação Secundária')),
             const SizedBox(height: 8),
             OutlinedButton(
               onPressed: () {},
@@ -134,15 +131,21 @@ void main() {
     test('lightTheme primary is green accent', () {
       final cs = lightTheme.colorScheme;
       final hsl = HSLColor.fromColor(cs.primary);
-      expect(hsl.hue, inInclusiveRange(80, 170),
-          reason: 'primary should be green');
+      expect(
+        hsl.hue,
+        inInclusiveRange(80, 170),
+        reason: 'primary should be green',
+      );
     });
 
     test('darkTheme primary is green accent', () {
       final cs = darkTheme.colorScheme;
       final hsl = HSLColor.fromColor(cs.primary);
-      expect(hsl.hue, inInclusiveRange(80, 170),
-          reason: 'primary should be green');
+      expect(
+        hsl.hue,
+        inInclusiveRange(80, 170),
+        reason: 'primary should be green',
+      );
     });
 
     test('light and dark share the same semantic color roles', () {
@@ -158,8 +161,9 @@ void main() {
   });
 
   group('AppTokens tests', () {
-    testWidgets('AppTokens is accessible via Theme.of(context).extension',
-        (tester) async {
+    testWidgets('AppTokens is accessible via Theme.of(context).extension', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         MaterialApp(
           theme: lightTheme,
@@ -247,7 +251,8 @@ void main() {
             bodyStyle!.fontFamily == 'Roboto' ||
             !bodyStyle.fontFamily!.contains('Lato'),
         isTrue,
-        reason: 'Font should not be Lato (google_fonts). Got: ${bodyStyle?.fontFamily}',
+        reason:
+            'Font should not be Lato (google_fonts). Got: ${bodyStyle?.fontFamily}',
       );
     });
   });
@@ -345,9 +350,7 @@ void main() {
     Widget buildGalleryFixture(ThemeData theme) {
       return MaterialApp(
         theme: theme,
-        home: const Scaffold(
-          body: DesignSystemGallery(),
-        ),
+        home: const Scaffold(body: DesignSystemGallery()),
       );
     }
 
@@ -380,9 +383,7 @@ void main() {
     Widget buildGalleryFixture(ThemeData theme) {
       return MaterialApp(
         theme: theme,
-        home: const Scaffold(
-          body: DesignSystemGallery(),
-        ),
+        home: const Scaffold(body: DesignSystemGallery()),
       );
     }
 

@@ -26,8 +26,11 @@ void main() {
       for (final dest in appDestinations) {
         expect(dest.icon, isNotNull);
         expect(dest.selectedIcon, isNotNull);
-        expect(dest.icon != dest.selectedIcon, isTrue,
-            reason: '${dest.id} must have distinct icon/selectedIcon');
+        expect(
+          dest.icon != dest.selectedIcon,
+          isTrue,
+          reason: '${dest.id} must have distinct icon/selectedIcon',
+        );
       }
     });
 

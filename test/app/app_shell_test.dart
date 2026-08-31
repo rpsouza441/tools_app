@@ -31,9 +31,7 @@ void main() {
       addTearDown(tester.view.resetDevicePixelRatio);
 
       await tester.pumpWidget(
-        MaterialApp(
-          home: AppShell(destinations: appDestinations),
-        ),
+        MaterialApp(home: AppShell(destinations: appDestinations)),
       );
       await tester.pumpAndSettle();
 
@@ -41,52 +39,47 @@ void main() {
       expect(find.byType(NavigationRail), findsNothing);
     });
 
-    testWidgets('shows collapsed NavigationRail at 600px width',
-        (tester) async {
+    testWidgets('shows collapsed NavigationRail at 600px width', (
+      tester,
+    ) async {
       tester.view.physicalSize = const Size(600, 800);
       tester.view.devicePixelRatio = 1.0;
       addTearDown(tester.view.resetPhysicalSize);
       addTearDown(tester.view.resetDevicePixelRatio);
 
       await tester.pumpWidget(
-        MaterialApp(
-          home: AppShell(destinations: appDestinations),
-        ),
+        MaterialApp(home: AppShell(destinations: appDestinations)),
       );
       await tester.pumpAndSettle();
 
       expect(find.byType(NavigationRail), findsOneWidget);
       expect(find.byType(NavigationBar), findsNothing);
-      final rail =
-          tester.widget<NavigationRail>(find.byType(NavigationRail));
+      final rail = tester.widget<NavigationRail>(find.byType(NavigationRail));
       expect(rail.extended, isFalse);
     });
 
-    testWidgets('shows extended NavigationRail at 840px width',
-        (tester) async {
+    testWidgets('shows extended NavigationRail at 840px width', (tester) async {
       tester.view.physicalSize = const Size(840, 800);
       tester.view.devicePixelRatio = 1.0;
       addTearDown(tester.view.resetPhysicalSize);
       addTearDown(tester.view.resetDevicePixelRatio);
 
       await tester.pumpWidget(
-        MaterialApp(
-          home: AppShell(destinations: appDestinations),
-        ),
+        MaterialApp(home: AppShell(destinations: appDestinations)),
       );
       await tester.pumpAndSettle();
 
       expect(find.byType(NavigationRail), findsOneWidget);
       expect(find.byType(NavigationBar), findsNothing);
-      final rail =
-          tester.widget<NavigationRail>(find.byType(NavigationRail));
+      final rail = tester.widget<NavigationRail>(find.byType(NavigationRail));
       expect(rail.extended, isTrue);
     });
   });
 
   group('AppShell state preservation', () {
-    testWidgets('IndexedStack preserves page state on navigation',
-        (tester) async {
+    testWidgets('IndexedStack preserves page state on navigation', (
+      tester,
+    ) async {
       tester.view.physicalSize = const Size(400, 800);
       tester.view.devicePixelRatio = 1.0;
       addTearDown(tester.view.resetPhysicalSize);
@@ -112,8 +105,7 @@ void main() {
           selectedIcon: Icons.star,
           category: AppDestinationCategory.hash,
           compactPriority: 2,
-          pageBuilder: (_) =>
-              const Scaffold(body: Text('Placeholder')),
+          pageBuilder: (_) => const Scaffold(body: Text('Placeholder')),
         ),
       ];
 
@@ -164,8 +156,7 @@ void main() {
           selectedIcon: Icons.star,
           category: AppDestinationCategory.hash,
           compactPriority: 2,
-          pageBuilder: (_) =>
-              const Scaffold(body: Text('Placeholder')),
+          pageBuilder: (_) => const Scaffold(body: Text('Placeholder')),
         ),
       ];
 
@@ -189,9 +180,9 @@ void main() {
   });
 
   group('AppShell growth — D-03 overflow', () {
-    testWidgets(
-        '5 destinations shows 3 compact priorities + Ferramentas',
-        (tester) async {
+    testWidgets('5 destinations shows 3 compact priorities + Ferramentas', (
+      tester,
+    ) async {
       tester.view.physicalSize = const Size(400, 800);
       tester.view.devicePixelRatio = 1.0;
       addTearDown(tester.view.resetPhysicalSize);
@@ -215,90 +206,103 @@ void main() {
     });
 
     testWidgets(
-        'selecting an unpinned item from Ferramentas keeps Ferramentas selected',
-        (tester) async {
-      tester.view.physicalSize = const Size(400, 800);
-      tester.view.devicePixelRatio = 1.0;
-      addTearDown(tester.view.resetPhysicalSize);
-      addTearDown(tester.view.resetDevicePixelRatio);
+      'selecting an unpinned item from Ferramentas keeps Ferramentas selected',
+      (tester) async {
+        tester.view.physicalSize = const Size(400, 800);
+        tester.view.devicePixelRatio = 1.0;
+        addTearDown(tester.view.resetPhysicalSize);
+        addTearDown(tester.view.resetDevicePixelRatio);
 
-      final destinations = _buildFiveDestinations();
+        final destinations = _buildFiveDestinations();
 
-      await tester.pumpWidget(
-        MaterialApp(home: AppShell(destinations: destinations)),
-      );
-      await tester.pumpAndSettle();
+        await tester.pumpWidget(
+          MaterialApp(home: AppShell(destinations: destinations)),
+        );
+        await tester.pumpAndSettle();
 
-      // Tap Ferramentas
-      await tester.tap(find.text('Ferramentas'));
-      await tester.pumpAndSettle();
+        // Tap Ferramentas
+        await tester.tap(find.text('Ferramentas'));
+        await tester.pumpAndSettle();
 
-      // Should show the overflow menu/sheet with lower-priority items
-      expect(find.text('Prio4'), findsOneWidget);
+        // Should show the overflow menu/sheet with lower-priority items
+        expect(find.text('Prio4'), findsOneWidget);
 
-      // Tap an unpinned item
-      await tester.tap(find.text('Prio4'));
-      await tester.pumpAndSettle();
+        // Tap an unpinned item
+        await tester.tap(find.text('Prio4'));
+        await tester.pumpAndSettle();
 
-      // The page of Prio4 should be visible
-      expect(find.text('Page4'), findsOneWidget);
+        // The page of Prio4 should be visible
+        expect(find.text('Page4'), findsOneWidget);
 
-      // NavigationBar should still show Ferramentas as selected
-      final navBar = tester.widget<NavigationBar>(find.byType(NavigationBar));
-      // Ferramentas is at index 3 (after the 3 pinned items)
-      expect(navBar.selectedIndex, 3);
-    });
+        // NavigationBar should still show Ferramentas as selected
+        final navBar = tester.widget<NavigationBar>(find.byType(NavigationBar));
+        // Ferramentas is at index 3 (after the 3 pinned items)
+        expect(navBar.selectedIndex, 3);
+      },
+    );
   });
 
   group('Happy path — real App integration', () {
     testWidgets(
-        'at 360x800: NavigationBar present, network calc works, state preserved',
-        (tester) async {
-      tester.view.physicalSize = const Size(360, 800);
-      tester.view.devicePixelRatio = 1.0;
-      addTearDown(tester.view.resetPhysicalSize);
-      addTearDown(tester.view.resetDevicePixelRatio);
+      'at 360x800: NavigationBar present, network calc works, state preserved',
+      (tester) async {
+        tester.view.physicalSize = const Size(360, 800);
+        tester.view.devicePixelRatio = 1.0;
+        addTearDown(tester.view.resetPhysicalSize);
+        addTearDown(tester.view.resetDevicePixelRatio);
 
-      await tester.pumpWidget(const App());
-      await tester.pumpAndSettle();
+        await tester.pumpWidget(const App());
+        await tester.pumpAndSettle();
 
-      // NavigationBar should be present
-      expect(find.byType(NavigationBar), findsOneWidget);
+        // NavigationBar should be present
+        expect(find.byType(NavigationBar), findsOneWidget);
 
-      // Should see the network calculator as the first screen (AppBar title)
-      expect(find.descendant(
-        of: find.byType(AppBar),
-        matching: find.text('Calculadora de Rede'),
-      ), findsOneWidget);
+        // Should see the network calculator as the first screen (AppBar title)
+        expect(
+          find.descendant(
+            of: find.byType(AppBar),
+            matching: find.text('Calculadora de Rede'),
+          ),
+          findsOneWidget,
+        );
 
-      // Enter IP and CIDR in the network calculator
-      await tester.enterText(
-          find.widgetWithText(TextField, 'Endereço de IP'), '192.168.1.10');
-      await tester.enterText(
-          find.widgetWithText(TextField, 'Máscara de Sub-Rede ou CIDR'), '24');
-      await tester.pumpAndSettle();
+        // Enter IP and CIDR in the network calculator
+        await tester.enterText(
+          find.widgetWithText(TextField, 'Endereço de IP'),
+          '192.168.1.10',
+        );
+        await tester.enterText(
+          find.widgetWithText(TextField, 'Máscara de Sub-Rede ou CIDR'),
+          '24',
+        );
+        await tester.pumpAndSettle();
 
-      // Scroll down to make Calcular button visible, then tap
-      await tester.ensureVisible(find.text('Calcular'));
-      await tester.tap(find.text('Calcular'));
-      await tester.pumpAndSettle();
+        // Scroll down to make Calcular button visible, then tap
+        await tester.ensureVisible(find.text('Calcular'));
+        await tester.tap(find.text('Calcular'));
+        await tester.pumpAndSettle();
 
-      // Verify result appears
-      expect(find.textContaining('Endereço de Rede: 192.168.1.0'),
-          findsOneWidget);
+        // Verify result appears
+        expect(
+          find.textContaining('Endereço de Rede: 192.168.1.0'),
+          findsOneWidget,
+        );
 
-      // Navigate to second tab
-      await tester.tap(find.text('Conversor de Dados'));
-      await tester.pumpAndSettle();
+        // Navigate to second tab
+        await tester.tap(find.text('Conversor de Dados'));
+        await tester.pumpAndSettle();
 
-      // Navigate back to first tab
-      await tester.tap(find.text('Calculadora de Rede'));
-      await tester.pumpAndSettle();
+        // Navigate back to first tab
+        await tester.tap(find.text('Calculadora de Rede'));
+        await tester.pumpAndSettle();
 
-      // Result is still there (preserved by IndexedStack)
-      expect(find.textContaining('Endereço de Rede: 192.168.1.0'),
-          findsOneWidget);
-    });
+        // Result is still there (preserved by IndexedStack)
+        expect(
+          find.textContaining('Endereço de Rede: 192.168.1.0'),
+          findsOneWidget,
+        );
+      },
+    );
   });
 }
 

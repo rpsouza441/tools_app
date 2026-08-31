@@ -36,9 +36,7 @@ class _AppShellState extends State<AppShell> {
   List<AppDestination> get _overflowDestinations {
     if (!_useOverflow) return [];
     final pinned = _pinnedDestinations;
-    return widget.destinations
-        .where((d) => !pinned.contains(d))
-        .toList();
+    return widget.destinations.where((d) => !pinned.contains(d)).toList();
   }
 
   /// Maps the selected index to the actual destination index in widget.destinations.
@@ -67,8 +65,9 @@ class _AppShellState extends State<AppShell> {
     _buildPages();
     if (_useOverflow) {
       // Default overflow selection to first overflow item
-      _overflowSelectedActualIndex =
-          widget.destinations.indexOf(_overflowDestinations.first);
+      _overflowSelectedActualIndex = widget.destinations.indexOf(
+        _overflowDestinations.first,
+      );
     }
   }
 
@@ -81,9 +80,7 @@ class _AppShellState extends State<AppShell> {
   }
 
   void _buildPages() {
-    _pages = widget.destinations
-        .map((d) => d.pageBuilder(context))
-        .toList();
+    _pages = widget.destinations.map((d) => d.pageBuilder(context)).toList();
   }
 
   void _onDestinationSelected(int index) {
@@ -121,19 +118,21 @@ class _AppShellState extends State<AppShell> {
                 ),
               ),
               ...grouped.entries.expand((entry) {
-                return entry.value.map((d) => ListTile(
-                      leading: Icon(d.icon),
-                      title: Text(d.label),
-                      onTap: () {
-                        Navigator.pop(sheetContext);
-                        setState(() {
-                          _overflowSelectedActualIndex =
-                              widget.destinations.indexOf(d);
-                          // Keep Ferramentas selected
-                          _selectedIndex = _pinnedDestinations.length;
-                        });
-                      },
-                    ));
+                return entry.value.map(
+                  (d) => ListTile(
+                    leading: Icon(d.icon),
+                    title: Text(d.label),
+                    onTap: () {
+                      Navigator.pop(sheetContext);
+                      setState(() {
+                        _overflowSelectedActualIndex = widget.destinations
+                            .indexOf(d);
+                        // Keep Ferramentas selected
+                        _selectedIndex = _pinnedDestinations.length;
+                      });
+                    },
+                  ),
+                );
               }),
             ],
           ),
@@ -147,7 +146,9 @@ class _AppShellState extends State<AppShell> {
     return LayoutBuilder(
       builder: (context, constraints) {
         final widthClass = AppBreakpoints.classify(constraints.maxWidth);
-        final pageIndex = _useOverflow ? _actualDestinationIndex : _selectedIndex;
+        final pageIndex = _useOverflow
+            ? _actualDestinationIndex
+            : _selectedIndex;
 
         final body = IndexedStack(
           key: _stackKey,
@@ -191,24 +192,30 @@ class _AppShellState extends State<AppShell> {
 
     if (_useOverflow) {
       for (final d in _pinnedDestinations) {
-        destinations.add(NavigationDestination(
-          icon: Icon(d.icon),
-          selectedIcon: Icon(d.selectedIcon),
-          label: d.label,
-        ));
+        destinations.add(
+          NavigationDestination(
+            icon: Icon(d.icon),
+            selectedIcon: Icon(d.selectedIcon),
+            label: d.label,
+          ),
+        );
       }
-      destinations.add(const NavigationDestination(
-        icon: Icon(Icons.build_outlined),
-        selectedIcon: Icon(Icons.build),
-        label: 'Ferramentas',
-      ));
+      destinations.add(
+        const NavigationDestination(
+          icon: Icon(Icons.build_outlined),
+          selectedIcon: Icon(Icons.build),
+          label: 'Ferramentas',
+        ),
+      );
     } else {
       for (final d in widget.destinations) {
-        destinations.add(NavigationDestination(
-          icon: Icon(d.icon),
-          selectedIcon: Icon(d.selectedIcon),
-          label: d.label,
-        ));
+        destinations.add(
+          NavigationDestination(
+            icon: Icon(d.icon),
+            selectedIcon: Icon(d.selectedIcon),
+            label: d.label,
+          ),
+        );
       }
     }
 
@@ -224,24 +231,30 @@ class _AppShellState extends State<AppShell> {
 
     if (_useOverflow) {
       for (final d in _pinnedDestinations) {
-        railDestinations.add(NavigationRailDestination(
-          icon: Icon(d.icon),
-          selectedIcon: Icon(d.selectedIcon),
-          label: Text(d.label),
-        ));
+        railDestinations.add(
+          NavigationRailDestination(
+            icon: Icon(d.icon),
+            selectedIcon: Icon(d.selectedIcon),
+            label: Text(d.label),
+          ),
+        );
       }
-      railDestinations.add(const NavigationRailDestination(
-        icon: Icon(Icons.build_outlined),
-        selectedIcon: Icon(Icons.build),
-        label: Text('Ferramentas'),
-      ));
+      railDestinations.add(
+        const NavigationRailDestination(
+          icon: Icon(Icons.build_outlined),
+          selectedIcon: Icon(Icons.build),
+          label: Text('Ferramentas'),
+        ),
+      );
     } else {
       for (final d in widget.destinations) {
-        railDestinations.add(NavigationRailDestination(
-          icon: Icon(d.icon),
-          selectedIcon: Icon(d.selectedIcon),
-          label: Text(d.label),
-        ));
+        railDestinations.add(
+          NavigationRailDestination(
+            icon: Icon(d.icon),
+            selectedIcon: Icon(d.selectedIcon),
+            label: Text(d.label),
+          ),
+        );
       }
     }
 
