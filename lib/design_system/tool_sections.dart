@@ -143,7 +143,7 @@ class TechnicalValueRow extends StatelessWidget {
     required this.label,
     required this.value,
     this.metadata,
-    this.onCopy,
+    this.copyWriter,
   });
 
   /// Label in sans-serif style.
@@ -155,9 +155,9 @@ class TechnicalValueRow extends StatelessWidget {
   /// Optional metadata text below the value.
   final String? metadata;
 
-  /// When provided, a [CopyValueAction] is shown. The callback is not used
-  /// directly — the action copies [value] via its writer.
-  final VoidCallback? onCopy;
+  /// When provided, a [CopyValueAction] is shown and this writer is invoked
+  /// with the displayed [value].
+  final CopyValueWriter? copyWriter;
 
   @override
   Widget build(BuildContext context) {
@@ -197,7 +197,8 @@ class TechnicalValueRow extends StatelessWidget {
             ],
           ),
         ),
-        if (onCopy != null) CopyValueAction(label: label, value: value),
+        if (copyWriter != null)
+          CopyValueAction(label: label, value: value, writer: copyWriter),
       ],
     );
   }

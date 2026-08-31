@@ -23,10 +23,11 @@ class ClipboardCopyWriter implements CopyValueWriter {
 /// 48px icon button that copies a value and shows a confirmation SnackBar.
 ///
 /// - Tooltip: 'Copiar {label}'
-/// - On success: hides current SnackBar, shows '{Label} copiado' for 2s
+/// - On success: closes only this action's prior SnackBar, shows '{Label} copiado' for 2s
 /// - On failure: shows fallback message advising manual copy
+/// - After [CopyValueWriter.write], touches the tree only if [BuildContext.mounted]
 /// - [writer] defaults to [ClipboardCopyWriter] if not provided
-class CopyValueAction extends StatelessWidget {
+class CopyValueAction extends StatefulWidget {
   const CopyValueAction({
     super.key,
     required this.label,
@@ -43,35 +44,47 @@ class CopyValueAction extends StatelessWidget {
   /// Injectable clipboard writer. Defaults to [ClipboardCopyWriter].
   final CopyValueWriter? writer;
 
-  String get _capitalizedLabel =>
-      label.isEmpty ? label : '${label[0].toUpperCase()}${label.substring(1)}';
+  @override
+  State<CopyValueAction> createState() => _CopyValueActionState();
+}
+
+class _CopyValueActionState extends State<CopyValueAction> {
+  ScaffoldFeatureController<SnackBar, SnackBarClosedReason>? _copySnackBar;
+
+  String get _capitalizedLabel => widget.label.isEmpty
+      ? widget.label
+      : '${widget.label[0].toUpperCase()}${widget.label.substring(1)}';
 
   @override
   Widget build(BuildContext context) {
     return IconButton(
-      icon: const Icon(Icons.copy),
-      tooltip: 'Copiar $label',
-      onPressed: () => _copy(context),
+      icon: Icon(Icons.copy, semanticLabel: 'Copiar ${widget.label}'),
+      tooltip: 'Copiar ${widget.label}',
+      onPressed: _copy,
       constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
     );
   }
 
-  Future<void> _copy(BuildContext context) async {
-    final messenger = ScaffoldMessenger.of(context);
-    final effectiveWriter = writer ?? const ClipboardCopyWriter();
+  Future<void> _copy() async {
+    // Capture the Element before await. State.context throws after unmount;
+    // Element.mounted is the safe post-await guard.
+    final context = this.context;
+    final effectiveWriter = widget.writer ?? const ClipboardCopyWriter();
 
     try {
-      await effectiveWriter.write(value);
-      messenger.hideCurrentSnackBar();
-      messenger.showSnackBar(
+      await effectiveWriter.write(widget.value);
+      if (!context.mounted) return;
+      _showOwnedSnackBar(
+        context,
         SnackBar(
           content: Text('$_capitalizedLabel copiado'),
           duration: const Duration(seconds: 2),
         ),
       );
     } on Exception {
-      messenger.hideCurrentSnackBar();
-      messenger.showSnackBar(
+      if (!context.mounted) return;
+      _showOwnedSnackBar(
+        context,
         const SnackBar(
           content: Text(
             'Não foi possível copiar. Selecione o valor e copie manualmente.',
@@ -80,5 +93,10 @@ class CopyValueAction extends StatelessWidget {
         ),
       );
     }
+  }
+
+  void _showOwnedSnackBar(BuildContext context, SnackBar snackBar) {
+    _copySnackBar?.close();
+    _copySnackBar = ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 }

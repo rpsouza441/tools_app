@@ -137,7 +137,6 @@ void main() {
       (tester) async {
         final writer = RecordingCopyWriter();
         final handle = tester.ensureSemantics();
-        addTearDown(handle.dispose);
 
         await tester.pumpWidget(
           _wrap(
@@ -151,14 +150,17 @@ void main() {
 
         final iconButton = tester.widget<IconButton>(find.byType(IconButton));
         expect(iconButton.tooltip, 'Copiar endereço de rede');
-
-        final semantics = tester.getSemantics(find.byType(IconButton));
-        expect(semantics.label, 'Copiar endereço de rede');
+        expect(find.byTooltip('Copiar endereço de rede'), findsOneWidget);
+        expect(
+          find.bySemanticsLabel('Copiar endereço de rede'),
+          findsOneWidget,
+        );
 
         await tester.tap(find.byIcon(Icons.copy));
         await tester.pumpAndSettle();
 
         expect(find.text('Endereço de rede copiado'), findsOneWidget);
+        handle.dispose();
       },
     );
 

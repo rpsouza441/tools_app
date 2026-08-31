@@ -324,7 +324,7 @@ void main() {
           TechnicalValueRow(
             label: 'IP Público',
             value: '192.168.1.1',
-            onCopy: () {},
+            copyWriter: FakeCopyWriter(),
           ),
         ),
       );
@@ -334,7 +334,7 @@ void main() {
       expect(find.byType(CopyValueAction), findsOneWidget);
     });
 
-    testWidgets('TechnicalValueRow hides copy when onCopy is null', (
+    testWidgets('TechnicalValueRow hides copy when copyWriter is null', (
       tester,
     ) async {
       await tester.pumpWidget(
@@ -353,7 +353,7 @@ void main() {
             label: 'Gateway',
             value: '192.168.0.1',
             metadata: 'via Wi-Fi',
-            onCopy: () {},
+            copyWriter: FakeCopyWriter(),
           ),
         ),
       );
@@ -715,7 +715,11 @@ void main() {
     ) async {
       await tester.pumpWidget(
         _wrap(
-          TechnicalValueRow(label: 'Gateway', value: '10.0.0.1', onCopy: () {}),
+          TechnicalValueRow(
+            label: 'Gateway',
+            value: '10.0.0.1',
+            copyWriter: FakeCopyWriter(),
+          ),
         ),
       );
 
