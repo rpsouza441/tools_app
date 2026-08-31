@@ -37,17 +37,11 @@ void main() {
         await tester.pumpWidget(const App());
         await tester.pumpAndSettle();
 
-        expect(
-          find.descendant(
-            of: find.byType(AppBar),
-            matching: find.text('Calculadora de Rede'),
-          ),
-          findsOneWidget,
-        );
+        expect(find.text('Calculadora de Rede'), findsWidgets);
         expect(
           find.descendant(
             of: find.byType(NetworkCalculatorScreen),
-            matching: find.text('Calcular'),
+            matching: find.text('Calcular rede'),
           ),
           findsOneWidget,
         );

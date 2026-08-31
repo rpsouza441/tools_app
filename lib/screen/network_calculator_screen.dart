@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:tools_app/design_system/copy_value_action.dart';
+import 'package:tools_app/design_system/tool_scaffold.dart';
+import 'package:tools_app/design_system/tool_sections.dart';
 import 'package:tools_app/service/network_calculator.dart';
 import 'package:tools_app/utils/network_utils.dart';
 
 class NetworkCalculatorScreen extends StatefulWidget {
-  const NetworkCalculatorScreen({super.key});
+  const NetworkCalculatorScreen({super.key, this.copyWriter});
+
+  final CopyValueWriter? copyWriter;
 
   @override
   State<NetworkCalculatorScreen> createState() =>
@@ -14,9 +19,28 @@ class _NetworkCalculatorScreenState extends State<NetworkCalculatorScreen> {
   final TextEditingController _ipController = TextEditingController();
   final TextEditingController _maskOrCidrController = TextEditingController();
 
-  String _result = '';
   String? _ipError;
   String? _maskOrCidrError;
+  String? _errorMessage;
+  String? _networkAddress;
+  String? _ipRange;
+  String? _broadcastAddress;
+  String? _subnetMask;
+  String? _cidrLabel;
+  String? _usableHosts;
+
+  CopyValueWriter get _copyWriter =>
+      widget.copyWriter ?? const ClipboardCopyWriter();
+
+  void _clearComputedResults() {
+    _networkAddress = null;
+    _ipRange = null;
+    _broadcastAddress = null;
+    _subnetMask = null;
+    _cidrLabel = null;
+    _usableHosts = null;
+    _errorMessage = null;
+  }
 
   void _calculate() {
     String ip = _ipController.text.trim();
@@ -28,13 +52,13 @@ class _NetworkCalculatorScreenState extends State<NetworkCalculatorScreen> {
 
       if (!isValidIp(ip)) {
         _ipError = 'Formato de IP inválido (ex: 192.168.1.1).';
-        _result = ''; // Limpa o resultado em caso de erro
+        _clearComputedResults(); // Limpa o resultado em caso de erro
         return;
       }
 
       if (maskOrCidr.isEmpty) {
         _maskOrCidrError = 'Insira uma máscara de sub-rede ou um CIDR.';
-        _result = ''; // Limpa o resultado em caso de erro
+        _clearComputedResults(); // Limpa o resultado em caso de erro
         return;
       }
 
@@ -43,14 +67,14 @@ class _NetworkCalculatorScreenState extends State<NetworkCalculatorScreen> {
         if (maskOrCidr.contains('.')) {
           if (!isValidIp(maskOrCidr) || !isValidSubnetMask(maskOrCidr)) {
             _maskOrCidrError = 'Máscara de sub-rede inválida.';
-            _result = ''; // Limpa o resultado em caso de erro
+            _clearComputedResults(); // Limpa o resultado em caso de erro
             return;
           }
           calculator = NetworkCalculator(ipAddress: ip, subnetMask: maskOrCidr);
         } else {
           if (!isValidCidr(maskOrCidr)) {
             _maskOrCidrError = 'Valor de CIDR inválido (0-32).';
-            _result = ''; // Limpa o resultado em caso de erro
+            _clearComputedResults(); // Limpa o resultado em caso de erro
             return;
           }
           int cidr = int.parse(maskOrCidr);
@@ -65,18 +89,20 @@ class _NetworkCalculatorScreenState extends State<NetworkCalculatorScreen> {
         );
         int usableHosts = calculator.calculateUsableHostCount();
 
-        _result =
-            'Endereço de Rede: $networkAddress\n'
-            'Faixa de IPs: $ipRange\n'
-            'Endereço de Broadcast: $broadcastAddress\n'
-            'Máscara de Sub-rede: ${calculator.subnetMask}\n'
-            'CIDR: /${calculator.cidr}\n'
-            'Hosts utilizáveis: $usableHosts';
+        _errorMessage = null;
+        _networkAddress = networkAddress;
+        _ipRange = ipRange;
+        _broadcastAddress = broadcastAddress;
+        _subnetMask = calculator.subnetMask;
+        _cidrLabel = '/${calculator.cidr}';
+        _usableHosts = '$usableHosts';
       } on FormatException {
-        _result =
+        _clearComputedResults();
+        _errorMessage =
             'Erro: Formato de entrada inválido. Verifique os valores inseridos.';
       } catch (e) {
-        _result = 'Erro inesperado: ${e.toString()}';
+        _clearComputedResults();
+        _errorMessage = 'Erro inesperado: ${e.toString()}';
       }
     });
   }
@@ -85,7 +111,7 @@ class _NetworkCalculatorScreenState extends State<NetworkCalculatorScreen> {
     setState(() {
       _ipController.clear();
       _maskOrCidrController.clear();
-      _result = '';
+      _clearComputedResults();
       _ipError = null;
       _maskOrCidrError = null;
     });
@@ -100,146 +126,83 @@ class _NetworkCalculatorScreenState extends State<NetworkCalculatorScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Calculadora de Rede')),
-      body: LayoutBuilder(
-        builder: (context, constraints) {
-          bool isWideScreen = constraints.maxWidth > 600;
-          return SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                children: [
-                  if (isWideScreen)
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Inputs ocupando 70% da largura
-                        Expanded(
-                          flex: 7,
-                          child: Column(
-                            children: [
-                              TextField(
-                                controller: _ipController,
-                                keyboardType: TextInputType.text,
-                                decoration: InputDecoration(
-                                  labelText: 'Endereço de IP',
-                                  border: const OutlineInputBorder(),
-                                  errorText: _ipError,
-                                ),
-                              ),
-                              const SizedBox(height: 16),
-                              TextField(
-                                controller: _maskOrCidrController,
-                                keyboardType: TextInputType.text,
-                                decoration: InputDecoration(
-                                  labelText: 'Máscara de Sub-Rede ou CIDR',
-                                  border: const OutlineInputBorder(),
-                                  errorText: _maskOrCidrError,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(width: 16),
-                        // Botões ocupando 30% da largura
-                        Expanded(
-                          flex: 3,
-                          child: Column(
-                            children: [
-                              SizedBox(
-                                width: double.infinity,
-                                child: ElevatedButton(
-                                  onPressed: _calculate,
-                                  style: ElevatedButton.styleFrom(
-                                    minimumSize: const Size.fromHeight(48),
-                                  ),
-                                  child: const Text('Calcular'),
-                                ),
-                              ),
-                              const SizedBox(height: 16),
-                              SizedBox(
-                                width: double.infinity,
-                                child: TextButton(
-                                  onPressed: _clearFields,
-                                  style: TextButton.styleFrom(
-                                    minimumSize: const Size.fromHeight(48),
-                                  ),
-                                  child: const Text('Limpar'),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  if (!isWideScreen)
-                    Column(
-                      children: [
-                        TextField(
-                          controller: _ipController,
-                          keyboardType: TextInputType.text,
-                          decoration: InputDecoration(
-                            labelText: 'Endereço de IP',
-                            border: const OutlineInputBorder(),
-                            errorText: _ipError,
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-                        TextField(
-                          controller: _maskOrCidrController,
-                          keyboardType: TextInputType.text,
-                          decoration: InputDecoration(
-                            labelText: 'Máscara de Sub-Rede ou CIDR',
-                            border: const OutlineInputBorder(),
-                            errorText: _maskOrCidrError,
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            SizedBox(
-                              width: constraints.maxWidth * 0.6,
-                              child: ElevatedButton(
-                                onPressed: _calculate,
-                                child: const Text('Calcular'),
-                              ),
-                            ),
-                            Expanded(
-                              child: TextButton(
-                                onPressed: _clearFields,
-                                child: const Text('Limpar'),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  const SizedBox(height: 16),
-                  if (_result.isNotEmpty)
-                    Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.surface,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Text(
-                        _result,
-                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          color: Theme.of(context).colorScheme.onSurface,
-                          fontWeight: FontWeight.w500,
-                        ),
-                        textAlign: TextAlign.start,
-                      ),
-                    ),
-                ],
+    return ToolScaffold(
+      title: 'Calculadora de Rede',
+      children: [
+        ToolInputSection(
+          children: [
+            TextField(
+              controller: _ipController,
+              keyboardType: TextInputType.text,
+              decoration: InputDecoration(
+                labelText: 'Endereço de IP',
+                border: const OutlineInputBorder(),
+                errorText: _ipError,
               ),
             ),
-          );
-        },
-      ),
+            TextField(
+              controller: _maskOrCidrController,
+              keyboardType: TextInputType.text,
+              decoration: InputDecoration(
+                labelText: 'Máscara de Sub-Rede ou CIDR',
+                border: const OutlineInputBorder(),
+                errorText: _maskOrCidrError,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 24),
+        ToolActionGroup(
+          primary: ElevatedButton(
+            onPressed: _calculate,
+            child: const Text('Calcular rede'),
+          ),
+          secondary: TextButton(
+            onPressed: _clearFields,
+            child: const Text('Limpar'),
+          ),
+        ),
+        if (_errorMessage != null) ...[
+          const SizedBox(height: 16),
+          Text(_errorMessage!),
+        ],
+        if (_networkAddress != null) ...[
+          const SizedBox(height: 24),
+          ToolResultCard(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                TechnicalValueRow(
+                  label: 'Endereço de Rede',
+                  value: _networkAddress!,
+                  copyWriter: _copyWriter,
+                ),
+                TechnicalValueRow(
+                  label: 'Faixa de IPs',
+                  value: _ipRange!,
+                  copyWriter: _copyWriter,
+                ),
+                TechnicalValueRow(
+                  label: 'Endereço de Broadcast',
+                  value: _broadcastAddress!,
+                  copyWriter: _copyWriter,
+                ),
+                TechnicalValueRow(
+                  label: 'Máscara de Sub-rede',
+                  value: _subnetMask!,
+                  copyWriter: _copyWriter,
+                ),
+                TechnicalValueRow(
+                  label: 'CIDR',
+                  value: _cidrLabel!,
+                  copyWriter: _copyWriter,
+                ),
+                ToolMetric(label: 'Hosts utilizáveis', value: _usableHosts),
+              ],
+            ),
+          ),
+        ],
+      ],
     );
   }
 }

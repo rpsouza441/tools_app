@@ -267,13 +267,13 @@ void main() {
         // NavigationBar should be present
         expect(find.byType(NavigationBar), findsOneWidget);
 
-        // Should see the network calculator as the first screen (AppBar title)
+        expect(find.text('Calculadora de Rede'), findsWidgets);
         expect(
           find.descendant(
             of: find.byType(AppBar),
             matching: find.text('Calculadora de Rede'),
           ),
-          findsOneWidget,
+          findsNothing,
         );
 
         // Enter IP and CIDR in the network calculator
@@ -287,16 +287,13 @@ void main() {
         );
         await tester.pumpAndSettle();
 
-        // Scroll down to make Calcular button visible, then tap
-        await tester.ensureVisible(find.text('Calcular'));
-        await tester.tap(find.text('Calcular'));
+        await tester.ensureVisible(find.text('Calcular rede'));
+        await tester.tap(find.text('Calcular rede'));
         await tester.pumpAndSettle();
 
-        // Verify result appears
-        expect(
-          find.textContaining('Endereço de Rede: 192.168.1.0'),
-          findsOneWidget,
-        );
+        expect(find.text('Endereço de Rede'), findsOneWidget);
+        expect(find.text('192.168.1.0'), findsOneWidget);
+        expect(find.text('Calcular'), findsNothing);
 
         // Navigate using short catalog labels on the bar
         await tester.tap(find.text('Armazenamento'));
@@ -306,10 +303,7 @@ void main() {
         await tester.pumpAndSettle();
 
         // Result is still there (preserved by IndexedStack)
-        expect(
-          find.textContaining('Endereço de Rede: 192.168.1.0'),
-          findsOneWidget,
-        );
+        expect(find.text('192.168.1.0'), findsOneWidget);
       },
     );
 
@@ -349,7 +343,7 @@ void main() {
             of: find.byType(AppBar),
             matching: find.text('Calculadora de Rede'),
           ),
-          findsOneWidget,
+          findsNothing,
         );
       },
     );
