@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Phase 2 Planned; not executed
-last_updated: "2026-08-31T18:20:00.000Z"
-last_activity: "2026-08-31 — Phase 1 Complete; Phase 2 Planned (4 plans); execution not started"
+stopped_at: Completed 02-01-PLAN.md
+last_updated: "2026-08-31T18:56:30.695Z"
+last_activity: 2026-08-31 -- Completed 02-01 harness and PRES-04 smoke
 progress:
   total_phases: 5
   completed_phases: 1
   total_plans: 15
-  completed_plans: 11
+  completed_plans: 12
   percent: 20
 ---
 
@@ -21,14 +21,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-08-31)
 
 **Core value:** Oferecer diagnósticos técnicos úteis e honestos em uma interface clara, sem ocultar limitações de plataforma, método de medição ou falhas parciais.
-**Current focus:** Phase 2 — Migração segura das ferramentas atuais (Planned, not executed)
+**Current focus:** Phase 2 — Migração segura das ferramentas atuais
 
 ## Current Position
 
-Phase: 2 of 5 (Migração segura das ferramentas atuais)
-Plan: Not started (4 plans ready)
-Status: Planned — checker VERIFICATION PASSED. Do not execute until the user asks.
-Last activity: 2026-08-31 — Phase 1 Complete; Phase 2 Planned (4 plans); execution not started
+Phase: 2 (Migração segura das ferramentas atuais) — EXECUTING
+Plan: 2 of 4
+Status: Ready to execute
+Last activity: 2026-08-31 -- Completed 02-01 harness and PRES-04 smoke
 
 Progress: [████░░░░░░] 20% (1 of 5 phases)
 
@@ -36,19 +36,21 @@ Progress: [████░░░░░░] 20% (1 of 5 phases)
 
 **Velocity:**
 
-- Total plans completed: 11
+- Total plans completed: 12
 - Average duration: ~7 min per plan
-- Total execution time: ~75 min
+- Total execution time: ~79 min
 
 **By Phase:**
 
 | Phase | Plans | Completed | Status |
 |-------|-------|-----------|--------|
 | 1 | 11 | 11 | Complete (2026-08-31) |
-| 2 | 4 | 0 | Planned — not executed |
+| 2 | 4 | 1 | In Progress (02-01 complete) |
 | 3 | TBD | 0 | Not started |
 | 4 | TBD | 0 | Not started |
 | 5 | TBD | 0 | Not started |
+
+**Plan 02-01:** 4 min, 2 tasks, 3 files
 
 ## Accumulated Context
 
@@ -57,6 +59,9 @@ Progress: [████░░░░░░] 20% (1 of 5 phases)
 - [Phase 1]: Fundação entregue. Verifier 25/25 passed. Complete 2026-08-31 via `gsd-tools query phase.complete 1`.
 - [Phase 2]: Quatro planos sequenciais — harness → Rede → Armazenamento → Hash+cópia+gate. PRES-01..PRES-04 cobertos. Plan checker PASSED. Não executado.
 - [Phase 2]: CTAs travados: Calcular rede / Analisar capacidade / Gerar hashes. Sem Scaffold interno. Hash copy via CopyValueAction.
+- [Phase 02]: wrapScreen and FakeCopyWriter live in test/screen/; tool_components_test analog was not edited
+- [Phase 02]: Four appDestinations pumps pass lightTheme; _pumpShell and fake destinations stay token-free
+- [Phase 02]: PRES-04 smoke uses const App() and current chrome; PRES-04 stays open until 02-04
 
 ### Blockers/Concerns
 
@@ -73,7 +78,7 @@ Progress: [████░░░░░░] 20% (1 of 5 phases)
 
 ## Session Continuity
 
-Last session: 2026-08-31T18:20:00.000Z
-Stopped at: Phase 1 complete, Phase 2 Planned, not executed
+Last session: 2026-08-31T18:56:30.542Z
+Stopped at: Completed 02-01-PLAN.md
 Resume file: None
 Resume with: `/gsd-execute-phase 2` only when the user asks. Do not start Phase 3.
