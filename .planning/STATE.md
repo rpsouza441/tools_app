@@ -2,10 +2,10 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: awaiting_verification
-stopped_at: Phase 1 plans 5/5 executed; awaiting verifier/UAT
-last_updated: "2026-08-31T14:08:44.146Z"
-last_activity: 2026-08-31 — Plan 01-05 auto-approved after green automated preflight; manual Android/TalkBack checks remain pending.
+status: gaps_found
+stopped_at: Phase 1 verification found six gap groups; gap-closure planning required
+last_updated: "2026-08-31T14:40:00.000Z"
+last_activity: 2026-08-31 — Phase 1 verification scored 9/25 must-haves and recorded six blocking gap groups.
 progress:
   total_phases: 5
   completed_phases: 0
@@ -21,14 +21,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-08-10)
 
 **Core value:** Oferecer diagnósticos técnicos úteis e honestos em uma interface clara, sem ocultar limitações de plataforma, método de medição ou falhas parciais.
-**Current focus:** Phase 1 — awaiting verifier/UAT after 5/5 plans
+**Current focus:** Phase 1 — gap closure after verification (5/5 plans executed)
 
 ## Current Position
 
 Phase: 1 of 5 (Contrato visual e fundação adaptativa)
 Plan: 5 of 5 in current phase (autonomous plans complete)
-Status: Awaiting verification (5/5 plans executed; manual Android/TalkBack debt pending)
-Last activity: 2026-08-31 — Plan 01-05 auto-approved after green automated preflight; manual Android/TalkBack checks remain pending.
+Status: Gaps found (9/25 must-haves verified; phase remains incomplete)
+Last activity: 2026-08-31 — Verifier confirmed six gap groups despite green analyzer and 100 tests.
 
 Progress: [██░░░░░░░░] 20%
 
@@ -44,7 +44,7 @@ Progress: [██░░░░░░░░] 20%
 
 | Phase | Plans | Completed | Status |
 |-------|-------|-----------|--------|
-| 1 | 5 | 5 | Awaiting verifier/UAT |
+| 1 | 5 | 5 | Gaps found — closure required |
 | Phase 01 P05 | 7 min | 1 tasks | 10 files |
 
 ## Accumulated Context
@@ -61,6 +61,7 @@ Progress: [██░░░░░░░░] 20%
 ### Blockers/Concerns
 
 - [Phase 1 verification debt]: Sete checks manuais e TalkBack nao executados porque nao havia dispositivo/emulador Android conectado; verifier/UAT deve executa-los antes de concluir a fase.
+- [Phase 1 verification]: Goal MVP invalido; rail/semantica, tema/estados, lifecycle de copia e cobertura visual/acessivel possuem gaps concretos. Ver 01-VERIFICATION.md e 01-REVIEW.md.
 
 ## Deferred Items
 
@@ -71,6 +72,6 @@ Progress: [██░░░░░░░░] 20%
 
 ## Session Continuity
 
-Last session: 2026-08-31T14:07:45.826Z
-Stopped at: Completed 01-05-PLAN.md; awaiting Phase 1 verifier/UAT
-Resume with: /gsd-verify-work 1 or manual device testing
+Last session: 2026-08-31T14:40:00.000Z
+Stopped at: Phase 1 verification found gaps (9/25 must-haves)
+Resume with: /gsd-plan-phase 1 --gaps
