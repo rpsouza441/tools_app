@@ -77,7 +77,7 @@ Gap-closure:
   3. Usuário gera hashes MD5, SHA-1, SHA-256 e SHA-512 e obtém os mesmos resultados válidos de antes da migração.
   4. Usuário encontra entradas, ações, resultados e cópia das três ferramentas disponíveis durante e depois da migração incremental, sem perda de funcionalidade.
 
-**Plans:** 1/4 plans executed
+**Plans:** 2/4 plans executed
 
 **Wave 1**
 
@@ -85,7 +85,7 @@ Gap-closure:
 
 **Wave 2** *(blocked on Wave 1)*
 
-- [ ] 02-02-PLAN.md — Migrar Calculadora de Rede (PRES-01)
+- [x] 02-02-PLAN.md — Migrar Calculadora de Rede (PRES-01)
 
 **Wave 3** *(blocked on Wave 2)*
 
@@ -150,7 +150,7 @@ Gap-closure:
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Contrato visual e fundação adaptativa | 11/11 | Complete    | 2026-08-31 |
-| 2. Migração segura das ferramentas atuais | 1/4 | In Progress|  |
+| 2. Migração segura das ferramentas atuais | 2/4 | In Progress|  |
 | 3. Diagnóstico de Internet completo e resiliente | 0/TBD | Not started | - |
 | 4. Validação Android e documentação transparente | 0/TBD | Not started | - |
 | 5. Gate de viabilidade do speed test | 0/TBD | Not started | - |
