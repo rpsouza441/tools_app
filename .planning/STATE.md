@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Phase 1 UI-SPEC approved
-last_updated: "2026-08-10T21:47:24.166Z"
-last_activity: 2026-08-10 — Roadmap inicial criado com cobertura integral dos requisitos v1.
+stopped_at: Phase 1 Plans 01-04 executed; Plan 05 requires human validation
+last_updated: "2026-08-10T22:19:00.000Z"
+last_activity: 2026-08-10 — Plans 01-01 through 01-04 executed successfully (100 tests, 0 issues).
 progress:
   total_phases: 5
   completed_phases: 0
-  total_plans: 0
-  completed_plans: 0
-  percent: 0
+  total_plans: 5
+  completed_plans: 4
+  percent: 16
 ---
 
 # Project State
@@ -21,61 +21,45 @@ progress:
 See: .planning/PROJECT.md (updated 2026-08-10)
 
 **Core value:** Oferecer diagnósticos técnicos úteis e honestos em uma interface clara, sem ocultar limitações de plataforma, método de medição ou falhas parciais.
-**Current focus:** Phase 1 — Contrato visual e fundação adaptativa
+**Current focus:** Phase 1 — Contrato visual e fundação adaptativa (Plans 01-04 complete, Plan 05 pending human validation)
 
 ## Current Position
 
 Phase: 1 of 5 (Contrato visual e fundação adaptativa)
-Plan: 0 of TBD in current phase
-Status: Ready to execute
-Last activity: 2026-08-10 — Roadmap inicial criado com cobertura integral dos requisitos v1.
+Plan: 4 of 5 in current phase (autonomous plans complete)
+Status: Awaiting human validation (Plan 05)
+Last activity: 2026-08-10 — Plans 01-01 through 01-04 executed successfully.
 
-Progress: [░░░░░░░░░░] 0%
+Progress: [██░░░░░░░░] 16%
 
 ## Performance Metrics
 
 **Velocity:**
 
-- Total plans completed: 0
-- Average duration: 0 min
-- Total execution time: 0.0 hours
+- Total plans completed: 4
+- Average duration: ~5 min per plan
+- Total execution time: ~20 min
 
 **By Phase:**
 
-| Phase | Plans | Total | Avg/Plan |
-|-------|-------|-------|----------|
-| - | - | - | - |
-
-**Recent Trend:**
-
-- Last 5 plans: none
-- Trend: Not available
-
-*Updated after each plan completion*
+| Phase | Plans | Completed | Status |
+|-------|-------|-----------|--------|
+| 1 | 5 | 4 | Plan 05 awaiting human |
 
 ## Accumulated Context
 
 ### Decisions
 
-Decisions are logged in PROJECT.md Key Decisions table.
-Recent decisions affecting current work:
-
-- [Phase 1]: O UI-SPEC é obrigatório antes do planejamento executável da fundação adaptativa.
-- [Phase 3]: Capabilities de rede permanecem independentes, canceláveis e honestamente rotuladas; falhas parciais não apagam resultados válidos.
-- [Phase 5]: O gate de speed test aceita `NO-GO`; nenhum requisito `SPD-*` pertence ao milestone v1.
-
-### Pending Todos
-
-None yet.
+- [Phase 1 Plan 01]: Walking skeleton delivered — typed catalog, adaptive shell (Bar/Rail), IndexedStack preservation, D-03 overflow.
+- [Phase 1 Plan 02]: Semantic tokens and themes — AppTokens, neutral body text, green accent only, accessibility guidelines pass.
+- [Phase 1 Plan 03]: Tool primitives — ToolScaffold, sections, 7 status variants, copy action with mounted safety.
+- [Phase 1 Plan 04]: Golden protection — 4 baselines, gallery, accessibility matrix extended.
 
 ### Blockers/Concerns
 
-- [Phase 3]: Alvo externo autorizado, estratégia de gateway/probe e provedor de IP público exigem validação antes da integração concreta.
-- [Phase 5]: Speed test permanece bloqueado por evidências técnicas, legais, operacionais e de privacidade; ausência de evidência resulta em `NO-GO`.
+- [Phase 1 Plan 05]: Requires human validation on device/emulator (TalkBack, manual viewport checks, visual approval).
 
 ## Deferred Items
-
-Items acknowledged and carried forward from this milestone:
 
 | Category | Item | Status | Deferred At |
 |----------|------|--------|-------------|
@@ -84,6 +68,6 @@ Items acknowledged and carried forward from this milestone:
 
 ## Session Continuity
 
-Last session: 2026-08-10T21:15:17.584Z
-Stopped at: Phase 1 UI-SPEC approved
-Resume file: .planning/phases/01-contrato-visual-e-funda-o-adaptativa/01-UI-SPEC.md
+Last session: 2026-08-10T22:19:00.000Z
+Stopped at: Phase 1 Plans 01-04 complete; Plan 05 requires human validation
+Resume with: /gsd-verify-work 1 or manual device testing
