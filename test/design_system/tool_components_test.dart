@@ -462,6 +462,28 @@ void main() {
             expect(find.text(expected.heading), findsOneWidget);
             expect(find.text(expected.body), findsOneWidget);
 
+            // UI-SPEC State Contract: accent/error belong on the icon, not
+            // the heading ("accent apenas no ícone"; "error role no ícone").
+            final headingFinder = find.text(expected.heading);
+            final headingText = tester.widget<Text>(headingFinder);
+            final headingColor =
+                headingText.style?.color ??
+                DefaultTextStyle.of(tester.element(headingFinder)).style.color;
+            expect(
+              headingColor,
+              theme.colorScheme.onSurface,
+              reason:
+                  '${entry.key.name} heading must stay onSurface; color is not '
+                  'the sole state signal',
+            );
+            if (entry.key == ToolStatusVariant.success) {
+              expect(headingColor, isNot(theme.colorScheme.primary));
+            }
+            if (entry.key == ToolStatusVariant.failure ||
+                entry.key == ToolStatusVariant.permissionDenied) {
+              expect(headingColor, isNot(theme.colorScheme.error));
+            }
+
             if (expected.progressIndicator) {
               // byType matches exact runtimeType; CircularProgressIndicator
               // is a ProgressIndicator subclass.

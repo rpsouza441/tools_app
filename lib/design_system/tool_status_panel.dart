@@ -63,8 +63,10 @@ const _statusMap = <ToolStatusVariant, _StatusData>{
 
 /// Maps a [ToolStatusVariant] to icon + pt-BR heading + body.
 ///
-/// - Color: success uses primary; failure and permissionDenied use error;
-///   empty, loading, offline, and cancelled use onSurface (neutral).
+/// - Color: icon/progress only — success uses primary; failure and
+///   permissionDenied use error; empty, loading, offline, and cancelled use
+///   onSurface (neutral). Headings always use onSurface (UI-SPEC: accent/error
+///   on the icon, not the heading).
 /// - Loading uses an indeterminate [CircularProgressIndicator] when
 ///   [ToolStatusPanel.progress] is null; otherwise the indicator is determinate.
 /// - preservedChild: shown below status for loading, failure, and cancelled.
@@ -135,7 +137,7 @@ class ToolStatusPanel extends StatelessWidget {
         SizedBox(height: tokens.spacing8),
         Text(
           data.heading,
-          style: textTheme.titleLarge?.copyWith(color: color),
+          style: textTheme.titleLarge?.copyWith(color: colorScheme.onSurface),
           textAlign: TextAlign.center,
         ),
         SizedBox(height: tokens.spacing4),
