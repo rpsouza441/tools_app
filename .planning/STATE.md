@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: verifying
-stopped_at: Phase 2 verifier passed 13/13; awaiting user before transition
-last_updated: "2026-08-31T19:50:00.000Z"
-last_activity: "2026-08-31 — official Phase 2 re-verification passed 13/13; no Phase 3"
+status: executing
+stopped_at: Phase 2 complete; ready to plan Phase 3
+last_updated: "2026-08-31T19:55:00.000Z"
+last_activity: "2026-08-31 — Phase 2 formally Complete; transition to Phase 3 planning"
 progress:
   total_phases: 5
-  completed_phases: 1
+  completed_phases: 2
   total_plans: 15
   completed_plans: 15
-  percent: 20
+  percent: 40
 ---
 
 # Project State
@@ -21,16 +21,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-08-31)
 
 **Core value:** Oferecer diagnósticos técnicos úteis e honestos em uma interface clara, sem ocultar limitações de plataforma, método de medição ou falhas parciais.
-**Current focus:** Phase 2 verifier passed 13/13 — wait for user before transition / Phase 3
+**Current focus:** Phase 3 — Diagnóstico de Internet completo e resiliente
 
 ## Current Position
 
-Phase: 2 of 5 (Migração segura das ferramentas atuais)
-Plan: 4 of 4 executed
-Status: Official re-verification **passed** 13/13. ROADMAP Phase 2 remains `[ ]`. No transition. No Phase 3.
-Last activity: 2026-08-31 — official Phase 2 re-verification passed 13/13; no Phase 3
+Phase: 3 of 5 (Diagnóstico de Internet completo e resiliente)
+Plan: Not started
+Status: Ready to plan
+Last activity: 2026-08-31 — Phase 2 formally Complete; transition to Phase 3 planning
 
-Progress: [████░░░░░░] 20% (1 of 5 phases)
+Progress: [████░░░░░░] 40% (2 of 5 phases)
 
 ## Performance Metrics
 
@@ -45,52 +45,35 @@ Progress: [████░░░░░░] 20% (1 of 5 phases)
 | Phase | Plans | Completed | Status |
 |-------|-------|-----------|--------|
 | 1 | 11 | 11 | Complete (2026-08-31) |
-| 2 | 4 | 4 | In Progress (awaiting verifier) |
-| 3 | TBD | 0 | Not started |
+| 2 | 4 | 4 | Complete (2026-08-31) |
+| 3 | TBD | 0 | Ready to plan |
 | 4 | TBD | 0 | Not started |
 | 5 | TBD | 0 | Not started |
-
-**Plan 02-01:** 4 min, 2 tasks, 3 files
-**Plan 02-02:** 4 min, 3 tasks, 4 files
-**Plan 02-03:** 5 min, 3 tasks, 3 files
-**Plan 02-04:** 4 min, 3 tasks, 3 files
 
 ## Accumulated Context
 
 ### Decisions
 
-- [Phase 1]: Fundação entregue. Verifier 25/25 passed. Complete 2026-08-31 via `gsd-tools query phase.complete 1`.
-- [Phase 2]: Quatro planos sequenciais — harness → Rede → Armazenamento → Hash+cópia+gate. PRES-01..PRES-04 cobertos. Plan checker PASSED. Não executado.
-- [Phase 2]: CTAs travados: Calcular rede / Analisar capacidade / Gerar hashes. Sem Scaffold interno. Hash copy via CopyValueAction.
-- [Phase 02]: wrapScreen and FakeCopyWriter live in test/screen/; tool_components_test analog was not edited
-- [Phase 02]: Four appDestinations pumps pass lightTheme; _pumpShell and fake destinations stay token-free
-- [Phase 02]: PRES-04 smoke uses const App() and current chrome; PRES-04 stays open until 02-04
-- [Phase 02]: Optional copyWriter keeps const NetworkCalculatorScreen() valid for app_destinations (D-03)
-- [Phase 02]: Limpar uses ToolActionGroup.secondary; onCancel is never wired (would paint Cancelar)
-- [Phase 02]: PRES-01 closed for Rede; PRES-04 stays open until 02-04
-- [Phase 02]: Optional copyWriter keeps const DataConverterScreen() valid for app_destinations (D-03) — pageBuilder stays const; Hash still unmigrated
-- [Phase 02]: No Limpar and no onCancel — the screen had no secondary action — onCancel would paint Cancelar
-- [Phase 02]: PRES-02 closed for Armazenamento; PRES-04 stays open until 02-04 — Hash still on old chrome
-- [Phase 02]: Optional copyWriter keeps const HashGeneratorScreen() valid for app_destinations (D-03) — pageBuilder stays const HashGeneratorScreen(); Hash copyWriter is optional with ClipboardCopyWriter default
-- [Phase 02]: Limpar uses ToolActionGroup.secondary; onCancel is never wired (would paint Cancelar) — Hash keeps Limpar as secondary like Rede; onCancel always paints Cancelar
-- [Phase 02]: PRES-03 and PRES-04 closed for Hash + three-tool gate; Phase 2 stays Incomplete until gsd-verifier — All four Phase 2 plans executed; ROADMAP Phase 2 checkbox must remain unchecked until verifier
+- [Phase 1]: Fundação ToolScaffold/shell/temas. Verifier 25/25. Complete 2026-08-31.
+- [Phase 2]: Rede/Armazenamento/Hash em ToolScaffold. CTAs Calcular rede / Analisar capacidade / Gerar hashes. Verifier 13/13. Complete 2026-08-31 via `gsd-tools query phase.complete 2`.
+- [Transition]: Warning `02-VERIFICATION.md: needs human verification` é falso positivo (`previous_status: human_needed` no relatório `passed`). HUMAN-UAT complete.
 
 ### Blockers/Concerns
 
-- [Plan checker residual]: no 02-03, teste de FakeCopyWriter marcado Optional; executor deve seguir as interfaces (copyWriter), não só o Optional.
-- [CLI]: `phase.complete` avisou UAT em 01-VERIFICATION.md apesar de `status: passed` — falso positivo.
+- [CLI]: `phase.complete` continua avisando UAT por `previous_status: human_needed` em relatórios `passed`.
 
 ## Deferred Items
 
 | Category | Item | Status | Deferred At |
 |----------|------|--------|-------------|
-| v2 | SPD-01–SPD-09 | Deferred | Roadmap creation |
+| v2 | SPD-01–SPD-09 | Deferred | Roadmap / Phase 5 GO |
 | v2 | EVO-01–EVO-03 | Deferred | Roadmap creation |
-| phase-3 | Diagnóstico de Internet (DIAG-*) | Deferred | Phase 3 — not started |
+| phase-4 | QUAL-09 + DOC-* verificação Android e docs | Deferred | Phase 4 |
+| phase-5 | Speed test GATE-* | Deferred | Phase 5 |
 
 ## Session Continuity
 
-Last session: 2026-08-31T19:40:00.000Z
-Stopped at: Phase 2 UAT approved; official re-verification
+Last session: 2026-08-31T19:55:00.000Z
+Stopped at: Phase 2 complete, ready to plan Phase 3
 Resume file: None
-Resume with: Show verifier result. Do not start Phase 3 or transition until the user sees it.
+Resume with: Plan Phase 3 (DIAG-01..15, QUAL-01..08). Do not execute Phase 3. Do not start Phase 4/5 or speed test.
