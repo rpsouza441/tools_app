@@ -96,8 +96,10 @@ class ToolMetric extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
     final colorScheme = Theme.of(context).colorScheme;
 
-    return Row(
-      mainAxisSize: MainAxisSize.min,
+    return Wrap(
+      spacing: 8,
+      runSpacing: 8,
+      crossAxisAlignment: WrapCrossAlignment.center,
       children: [
         Text(
           label,
@@ -105,7 +107,6 @@ class ToolMetric extends StatelessWidget {
             color: colorScheme.onSurfaceVariant,
           ),
         ),
-        const SizedBox(width: 8),
         Text(
           value ?? 'Indisponível',
           style: textTheme.bodyMedium?.copyWith(
@@ -178,11 +179,16 @@ class TechnicalValueRow extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 4),
-              SelectableText(
-                value,
-                style: textTheme.bodyMedium?.copyWith(
-                  fontFamily: 'monospace',
-                  fontFamilyFallback: const ['Courier New', 'Courier'],
+              Semantics(
+                label: value,
+                child: ExcludeSemantics(
+                  child: SelectableText(
+                    value,
+                    style: textTheme.bodyMedium?.copyWith(
+                      fontFamily: 'monospace',
+                      fontFamilyFallback: const ['Courier New', 'Courier'],
+                    ),
+                  ),
                 ),
               ),
               if (metadata != null) ...[

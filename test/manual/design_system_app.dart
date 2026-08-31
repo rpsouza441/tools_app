@@ -20,7 +20,7 @@ class _DesignSystemApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Design System Gallery',
+      title: 'Galeria do sistema de design',
       theme: lightTheme,
       darkTheme: darkTheme,
       themeMode: ThemeMode.system,

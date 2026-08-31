@@ -1,7 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:tools_app/design_system/copy_value_action.dart';
 import 'package:tools_app/design_system/tool_scaffold.dart';
 import 'package:tools_app/design_system/tool_sections.dart';
 import 'package:tools_app/design_system/tool_status_panel.dart';
+
+/// Completes immediately without touching the system clipboard.
+class _NoopCopyWriter implements CopyValueWriter {
+  const _NoopCopyWriter();
+
+  @override
+  Future<void> write(String value) async {}
+}
 
 /// Test-only gallery showcasing all design system primitives.
 ///
@@ -17,6 +26,8 @@ import 'package:tools_app/design_system/tool_status_panel.dart';
 /// Scaffold. When used standalone, wrap in a [Scaffold].
 class DesignSystemGallery extends StatelessWidget {
   const DesignSystemGallery({super.key});
+
+  static const CopyValueWriter _copyWriter = _NoopCopyWriter();
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +62,7 @@ class DesignSystemGallery extends StatelessWidget {
         ToolActionGroup(
           primary: ElevatedButton(
             onPressed: () {},
-            child: const Text('Calcular'),
+            child: const Text('Calcular rede'),
           ),
           secondary: TextButton(onPressed: () {}, child: const Text('Limpar')),
         ),
@@ -70,8 +81,12 @@ class DesignSystemGallery extends StatelessWidget {
         ),
         const SizedBox(height: 24),
 
-        // TechnicalValueRow
-        const TechnicalValueRow(label: 'Hash', value: 'abc123def456'),
+        // TechnicalValueRow with visible copy action
+        const TechnicalValueRow(
+          label: 'Hash SHA-256',
+          value: 'abc123def456',
+          copyWriter: _copyWriter,
+        ),
         const SizedBox(height: 32),
 
         // All 7 ToolStatusPanel variants
@@ -90,7 +105,10 @@ class _StatusPanelShowcase extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Text('Status Panels', style: Theme.of(context).textTheme.titleLarge),
+        Text(
+          'Painéis de status',
+          style: Theme.of(context).textTheme.titleLarge,
+        ),
         const SizedBox(height: 16),
         for (final variant in ToolStatusVariant.values) ...[
           Container(
