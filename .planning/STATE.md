@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 01-08-PLAN.md
-last_updated: "2026-08-31T15:55:52.235Z"
-last_activity: "2026-08-31 — 01-08 completed: canonical theme hex + seven status states"
+stopped_at: Completed 01-09-PLAN.md
+last_updated: "2026-08-31T16:04:17.840Z"
+last_activity: "2026-08-31 — 01-09 completed: copy lifecycle + TechnicalValueRow.copyWriter"
 progress:
   total_phases: 5
   completed_phases: 0
   total_plans: 11
-  completed_plans: 8
-  percent: 73
+  completed_plans: 9
+  percent: 82
 ---
 
 # Project State
@@ -21,34 +21,35 @@ progress:
 See: .planning/PROJECT.md (updated 2026-08-10)
 
 **Core value:** Oferecer diagnósticos técnicos úteis e honestos em uma interface clara, sem ocultar limitações de plataforma, método de medição ou falhas parciais.
-**Current focus:** Phase 1 — gap-closure next 01-09; Phase 1 remains incomplete
+**Current focus:** Phase 1 — gap-closure next 01-10; Phase 1 remains incomplete
 
 ## Current Position
 
 Phase: 1 of 5 (Contrato visual e fundação adaptativa)
-Plan: 9 of 11 (next: 01-09)
-Status: Gap-closure in progress — 01-08 complete; Phase 1 remains incomplete
-Last activity: 2026-08-31 — 01-08 completed: canonical theme hex + seven status states
+Plan: 10 of 11 (next: 01-10)
+Status: Gap-closure in progress — 01-09 complete; Phase 1 remains incomplete
+Last activity: 2026-08-31 — 01-09 completed: copy lifecycle + TechnicalValueRow.copyWriter
 
-Progress: [███████░░░] 73%
+Progress: [████████░░] 82%
 
 ## Performance Metrics
 
 **Velocity:**
 
-- Total plans completed: 8
+- Total plans completed: 9
 - Average duration: ~7 min per plan
-- Total execution time: ~59 min
+- Total execution time: ~65 min
 
 **By Phase:**
 
 | Phase | Plans | Completed | Status |
 |-------|-------|-----------|--------|
-| 1 | 11 | 8 | Gap-closure in progress — 01-08 complete; Phase 1 incomplete |
+| 1 | 11 | 9 | Gap-closure in progress — 01-09 complete; Phase 1 incomplete |
 | Phase 01 P05 | 7 min | 1 tasks | 10 files |
 | Phase 1 P06 | 12min | 2 tasks | 2 files |
 | Phase 01 P07 | 12min | 2 tasks | 4 files |
 | Phase 01 P08 | 8min | 2 tasks | 4 files |
+| Phase 01-contrato-visual-e-funda-o-adaptativa P09 | 6min | 2 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -68,11 +69,14 @@ Progress: [███████░░░] 73%
 - [Phase 01]: ColorScheme.fromSeed permanece o ponto de partida; os roles listados no UI-SPEC sao sobrescritos com Color(0xFF...) — fromSeed nao e oracle.
 - [Phase 01]: Offline usa wifi_off + icone onSurface (neutro); permissionDenied usa lock_outline + error; loading usa CircularProgressIndicator no slot do icone porque Icons.progress_activity nao existe no Material SDK.
 - [Phase 01]: Card elevation 0 com BorderSide outline 1 px; AppBar scrolledUnderElevation 0; botoes AppTokens.radius8; chips AppTokens.radius4.
+- [Phase 01]: Capturar BuildContext antes do await para que context.mounted seja Element.mounted — State.context lança após unmount.
+- [Phase 01]: SnackBar de cópia fecha só o ScaffoldFeatureController próprio; SnackBars alheios permanecem.
+- [Phase 01]: TechnicalValueRow expõe copyWriter (não onCopy) e passa writer: copyWriter para CopyValueAction.
 
 ### Blockers/Concerns
 
 - [Phase 1 verification debt]: Sete checks manuais e TalkBack nao executados porque nao havia dispositivo/emulador Android conectado; verifier/UAT deve executa-los antes de concluir a fase.
-- [Phase 1 verification]: Goal MVP (formato As a / I want to / so that) fechado em artefato de planejamento (01-06). Gap A/CR-01/CR-02/WR-03 fechados em 01-07. Gap B/C (tema/estados) fechado em 01-08. Gaps restantes: lifecycle de cópia (01-09) e cobertura visual/acessível (01-10/01-11). Ver 01-VERIFICATION.md e 01-REVIEW.md.
+- [Phase 1 verification]: Goal MVP (formato As a / I want to / so that) fechado em artefato de planejamento (01-06). Gap A/CR-01/CR-02/WR-03 fechados em 01-07. Gap B/C (tema/estados) fechado em 01-08. Gap D/CR-03/WR-02 (cópia) fechado em 01-09. Gaps restantes: cobertura visual/acessível (01-10/01-11). Ver 01-VERIFICATION.md e 01-REVIEW.md.
 - [Phase 1 gap planning]: Goal da Phase 1 reformatado para user story minima (`As a ..., I want to ..., so that ...`) sem alterar Success Criteria, Requirements nem o boundary da Phase 2. `/gsd mvp-phase 1` nao foi executado por completo porque a fase ja esta `mode: mvp` e `in_progress`/`Executed`, e o workflow delegaria a `plan-phase` sem `--gaps`.
 - [Phase 1 Plan 06 UI-03]: Inconsistência documental registrada, não expandida — Phase 1 owns primitives/galeria; Phase 2 owns adoção nas três telas. Não mover UI-03. Não desmarcar REQUIREMENTS.md. Não puxar PRES-*.
 
@@ -86,6 +90,6 @@ Progress: [███████░░░] 73%
 
 ## Session Continuity
 
-Last session: 2026-08-31T15:55:19.769Z
-Stopped at: Completed 01-08-PLAN.md
-Resume with: /gsd-execute-phase 1 --gaps-only (next: 01-09; do not use --auto)
+Last session: 2026-08-31T16:04:17.834Z
+Stopped at: Completed 01-09-PLAN.md
+Resume with: /gsd-execute-phase 1 --gaps-only (next: 01-10; do not use --auto)

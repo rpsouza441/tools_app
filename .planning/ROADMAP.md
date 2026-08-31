@@ -32,7 +32,7 @@ Este milestone evolui o aplicativo sem reescrita total: primeiro estabelece e im
   3. Usuário pode operar a interface em tema claro ou escuro, sempre em português do Brasil, sem perder contraste, significado ou confirmação acessível ao copiar valores.
   4. Usuário pode usar alvos de toque acessíveis, leitor de tela e fonte ampliada sem perder conteúdo, ações ou compreensão em larguras compactas e largas.
 
-**Plans:** 8/11 plans executed
+**Plans:** 9/11 plans executed
 
 Executed (original):
 
@@ -52,7 +52,7 @@ Gap-closure:
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
-- [ ] 01-09-PLAN.md — Cópia, lifecycle e API pública — gap-closure
+- [x] 01-09-PLAN.md — Cópia, lifecycle e API pública — gap-closure
 
 **Wave 3** *(blocked on Wave 2 completion)*
 
@@ -132,7 +132,7 @@ Gap-closure:
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Contrato visual e fundação adaptativa | 8/11 | In Progress|  |
+| 1. Contrato visual e fundação adaptativa | 9/11 | In Progress|  |
 | 2. Migração segura das ferramentas atuais | 0/TBD | Not started | - |
 | 3. Diagnóstico de Internet completo e resiliente | 0/TBD | Not started | - |
 | 4. Validação Android e documentação transparente | 0/TBD | Not started | - |
