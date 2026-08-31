@@ -3,9 +3,9 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: 01-11 approved; official Phase 1 re-verification
-last_updated: "2026-08-31T17:40:00.000Z"
-last_activity: "2026-08-31 — 01-11 approved (TalkBack emulator); awaiting verifier; no Phase 2"
+stopped_at: Phase 1 verifier passed 25/25; awaiting user before transition
+last_updated: "2026-08-31T17:52:00.000Z"
+last_activity: "2026-08-31 — official re-verification passed 25/25; no Phase 2; no transition"
 progress:
   total_phases: 5
   completed_phases: 0
@@ -21,16 +21,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-08-10)
 
 **Core value:** Oferecer diagnósticos técnicos úteis e honestos em uma interface clara, sem ocultar limitações de plataforma, método de medição ou falhas parciais.
-**Current focus:** Phase 1 — 01-11 approved; official re-verification; do not start Phase 2
+**Current focus:** Phase 1 verifier passed 25/25 — wait for user before transition / Phase 2
 
 ## Current Position
 
 Phase: 1 of 5 (Contrato visual e fundação adaptativa)
-Plan: 11 of 11 (01-11 approved)
-Status: 01-11 closed with human `approved` (TalkBack emulator); Phase 1 awaits verifier
-Last activity: 2026-08-31 — 01-11 approved (TalkBack emulator); awaiting verifier; no Phase 2
+Plan: 11 of 11
+Status: Official re-verification **passed** 25/25. ROADMAP Phase 1 remains `[ ]`. No transition. No Phase 2.
+Last activity: 2026-08-31 — official re-verification passed 25/25; no Phase 2; no transition
 
-Progress: [██████████] 100% of Phase 1 plans; phase not Complete until verifier passed
+Progress: [██████████] 100% of Phase 1 plans; verifier passed; phase checkbox not Complete until user authorizes transition
 
 ## Performance Metrics
 
@@ -44,7 +44,7 @@ Progress: [██████████] 100% of Phase 1 plans; phase not Comp
 
 | Phase | Plans | Completed | Status |
 |-------|-------|-----------|--------|
-| 1 | 11 | 11 | 01-11 approved; Phase 1 awaits verifier |
+| 1 | 11 | 11 | verifier passed 25/25; awaiting user before Complete |
 | Phase 01 P05 | 7 min | 1 tasks | 10 files |
 | Phase 1 P06 | 12min | 2 tasks | 2 files |
 | Phase 01 P07 | 12min | 2 tasks | 4 files |
@@ -84,7 +84,7 @@ Progress: [██████████] 100% of Phase 1 plans; phase not Comp
 ### Blockers/Concerns
 
 - [Phase 1 Plan 11]: Usuário `approved` após TalkBack no emulador Android (foco, labels, campos, Máscara inválida, galeria percorrível, copy `abc123def456`). 01-11 fechado. Phase 1 não Complete até verifier. Phase 2 não iniciada.
-- [Phase 1 verification]: Relatório anterior **human_needed** 24/25 (TalkBack residual). 01-11 agora `approved`. Re-verificação oficial pendente; não Complete até o verifier. Phase 2 não iniciada.
+- [Phase 1 verification]: Re-verificação oficial **passed**, score 25/25. Relatório em 01-VERIFICATION.md. ROADMAP Phase 1 permanece `[ ]`. Phase 2 não iniciada. Aguardando o usuário antes de transition.
 - [Phase 1 gap planning]: Goal da Phase 1 reformatado para user story minima (`As a ..., I want to ..., so that ...`) sem alterar Success Criteria, Requirements nem o boundary da Phase 2. `/gsd mvp-phase 1` nao foi executado por completo porque a fase ja esta `mode: mvp` e `in_progress`/`Executed`, e o workflow delegaria a `plan-phase` sem `--gaps`.
 - [Phase 1 Plan 06 UI-03]: Inconsistência documental registrada, não expandida — Phase 1 owns primitives/galeria; Phase 2 owns adoção nas três telas. Não mover UI-03. Não desmarcar REQUIREMENTS.md. Não puxar PRES-*.
 
@@ -98,6 +98,6 @@ Progress: [██████████] 100% of Phase 1 plans; phase not Comp
 
 ## Session Continuity
 
-Last session: 2026-08-31T17:40:00.000Z
-Stopped at: 01-11 approved; official Phase 1 re-verification
-Resume with: Show verifier result. Do not start Phase 2 or transition until the user sees it.
+Last session: 2026-08-31T17:52:00.000Z
+Stopped at: Phase 1 verifier passed 25/25; awaiting user before transition
+Resume with: User has seen the verifier result. Do not start Phase 2 or run transition until they explicitly ask.
