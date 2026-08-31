@@ -60,7 +60,7 @@ completed: 2026-08-31
 
 - Cruzou os sete checks do 01-11 com evidência humana APPROVED, testes automatizados, goldens canônicos e código.
 - Corrigiu headings `Concluído` / `Não foi possível concluir` / `Permissão necessária` para `onSurface` (UI-SPEC: accent/error no ícone).
-- Falha humana: copy no harness mostrava confirmação sem clipboard (`_NoopCopyWriter`). Corrigido para `ClipboardCopyWriter`. **01-11 não aprovado.**
+- Falha humana: copy no harness mostrava confirmação sem clipboard (`_NoopCopyWriter`). Corrigido para `ClipboardCopyWriter`. Reteste humano colou `abc123def456`. **01-11 não aprovado** (TalkBack residual).
 - Não inventou TalkBack. Não aplicou waiver. Não iniciou Phase 2.
 
 ## Check results
@@ -72,7 +72,7 @@ completed: 2026-08-31
 | 3 Temas | PASS (cruzado) | Humano: app real claro + harness escuro APPROVED (corpo neutro, verde só no acento, cards com borda). Automatizado: `theme_contract_test.dart` hex/elevation/radius. |
 | 4 Texto 200% | PASS (automatizado) | `accessibility_test` 360/720/1024 × 1.0/2.0 em widgets públicos; `tool_metric_reflow_test` 360 + scaler 2.0. Sem gap visual nas evidências. |
 | 5 TalkBack | RESIDUAL | Não executado. Não simulado. Widget tests não substituem. |
-| 6 Anúncios/targets (exceto TalkBack) | **FAIL humano / corrigido no código, 01-11 não aprovado** | Harness usava `_NoopCopyWriter`: SnackBar de sucesso sem clipboard. Corrigido para `ClipboardCopyWriter`. `Calcular rede`/`Limpar` são callbacks vazios deliberados (galeria estática). |
+| 6 Anúncios/targets (exceto TalkBack) | PASS (reteste humano) | Falha `_NoopCopyWriter` corrigida. Usuário colou `abc123def456` do clipboard. `Calcular rede`/`Limpar` permanecem samples. |
 | 7 Goldens | PASS (cruzado) | Quatro PNGs em `test/design_system/goldens/`. Aprovação humana da direção visual nesta sessão. `shell_medium_light.png` regenerado só após correção dos headings. `test/goldens/` ausente. |
 
 ## Heading color gap

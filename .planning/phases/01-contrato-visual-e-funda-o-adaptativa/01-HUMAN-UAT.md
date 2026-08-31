@@ -5,17 +5,20 @@ source:
   - 01-VERIFICATION.md
   - 01-11-SUMMARY.md
 started: "2026-08-31T17:20:00Z"
-updated: "2026-08-31T17:35:00Z"
+updated: "2026-08-31T17:31:00Z"
 ---
 
 ## Current Test
 
-number: 2
-name: Copy no harness após correção do writer
+number: 1
+name: TalkBack no Android
 expected: |
-  No harness Android, tocar em copiar Hash SHA-256 grava abc123def456
-  no clipboard real e só então mostra "Hash SHA-256 copiado".
-awaiting: user retest
+  Com TalkBack ligado, percorrer o app real e o harness
+  (`flutter run -t test/manual/design_system_app.dart`): navegação com
+  semanticLabel, headings, campos, ações, sete estados, resultado/métrica,
+  Copiar {rótulo} e exatamente um {Rótulo} copiado. Ordem compreensível,
+  sem nós essenciais ausentes, sem duplicação.
+awaiting: user response
 
 ## Tests
 
@@ -26,9 +29,9 @@ why: Serviço assistivo Android. Não executado.
 
 ### 2. Copy no harness
 expected: Clipboard real recebe abc123def456; confirmação só depois do write.
-result: issue
-reported: "aparece a confirmação de que foi copiado; porém o valor NÃO é colocado no clipboard real."
-fix: Galeria usava `_NoopCopyWriter` (01-10). Trocado para `ClipboardCopyWriter`. 01-11 permanece não aprovado até reteste humano.
+result: pass
+reported: "abc123def456"
+fix: `_NoopCopyWriter` → `ClipboardCopyWriter`. Reteste humano colou o valor exibido.
 
 ### 3. Calcular rede / Limpar na galeria
 expected: Se forem samples de layout, não calculam.
@@ -39,8 +42,8 @@ note: Galeria estática; callbacks vazios. 01-11 não exige calculadora no harne
 ## Summary
 
 total: 3
-passed: 1
-issues: 1
+passed: 2
+issues: 0
 pending: 1
 skipped: 0
 blocked: 0
