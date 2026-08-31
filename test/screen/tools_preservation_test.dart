@@ -89,7 +89,7 @@ void main() {
 
         expect(
           find.descendant(
-            of: find.byType(AppBar),
+            of: find.byType(HashGeneratorScreen),
             matching: find.text('Gerador de Hash'),
           ),
           findsOneWidget,
@@ -104,7 +104,14 @@ void main() {
         expect(
           find.descendant(
             of: find.byType(HashGeneratorScreen),
-            matching: find.text('Calcular'),
+            matching: find.text('Gerar hashes'),
+          ),
+          findsOneWidget,
+        );
+        expect(
+          find.descendant(
+            of: find.byType(HashGeneratorScreen),
+            matching: find.text('Limpar'),
           ),
           findsOneWidget,
         );
