@@ -13,7 +13,7 @@ Este milestone evolui o aplicativo sem reescrita total: primeiro estabelece e im
 
 - [x] **Phase 1: Contrato visual e fundação adaptativa** - Definir o UI-SPEC e tornar a base visual, a navegação e os estados compartilhados adaptativos e acessíveis. (completed 2026-08-31)
 - [x] **Phase 2: Migração segura das ferramentas atuais** - Levar as três ferramentas existentes à nova fundação sem perda funcional. (completed 2026-08-31)
-- [ ] **Phase 3: Diagnóstico de Internet completo e resiliente** - Entregar o fluxo de diagnóstico transparente, progressivo, cancelável e testável de ponta a ponta.
+- [ ] **Phase 3: Diagnóstico de Internet completo e resiliente** - Entregar o fluxo de diagnóstico transparente, progressivo, cancelável e testável de ponta a ponta. (planned 2026-08-31; not executed)
 - [ ] **Phase 4: Validação Android e documentação transparente** - Comprovar os cenários Android reais e documentar capacidades, permissões, terceiros e privacidade.
 - [ ] **Phase 5: Gate de viabilidade do speed test** - Registrar uma decisão formal `GO` ou `NO-GO` antes de qualquer plano de implementação de teste de velocidade.
 
@@ -174,7 +174,7 @@ Gap-closure:
 |-------|----------------|--------|-----------|
 | 1. Contrato visual e fundação adaptativa | 11/11 | Complete    | 2026-08-31 |
 | 2. Migração segura das ferramentas atuais | 4/4 | Complete    | 2026-08-31 |
-| 3. Diagnóstico de Internet completo e resiliente | 0/7 | Not started | - |
+| 3. Diagnóstico de Internet completo e resiliente | 0/7 | Planned     | - |
 | 4. Validação Android e documentação transparente | 0/TBD | Not started | - |
 | 5. Gate de viabilidade do speed test | 0/TBD | Not started | - |
 

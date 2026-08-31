@@ -624,27 +624,15 @@ Não adicionar `ACCESS_FINE_LOCATION`, `ACCESS_COARSE_LOCATION`, `ACCESS_BACKGRO
 | A5 | Claim ipify “não loga visitantes” é só marketing | Public IP | Exposição de IP a terceiro é certa de qualquer forma — divulgar na UI |
 | A6 | Em target 36, probe TCP ao gateway LAN **não** precisa de `ACCESS_LOCAL_NETWORK` | Permissions | Android 16 opt-in de restrição LAN pode quebrar o probe em devices de teste. Mitigação: fato `permissionDenied` no modelo; não opt-in nesta fase; QUAL-09 na Phase 4 |
 
-## Open Questions
+## Open Questions (RESOLVED for planning)
 
-1. **Licença/ToS do generate_204 para app de terceiro**
-   - What we know: padrão de indústria; Android usa HTTP gstatic/clients para captive; não há license grant encontrado para apps.
-   - What's unclear: se o default deve ser gstatic, um host próprio, ou TCP 443 a `1.1.1.1` (aí o método deixaria de ser HTTPS — CONTEXT pede alvo HTTPS).
-   - Recommendation: seguir A1 (gstatic HTTPS) com substituição trivial; se o dono do produto recusar Google, injetar outro 204/pequeno HTTPS **antes** do execute, sem cascade.
+1. **Licença/ToS do generate_204 para app de terceiro** — RESOLVED (planning default): A1 + 03-05. Default `https://www.gstatic.com/generate_204`, URL 100% injetável. Evidência de ToS Google para apps de terceiros **permanece ausente** — produto pode trocar o host antes do execute sem redesenhar contratos.
 
-2. **Porta default do gateway**
-   - What we know: TCP a gateway frequentemente recusa; ICMP seria o método clássico e está fora.
-   - What's unclear: 80 vs 53 vs “não probear, só mostrar endereço”.
-   - Recommendation: probear porta 80; endereço permanece visível se o probe falhar.
+2. **Porta default do gateway** — RESOLVED: A2 + 03-05. TCP porta **80**, injetável; copy de limitação L3; endereço visível se o probe falhar.
 
-3. **Subir AGP 8.12.1 só para share_plus**
-   - What we know: Gradle/Kotlin já servem; AGP 8.11.1 é o único gap.
-   - What's unclear: apetite de mexer no Gradle nesta fase.
-   - Recommendation: **não** subir AGP; `ShareTextPort` nativo.
+3. **Subir AGP 8.12.1 só para share_plus** — RESOLVED: **não** subir AGP; 03-07 usa `ShareTextPort` + `Intent.ACTION_SEND`.
 
-4. **Não-Android nesta fase**
-   - What we know: D-04 = unavailable honesto.
-   - What's unclear: desktop/web no mesmo catálogo.
-   - Recommendation: mesma tela; snapshot/probes local-IP/gateway `unavailable`; HTTPS/ipify *podem* rodar em desktop `dart:io` se o planner quiser, mas o compromisso é Android-first — default mais seguro: probes de plataforma local unavailable fora de Android; HTTPS/ipify só se `!kIsWeb && Platform.isAndroid` no MVP para não prometer o que não foi verificado.
+4. **Não-Android nesta fase** — RESOLVED: 03-06. Snapshot/local/gateway `unavailable` fora de Android; compromisso Android-first.
 
 ## Environment Availability
 
