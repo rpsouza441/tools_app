@@ -11,13 +11,13 @@ class AnalysisResult {
   final List<ConversionData> manufacturerConversions;
   final List<ConversionData> systemConversions;
 
-  final String advertisedValue;
+  final double advertisedValue;
   final String advertisedUnit;
 
-  final String realValue;
+  final double realValue;
   final String realUnit;
 
-  final String differenceValue;
+  final double differenceValue;
   final String differenceUnit;
 
   AnalysisResult({

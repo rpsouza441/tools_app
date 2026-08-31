@@ -54,20 +54,16 @@ class _DataConverterScreenState extends State<DataConverterScreen> {
     });
   }
 
-  void _clear() {
-    setState(() {
-      _valueController.clear();
-      _result = null;
-      _error = null;
-    });
+  @override
+  void dispose() {
+    _valueController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Conversor de Armazenamento'),
-      ),
+      appBar: AppBar(title: const Text('Conversor de Armazenamento')),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -87,7 +83,8 @@ class _DataConverterScreenState extends State<DataConverterScreen> {
                           child: TextField(
                             controller: _valueController,
                             keyboardType: const TextInputType.numberWithOptions(
-                                decimal: true),
+                              decimal: true,
+                            ),
                             decoration: InputDecoration(
                               labelText: 'Valor Anunciado',
                               border: const OutlineInputBorder(),
@@ -100,30 +97,27 @@ class _DataConverterScreenState extends State<DataConverterScreen> {
                         Expanded(
                           flex: 2,
                           child: DropdownButtonFormField<String>(
-                            value: _fromUnit,
+                            initialValue: _fromUnit,
                             // A UI obtém a lista de unidades da fonte da verdade.
                             items: DataConverter.availableUnits.map((unit) {
                               return DropdownMenuItem(
-                                  value: unit, child: Text(unit));
+                                value: unit,
+                                child: Text(unit),
+                              );
                             }).toList(),
                             onChanged: (value) =>
                                 setState(() => _fromUnit = value!),
                             decoration: InputDecoration(
                               labelText: 'Unidade',
-                              labelStyle: Theme
-                                  .of(context)
-                                  .textTheme
-                                  .labelLarge,
+                              labelStyle: Theme.of(
+                                context,
+                              ).textTheme.labelLarge,
                               border: OutlineInputBorder(),
                             ),
-                            style: Theme
-                                .of(context)
-                                .textTheme
-                                .bodyLarge,
-                            dropdownColor: Theme
-                                .of(context)
-                                .colorScheme
-                                .surface,
+                            style: Theme.of(context).textTheme.bodyLarge,
+                            dropdownColor: Theme.of(
+                              context,
+                            ).colorScheme.surface,
                           ),
                         ),
                       ],
@@ -133,8 +127,8 @@ class _DataConverterScreenState extends State<DataConverterScreen> {
                       width: double.infinity,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 16.0)),
+                          padding: const EdgeInsets.symmetric(vertical: 16.0),
+                        ),
                         onPressed: _isLoading ? null : _calculate,
                         child: _isLoading
                             ? const CircularProgressIndicator()
@@ -161,14 +155,9 @@ class _DataConverterScreenState extends State<DataConverterScreen> {
   }
 
   Widget _buildResultCard(AnalysisResult result) {
-    final textStyle = Theme
-        .of(context)
-        .textTheme
-        .bodyLarge
-        ?.copyWith(
-      fontFamily: 'monospace',
-      height: 1.6,
-    );
+    final textStyle = Theme.of(
+      context,
+    ).textTheme.bodyLarge?.copyWith(fontFamily: 'monospace', height: 1.6);
 
     return Card(
       child: Padding(
@@ -176,49 +165,57 @@ class _DataConverterScreenState extends State<DataConverterScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Resultado da Análise', style: Theme
-                .of(context)
-                .textTheme
-                .titleMedium),
+            Text(
+              'Resultado da Análise',
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
             const Divider(height: 24),
 
-            const Text('Padrão do Fabricante (Base 10)',
-                style: TextStyle(fontWeight: FontWeight.bold)),
+            const Text(
+              'Padrão do Fabricante (Base 10)',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
             ...result.manufacturerConversions.map(
-                  (data) =>
-                  Text('${_formatNumber(data.value)} ${data.unit}',
-                      style: textStyle),
+              (data) => Text(
+                '${_formatNumber(data.value)} ${data.unit}',
+                style: textStyle,
+              ),
             ),
 
             const SizedBox(height: 16),
-            const Text('Padrão Real do Sistema (Base 2)',
-                style: TextStyle(fontWeight: FontWeight.bold)),
+            const Text(
+              'Padrão Real do Sistema (Base 2)',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
             ...result.systemConversions.map(
-                  (data) =>
-                  Text('${_formatNumber(data.value)} ${data.unit}',
-                      style: textStyle),
+              (data) => Text(
+                '${_formatNumber(data.value)} ${data.unit}',
+                style: textStyle,
+              ),
             ),
 
             const Divider(height: 24),
-            const Text('Resumo da Diferença',
-                style: TextStyle(fontWeight: FontWeight.bold)),
+            const Text(
+              'Resumo da Diferença',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
             const SizedBox(height: 8),
             Text.rich(
               TextSpan(
-                style: Theme
-                    .of(context)
-                    .textTheme
-                    .bodyMedium,
+                style: Theme.of(context).textTheme.bodyMedium,
                 children: [
                   const TextSpan(text: 'Um drive de '),
-                  TextSpan(text: '${_formatNumber(
-                      double.parse(result.advertisedValue))} ${result
-                      .advertisedUnit}',
-                      style: const TextStyle(fontWeight: FontWeight.bold)),
+                  TextSpan(
+                    text:
+                        '${_formatNumber(result.advertisedValue)} ${result.advertisedUnit}',
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
                   const TextSpan(text: ' na verdade possui '),
-                  TextSpan(text: '${_formatNumber(
-                      double.parse(result.realValue))} ${result.realUnit}',
-                      style: const TextStyle(fontWeight: FontWeight.bold)),
+                  TextSpan(
+                    text:
+                        '${_formatNumber(result.realValue)} ${result.realUnit}',
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
                   const TextSpan(text: ' no sistema.'),
                 ],
               ),
@@ -226,17 +223,17 @@ class _DataConverterScreenState extends State<DataConverterScreen> {
             const SizedBox(height: 8),
             Text.rich(
               TextSpan(
-                style: Theme
-                    .of(context)
-                    .textTheme
-                    .bodyMedium,
+                style: Theme.of(context).textTheme.bodyMedium,
                 children: [
                   const TextSpan(text: 'Diferença "perdida": '),
-                  TextSpan(text: '${_formatNumber(
-                      double.parse(result.differenceValue))} ${result
-                      .differenceUnit}',
-                      style: const TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.red)),
+                  TextSpan(
+                    text:
+                        '${_formatNumber(result.differenceValue)} ${result.differenceUnit}',
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.red,
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -247,24 +244,15 @@ class _DataConverterScreenState extends State<DataConverterScreen> {
   }
 
   Widget _buildExplanationCard() {
-    final iconColor = Theme
-        .of(context)
-        .colorScheme
-        .secondary;
-    final textColor = Theme
-        .of(context)
-        .textTheme
-        .bodyMedium
-        ?.color;
+    final iconColor = Theme.of(context).colorScheme.secondary;
+    final textColor = Theme.of(context).textTheme.bodyMedium?.color;
 
     return Card(
       // Usando Card.outlined para um estilo mais sutil no tema escuro
       shape: RoundedRectangleBorder(
-        side: BorderSide(color: Theme
-            .of(context)
-            .colorScheme
-            .outline
-            .withOpacity(0.3)),
+        side: BorderSide(
+          color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.3),
+        ),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Padding(
@@ -274,11 +262,9 @@ class _DataConverterScreenState extends State<DataConverterScreen> {
           children: [
             Text(
               'Por que a capacidade parece menor?', // Título mais direto
-              style: Theme
-                  .of(context)
-                  .textTheme
-                  .titleLarge
-                  ?.copyWith(fontWeight: FontWeight.bold),
+              style: Theme.of(
+                context,
+              ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
 
@@ -287,7 +273,8 @@ class _DataConverterScreenState extends State<DataConverterScreen> {
               leading: Icon(Icons.storage_rounded, color: iconColor, size: 32),
               title: const Text('O Padrão do Fabricante (Base 10)'),
               subtitle: const Text(
-                  'Para marketing, 1 Gigabyte (GB) é um número redondo: 1 bilhão de bytes.'),
+                'Para marketing, 1 Gigabyte (GB) é um número redondo: 1 bilhão de bytes.',
+              ),
               contentPadding: EdgeInsets.zero,
             ),
 
@@ -296,7 +283,8 @@ class _DataConverterScreenState extends State<DataConverterScreen> {
               leading: Icon(Icons.devices_rounded, color: iconColor, size: 32),
               title: const Text('O Padrão do Sistema (Base 2)'),
               subtitle: const Text(
-                  'O sistema operacional usa potências de 2, onde 1 Gibibyte (GiB) = 1.073.741.824 bytes.'),
+                'O sistema operacional usa potências de 2, onde 1 Gibibyte (GiB) = 1.073.741.824 bytes.',
+              ),
               contentPadding: EdgeInsets.zero,
             ),
 
@@ -311,17 +299,23 @@ class _DataConverterScreenState extends State<DataConverterScreen> {
                   TextSpan(
                     text: '1 TB',
                     style: TextStyle(
-                        fontWeight: FontWeight.bold, color: iconColor),
+                      fontWeight: FontWeight.bold,
+                      color: iconColor,
+                    ),
                   ),
                   const TextSpan(
-                      text: ' é lido pelo seu sistema como aproximadamente '),
+                    text: ' é lido pelo seu sistema como aproximadamente ',
+                  ),
                   TextSpan(
                     text: '931 GiB',
                     style: TextStyle(
-                        fontWeight: FontWeight.bold, color: iconColor),
+                      fontWeight: FontWeight.bold,
+                      color: iconColor,
+                    ),
                   ),
                   const TextSpan(
-                      text: '. Essa diferença é normal e não um defeito!'),
+                    text: '. Essa diferença é normal e não um defeito!',
+                  ),
                 ],
               ),
             ),

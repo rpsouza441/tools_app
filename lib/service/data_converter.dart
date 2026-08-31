@@ -1,6 +1,5 @@
 // lib/service/data_converter.dart
 import '../model/analysis_result.dart';
-import 'dart:math';
 
 class DataConverter {
   // Fonte da verdade para as unidades e seus multiplicadores.
@@ -46,17 +45,24 @@ class DataConverter {
     // 2. Gerar a lista de conversões para o padrão do fabricante (Base 10).
     final manufacturerConversions = _decimalMultipliers.entries
         .where((entry) => entry.key != fromUnit) // Pula a unidade de origem
-        .map((entry) => ConversionData(unit: entry.key, value: totalBytes / entry.value))
+        .map(
+          (entry) =>
+              ConversionData(unit: entry.key, value: totalBytes / entry.value),
+        )
         .toList();
 
     // 3. Gerar a lista de conversões para o padrão do sistema (Base 2).
     final systemConversions = _binaryMultipliers.entries
-        .map((entry) => ConversionData(unit: entry.key, value: totalBytes / entry.value))
+        .map(
+          (entry) =>
+              ConversionData(unit: entry.key, value: totalBytes / entry.value),
+        )
         .toList();
 
     // 4. Calcular os valores para o resumo.
     final comparableBinaryUnit = _unitComparisonMap[fromUnit]!;
-    final realValueInComparableUnit = totalBytes / _binaryMultipliers[comparableBinaryUnit]!;
+    final realValueInComparableUnit =
+        totalBytes / _binaryMultipliers[comparableBinaryUnit]!;
     final difference = value - realValueInComparableUnit;
 
     // 5. Retornar o objeto de resultado estruturado.
@@ -65,11 +71,11 @@ class DataConverter {
     return AnalysisResult(
       manufacturerConversions: manufacturerConversions,
       systemConversions: systemConversions,
-      advertisedValue: value.toString(), // Enviando dados brutos
+      advertisedValue: value,
       advertisedUnit: fromUnit,
-      realValue: realValueInComparableUnit.toString(),
+      realValue: realValueInComparableUnit,
       realUnit: comparableBinaryUnit,
-      differenceValue: difference.toString(),
+      differenceValue: difference,
       differenceUnit: fromUnit, // A diferença é expressa na unidade original
     );
   }

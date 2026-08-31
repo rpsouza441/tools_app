@@ -92,5 +92,10 @@ app.*.map.json
 
 # Configurações de serviços da Google (Firebase, etc.)
 # Cuidado ao adicionar *.json. Se precisar, use um nome específico.
-/android/app/google-services.json -> Este pode ser enviado
-*service-account*.json -> NÃO ENVIE
+# /android/app/google-services.json - Este PODE ser enviado (se público)
+*service-account*.json
+
+#####################################################################
+# DIRETÓRIOS DE PLANEJAMENTO E DOCUMENTAÇÃO INTERNA
+#####################################################################
+/planning/

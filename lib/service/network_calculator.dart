@@ -46,12 +46,44 @@ class NetworkCalculator {
   }
 
   String calculateIpRange(String networkAddress, String broadcastAddress) {
-    List<int> startIp = networkAddress.split('.').map(int.parse).toList();
-    List<int> endIp = broadcastAddress.split('.').map(int.parse).toList();
-    endIp[3] -= 1; // Último IP válido antes do broadcast
+    final network = _ipToInt(networkAddress);
+    final broadcast = _ipToInt(broadcastAddress);
 
-    String startIpStr = startIp.join('.');
-    String endIpStr = endIp.join('.');
-    return '$startIpStr - $endIpStr';
+    if (cidr == 32) {
+      return networkAddress;
+    }
+
+    if (cidr == 31) {
+      return '$networkAddress - $broadcastAddress';
+    }
+
+    return '${_intToIp(network + 1)} - ${_intToIp(broadcast - 1)}';
+  }
+
+  int calculateUsableHostCount() {
+    if (cidr == 32) {
+      return 1;
+    }
+
+    if (cidr == 31) {
+      return 2;
+    }
+
+    return (1 << (32 - cidr!)) - 2;
+  }
+
+  int _ipToInt(String ip) {
+    return ip.split('.').map(int.parse).fold(0, (value, octet) {
+      return (value << 8) + octet;
+    });
+  }
+
+  String _intToIp(int value) {
+    return [
+      (value >> 24) & 0xFF,
+      (value >> 16) & 0xFF,
+      (value >> 8) & 0xFF,
+      value & 0xFF,
+    ].join('.');
   }
 }

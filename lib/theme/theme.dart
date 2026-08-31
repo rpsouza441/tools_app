@@ -1,127 +1,174 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:tools_app/design_system/app_tokens.dart';
 
-// Tema escuro (Matrix)
-final ThemeData darkTheme = ThemeData(
-  colorScheme: ColorScheme.fromSeed(
-    brightness: Brightness.dark,
-    seedColor: const Color(0xFF00FF41),
-    primary: const Color(0xFF00FF41),
-    secondary: const Color(0xFF4CAF50),
-    surface: const Color(0xFF1C1C1C),
-    background: const Color(0xFF2B2B2B),
-    error: const Color(0xFFCF6679),
-    onSurface: const Color(0xFF00FF41),
-  ),
-  canvasColor: const Color(0xFF2B2B2B),
-  useMaterial3: true,
-  appBarTheme: const AppBarTheme(
-    backgroundColor: Color(0xFF2B2B2B),
-    foregroundColor: Color(0xFF00FF41),
-    elevation: 0,
-  ),
-  textTheme: GoogleFonts.latoTextTheme().copyWith(
-    bodyLarge: const TextStyle(color: Color(0xFF00FF41), fontSize: 16),
-    bodyMedium: const TextStyle(color: Color(0xFF00FF41), fontSize: 14),
-    headlineLarge:
-        const TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF00FF41)),
-    labelLarge: const TextStyle(
-        fontWeight: FontWeight.w600, fontSize: 14, color: Color(0xFF00FF41)),
-  ),
-  buttonTheme: ButtonThemeData(
-    buttonColor: const Color(0xFF4CAF50),
-    textTheme: ButtonTextTheme.primary,
-  ),
-  elevatedButtonTheme: ElevatedButtonThemeData(
-    style: ElevatedButton.styleFrom(
-      backgroundColor: const Color(0xFF4CAF50),
-      foregroundColor: Colors.black,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
-    ),
-  ),
-  inputDecorationTheme: const InputDecorationTheme(
-    border: OutlineInputBorder(
-      borderSide: BorderSide(color: Color(0xFF00FF41)),
-    ),
-    focusedBorder: OutlineInputBorder(
-      borderSide: BorderSide(color: Color(0xFF00FF41), width: 2.0),
-    ),
-    labelStyle: TextStyle(color: Color(0xFF00FF41)),
-  ),
-  popupMenuTheme: PopupMenuThemeData(
-    color: const Color(0xFF2B2B2B), // Fundo do menu
-    textStyle: const TextStyle(color: Color(0xFF00FF41)), // Texto do menu
-  ),
-  dropdownMenuTheme: DropdownMenuThemeData(
-    // Estilo do texto para todos os itens do menu
-    textStyle: const TextStyle(color: Color(0xFF00FF41), fontSize: 16),
-    inputDecorationTheme: const InputDecorationTheme(
-      // Garante que o campo em si (quando o menu está fechado) também use a cor correta
-      labelStyle: TextStyle(color: Color(0xFF00FF41)),
-      // Estilo do texto dentro do campo
-      hintStyle: TextStyle(color: Color(0xFF00FF41)),
-    ),
-    menuStyle: MenuStyle(
-      // Cor de fundo do menu aberto
-      backgroundColor: MaterialStateProperty.all(const Color(0xFF1C1C1C)),
-      // Cor de fundo quando um item está focado ou selecionado
-      surfaceTintColor: MaterialStateProperty.all(const Color(0xFF1C1C1C)),
-    ),
-  ),
-  // Garante que a cor de destaque geral siga o tema
-  highlightColor: const Color(0xFF4CAF50).withOpacity(0.3),
-  splashColor: const Color(0xFF00FF41).withOpacity(0.4),
-  scaffoldBackgroundColor: const Color(0xFF1C1C1C),
+// ---------------------------------------------------------------------------
+// D-05: Green accent only — neutral high-contrast surfaces/text in light/dark.
+// D-06: Default Material sans-serif; no google_fonts runtime fetch.
+// D-07: Hierarchy by size/weight/spacing/surface; color never sole indicator.
+// D-08: Light/dark share semantic color roles.
+// D-16: Touch targets >= 48x48.
+// ---------------------------------------------------------------------------
+
+/// Green seed used for accent roles (primary, selected, focus indicators).
+const _greenSeed = Color(0xFF4CAF50);
+
+// ──────────────────────────────────────────────────────────────────────────────
+// Shared text theme — default sans-serif, neutral colors applied by ColorScheme.
+// ──────────────────────────────────────────────────────────────────────────────
+
+const _textTheme = TextTheme(
+  bodyMedium: TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
+  bodyLarge: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+  titleLarge: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+  headlineSmall: TextStyle(fontSize: 28, fontWeight: FontWeight.w600),
+  labelLarge: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
 );
 
-// Tema claro
-final ThemeData lightTheme = ThemeData(
-  colorScheme: ColorScheme.fromSeed(
-    brightness: Brightness.light,
-    seedColor: const Color(0xFF4CAF50),
-    primary: const Color(0xFF4CAF50),
-    secondary: const Color(0xFF00FF41),
-    surface: const Color(0xFFE0E0E0),
-    background: const Color(0xFFF5F5F5),
-    error: const Color(0xFFB00020),
-  ),
-  useMaterial3: true,
-  appBarTheme: const AppBarTheme(
-    backgroundColor: Color(0xFFF5F5F5),
-    foregroundColor: Color(0xFF4CAF50),
-    elevation: 0,
-  ),
-  textTheme: GoogleFonts.latoTextTheme().copyWith(
-    bodyLarge: const TextStyle(color: Colors.black87, fontSize: 16),
-    bodyMedium: const TextStyle(color: Colors.black87, fontSize: 14),
-    headlineLarge:
-        const TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
-    labelLarge: const TextStyle(
-        fontWeight: FontWeight.w600, fontSize: 14, color: Colors.black),
-  ),
-  buttonTheme: ButtonThemeData(
-    buttonColor: const Color(0xFF4CAF50),
-    textTheme: ButtonTextTheme.primary,
-  ),
-  elevatedButtonTheme: ElevatedButtonThemeData(
-    style: ElevatedButton.styleFrom(
-      backgroundColor: const Color(0xFF4CAF50),
-      foregroundColor: Colors.white,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
+// ──────────────────────────────────────────────────────────────────────────────
+// Shared component themes — D-16 tap targets, consistent radii.
+// ──────────────────────────────────────────────────────────────────────────────
+
+final _buttonShape = RoundedRectangleBorder(
+  borderRadius: BorderRadius.circular(12),
+);
+
+const _buttonMinSize = Size(48, 48);
+
+/// Component themes that depend on the active [ColorScheme].
+ThemeData _applyComponentThemes(ThemeData base) {
+  final cs = base.colorScheme;
+  return base.copyWith(
+    navigationBarTheme: NavigationBarThemeData(
+      indicatorColor: cs.primaryContainer,
+      iconTheme: WidgetStateProperty.resolveWith((states) {
+        if (states.contains(WidgetState.selected)) {
+          return IconThemeData(color: cs.onPrimaryContainer);
+        }
+        return IconThemeData(color: cs.onSurfaceVariant);
+      }),
+      labelTextStyle: WidgetStateProperty.resolveWith((states) {
+        if (states.contains(WidgetState.selected)) {
+          return TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.w600,
+            color: cs.onSurface,
+          );
+        }
+        return TextStyle(
+          fontSize: 12,
+          fontWeight: FontWeight.w400,
+          color: cs.onSurfaceVariant,
+        );
+      }),
+    ),
+    navigationRailTheme: NavigationRailThemeData(
+      indicatorColor: cs.primaryContainer,
+      selectedIconTheme: IconThemeData(color: cs.onPrimaryContainer),
+      unselectedIconTheme: IconThemeData(color: cs.onSurfaceVariant),
+      selectedLabelTextStyle: TextStyle(
+        fontSize: 12,
+        fontWeight: FontWeight.w600,
+        color: cs.onSurface,
+      ),
+      unselectedLabelTextStyle: TextStyle(
+        fontSize: 12,
+        fontWeight: FontWeight.w400,
+        color: cs.onSurfaceVariant,
       ),
     ),
-  ),
-  inputDecorationTheme: const InputDecorationTheme(
-    border: OutlineInputBorder(
-      borderSide: BorderSide(color: Color(0xFF4CAF50)),
+    cardTheme: CardThemeData(
+      elevation: 1,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
     ),
-    focusedBorder: OutlineInputBorder(
-      borderSide: BorderSide(color: Color(0xFF4CAF50)),
+    inputDecorationTheme: InputDecorationTheme(
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8),
+        borderSide: BorderSide(color: cs.primary, width: 2),
+      ),
+      errorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8),
+        borderSide: BorderSide(color: cs.error),
+      ),
+      labelStyle: TextStyle(color: cs.onSurfaceVariant),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
     ),
-    labelStyle: TextStyle(color: Color(0xFF4CAF50)),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: cs.primary,
+        foregroundColor: cs.onPrimary,
+        minimumSize: _buttonMinSize,
+        shape: _buttonShape,
+        textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+      ),
+    ),
+    textButtonTheme: TextButtonThemeData(
+      style: TextButton.styleFrom(
+        foregroundColor: cs.primary,
+        minimumSize: _buttonMinSize,
+        shape: _buttonShape,
+        textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+      ),
+    ),
+    outlinedButtonTheme: OutlinedButtonThemeData(
+      style: OutlinedButton.styleFrom(
+        foregroundColor: cs.primary,
+        minimumSize: _buttonMinSize,
+        shape: _buttonShape,
+        side: BorderSide(color: cs.outline),
+        textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+      ),
+    ),
+    chipTheme: ChipThemeData(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      labelStyle: TextStyle(fontSize: 12, color: cs.onSurfaceVariant),
+    ),
+    snackBarTheme: SnackBarThemeData(
+      behavior: SnackBarBehavior.floating,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+    ),
+    iconButtonTheme: IconButtonThemeData(
+      style: IconButton.styleFrom(minimumSize: _buttonMinSize),
+    ),
+  );
+}
+
+// ──────────────────────────────────────────────────────────────────────────────
+// Light theme
+// ──────────────────────────────────────────────────────────────────────────────
+
+final ThemeData lightTheme = _applyComponentThemes(
+  ThemeData(
+    useMaterial3: true,
+    brightness: Brightness.light,
+    colorScheme: ColorScheme.fromSeed(
+      seedColor: _greenSeed,
+      brightness: Brightness.light,
+    ),
+    textTheme: _textTheme,
+    scaffoldBackgroundColor: const Color(0xFFFBFDF8),
+    appBarTheme: const AppBarTheme(elevation: 0, scrolledUnderElevation: 1),
+    extensions: const <ThemeExtension>[AppTokens()],
   ),
-  scaffoldBackgroundColor: const Color(0xFFF5F5F5),
+);
+
+// ──────────────────────────────────────────────────────────────────────────────
+// Dark theme
+// ──────────────────────────────────────────────────────────────────────────────
+
+final ThemeData darkTheme = _applyComponentThemes(
+  ThemeData(
+    useMaterial3: true,
+    brightness: Brightness.dark,
+    colorScheme: ColorScheme.fromSeed(
+      seedColor: _greenSeed,
+      brightness: Brightness.dark,
+    ),
+    textTheme: _textTheme,
+    scaffoldBackgroundColor: const Color(0xFF1A1C19),
+    appBarTheme: const AppBarTheme(elevation: 0, scrolledUnderElevation: 1),
+    extensions: const <ThemeExtension>[AppTokens()],
+  ),
 );

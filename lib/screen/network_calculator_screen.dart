@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tolls_app/service/network_calculator.dart';
-import 'package:tolls_app/utils/network_utils.dart'; // Importe o arquivo de utilitários
+import 'package:tools_app/service/network_calculator.dart';
+import 'package:tools_app/utils/network_utils.dart';
 
 class NetworkCalculatorScreen extends StatefulWidget {
   const NetworkCalculatorScreen({super.key});
@@ -59,14 +59,19 @@ class _NetworkCalculatorScreenState extends State<NetworkCalculatorScreen> {
 
         String networkAddress = calculator.calculateNetworkAddress();
         String broadcastAddress = calculator.calculateBroadcastAddress();
-        String ipRange =
-            calculator.calculateIpRange(networkAddress, broadcastAddress);
+        String ipRange = calculator.calculateIpRange(
+          networkAddress,
+          broadcastAddress,
+        );
+        int usableHosts = calculator.calculateUsableHostCount();
 
-        _result = 'Endereço de Rede: $networkAddress\n'
+        _result =
+            'Endereço de Rede: $networkAddress\n'
             'Faixa de IPs: $ipRange\n'
             'Endereço de Broadcast: $broadcastAddress\n'
             'Máscara de Sub-rede: ${calculator.subnetMask}\n'
-            'CIDR: /${calculator.cidr}';
+            'CIDR: /${calculator.cidr}\n'
+            'Hosts utilizáveis: $usableHosts';
       } on FormatException {
         _result =
             'Erro: Formato de entrada inválido. Verifique os valores inseridos.';
@@ -87,11 +92,16 @@ class _NetworkCalculatorScreenState extends State<NetworkCalculatorScreen> {
   }
 
   @override
+  void dispose() {
+    _ipController.dispose();
+    _maskOrCidrController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Network Calculator'),
-      ),
+      appBar: AppBar(title: const Text('Calculadora de Rede')),
       body: LayoutBuilder(
         builder: (context, constraints) {
           bool isWideScreen = constraints.maxWidth > 600;
@@ -111,7 +121,7 @@ class _NetworkCalculatorScreenState extends State<NetworkCalculatorScreen> {
                             children: [
                               TextField(
                                 controller: _ipController,
-                                keyboardType: TextInputType.number,
+                                keyboardType: TextInputType.text,
                                 decoration: InputDecoration(
                                   labelText: 'Endereço de IP',
                                   border: const OutlineInputBorder(),
@@ -121,7 +131,7 @@ class _NetworkCalculatorScreenState extends State<NetworkCalculatorScreen> {
                               const SizedBox(height: 16),
                               TextField(
                                 controller: _maskOrCidrController,
-                                keyboardType: TextInputType.number,
+                                keyboardType: TextInputType.text,
                                 decoration: InputDecoration(
                                   labelText: 'Máscara de Sub-Rede ou CIDR',
                                   border: const OutlineInputBorder(),
@@ -168,7 +178,7 @@ class _NetworkCalculatorScreenState extends State<NetworkCalculatorScreen> {
                       children: [
                         TextField(
                           controller: _ipController,
-                          keyboardType: TextInputType.number,
+                          keyboardType: TextInputType.text,
                           decoration: InputDecoration(
                             labelText: 'Endereço de IP',
                             border: const OutlineInputBorder(),
@@ -178,7 +188,7 @@ class _NetworkCalculatorScreenState extends State<NetworkCalculatorScreen> {
                         const SizedBox(height: 16),
                         TextField(
                           controller: _maskOrCidrController,
-                          keyboardType: TextInputType.number,
+                          keyboardType: TextInputType.text,
                           decoration: InputDecoration(
                             labelText: 'Máscara de Sub-Rede ou CIDR',
                             border: const OutlineInputBorder(),
@@ -218,9 +228,9 @@ class _NetworkCalculatorScreenState extends State<NetworkCalculatorScreen> {
                       child: Text(
                         _result,
                         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                              color: Theme.of(context).colorScheme.onSurface,
-                              fontWeight: FontWeight.w500,
-                            ),
+                          color: Theme.of(context).colorScheme.onSurface,
+                          fontWeight: FontWeight.w500,
+                        ),
                         textAlign: TextAlign.start,
                       ),
                     ),
