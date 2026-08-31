@@ -2,8 +2,8 @@
 phase: 01-contrato-visual-e-funda-o-adaptativa
 plan: "11"
 subsystem: testing
-tags: [human-verify, android, goldens, talkback-residual, gap-closure]
-status: residual_talkback_and_copy_retest
+tags: [human-verify, android, goldens, talkback, gap-closure]
+status: complete
 
 requires:
   - phase: 01-contrato-visual-e-funda-o-adaptativa
@@ -12,14 +12,14 @@ provides:
   - Aprovação humana visual representativa (compacta Android + harness claro/escuro + viewport larga)
   - Cruzamento dos sete checks com evidência humana + testes + goldens + código
   - Correção de headings de status para onSurface (accent/error só no ícone)
-  - Residual explícito: TalkBack real não executado
+  - Gate humano fechado: visual + copy + TalkBack no emulador Android (`approved`)
 affects: [phase-1-verification]
 
 tech-stack:
   added: []
   patterns:
     - Inspeção visual representativa + testes de boundary não exigem matriz de screenshots por breakpoint
-    - TalkBack real não é substituível por widget tests; GSD override não suprime human_needed
+    - TalkBack real não é substituível por widget tests; fechado só com `approved` humano após percurso no emulador
 
 key-files:
   created:
@@ -33,7 +33,7 @@ key-decisions:
   - "Usuário APPROVED evidência visual representativa; não exigir screenshots 599/600/720/839/840/1024."
   - "Boundaries de shell, 5 destinos, semantics, reflow e 200% usam testes automatizados existentes."
   - "UI-SPEC: accent apenas no ícone (success) e error role no ícone (permissionDenied); headings passam a onSurface."
-  - "TalkBack real não ocorreu e não foi inventado. Override GSD existe para must-haves FAIL, mas não suprime human_needed — não aplicado."
+  - "TalkBack no emulador Android: foco, labels de campos, interação, Máscara inválida acessível, galeria percorrível, sem nós essenciais ausentes nem duplicações problemáticas. Usuário respondeu approved."
 
 patterns-established:
   - "Headings de ToolStatusPanel usam onSurface; ícone/progress carregam primary/error/onSurface."
@@ -44,24 +44,25 @@ duration: 40min
 completed: 2026-08-31
 ---
 
-# Phase 1 Plan 11: Gate humano — visual APPROVED, TalkBack residual
+# Phase 1 Plan 11: Gate humano — `approved`
 
-**Aprovação humana visual representativa registrada; TalkBack real não foi executado e permanece o único ponto residual do 01-11. Phase 1 não está Complete.**
+**Checks 1–7 fechados com evidência humana + testes. TalkBack no emulador Android aprovado pelo usuário. Phase 1 ainda depende da re-verificação oficial (não Complete por este SUMMARY sozinho).**
 
 ## Performance
 
 - **Duration:** ~40 min (cruzamento + correção de headings + re-preflight)
 - **Started:** 2026-08-31T16:16:00Z
-- **Completed:** 2026-08-31T17:20:00Z
-- **Tasks:** 1 checkpoint humano (parcial)
+- **Completed:** 2026-08-31T17:40:00Z
+- **Tasks:** 1 checkpoint humano (`approved`)
 - **Files modified:** 3 (correção de headings + golden medium)
 
 ## Accomplishments
 
 - Cruzou os sete checks do 01-11 com evidência humana APPROVED, testes automatizados, goldens canônicos e código.
 - Corrigiu headings `Concluído` / `Não foi possível concluir` / `Permissão necessária` para `onSurface` (UI-SPEC: accent/error no ícone).
-- Falha humana: copy no harness mostrava confirmação sem clipboard (`_NoopCopyWriter`). Corrigido para `ClipboardCopyWriter`. Reteste humano colou `abc123def456`. **01-11 não aprovado** (TalkBack residual).
-- Não inventou TalkBack. Não aplicou waiver. Não iniciou Phase 2.
+- Falha humana: copy no harness mostrava confirmação sem clipboard (`_NoopCopyWriter`). Corrigido para `ClipboardCopyWriter`. Reteste humano colou `abc123def456`.
+- TalkBack no emulador Android: usuário respondeu `approved` (foco, labels, campos, erro, galeria percorrível, sem nós essenciais ausentes nem duplicações problemáticas).
+- Não aplicou waiver. Não iniciou Phase 2.
 
 ## Check results
 
@@ -71,7 +72,7 @@ completed: 2026-08-31
 | 2 Preservação | PASS (automatizado) | `IndexedStack preserves page state on navigation/resize`; happy path calcula rede e preserva. Sem repetição manual. |
 | 3 Temas | PASS (cruzado) | Humano: app real claro + harness escuro APPROVED (corpo neutro, verde só no acento, cards com borda). Automatizado: `theme_contract_test.dart` hex/elevation/radius. |
 | 4 Texto 200% | PASS (automatizado) | `accessibility_test` 360/720/1024 × 1.0/2.0 em widgets públicos; `tool_metric_reflow_test` 360 + scaler 2.0. Sem gap visual nas evidências. |
-| 5 TalkBack | RESIDUAL | Não executado. Não simulado. Widget tests não substituem. |
+| 5 TalkBack | PASS (humano) | Emulador Android. Foco TalkBack; campos e rótulos anunciados; interação com campos; “Máscara inválida” acessível; ações/galeria percorríveis; sem nós essenciais ausentes nem duplicações problemáticas. Copy já retestado (`abc123def456`). `approved`. |
 | 6 Anúncios/targets (exceto TalkBack) | PASS (reteste humano) | Falha `_NoopCopyWriter` corrigida. Usuário colou `abc123def456` do clipboard. `Calcular rede`/`Limpar` permanecem samples. |
 | 7 Goldens | PASS (cruzado) | Quatro PNGs em `test/design_system/goldens/`. Aprovação humana da direção visual nesta sessão. `shell_medium_light.png` regenerado só após correção dos headings. `test/goldens/` ausente. |
 
@@ -85,15 +86,7 @@ UI-SPEC State Contract: success **“accent apenas no ícone”**; permissionDen
 
 ## TalkBack / waiver
 
-GSD tem `overrides:` em VERIFICATION.md (`references/verification-overrides.md`). **Não suprime `human_needed`.** Não há comando de waiver de TalkBack. Override **não aplicado**. YAML que *seria* registrado se o usuário aceitasse o residual como must-have FAIL (não fecha TalkBack humano):
-
-```yaml
-overrides:
-  - must_have: "TalkBack anuncia navegação com semanticLabel, sete estados canônicos, Copiar {rótulo} e exatamente um {Rótulo} copiado, sem nós duplicados."
-    reason: "Percurso TalkBack real não executado; cobertura automatizada de semantics/copy/targets existe; inspeção visual APPROVED. Override não substitui human_needed."
-    accepted_by: "Rodrigo"
-    accepted_at: "<ISO — não aplicado>"
-```
+TalkBack no emulador Android foi executado e o usuário respondeu `approved`. Override **não aplicado** (não era necessário). GSD `overrides:` **não suprime `human_needed`** e não foi usado para fechar o gate.
 
 ## Preflight
 
@@ -107,5 +100,5 @@ overrides:
 - Requirements: 01-11 não marca UI-01..UI-09 complete em REQUIREMENTS.md
 - Key links: harness → galeria; main → AppShell
 - Threat model: T-01-G11-01 (sem autoaprovação de TalkBack); T-01-G11-03 (correção de headings autorizada pelo usuário após o checkpoint)
-- 80/20: TalkBack real continua residual; copy do harness precisa de reteste humano após o fix
-- Phase 1 permanece incompleta. Phase 2 não iniciada. PRES-* não implementados. 01-11 **não aprovado**.
+- 80/20: 01-11 fechado com `approved`; Phase 1 só Complete após verifier `passed`
+- Phase 2 não iniciada. PRES-* não implementados.

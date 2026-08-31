@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: 01-11 visual APPROVED; TalkBack residual; awaiting official re-verification
-last_updated: "2026-08-31T17:20:00.000Z"
-last_activity: "2026-08-31 — 01-11 visual APPROVED; headings onSurface; TalkBack residual; Phase 1 incompleta"
+stopped_at: 01-11 approved; official Phase 1 re-verification
+last_updated: "2026-08-31T17:40:00.000Z"
+last_activity: "2026-08-31 — 01-11 approved (TalkBack emulator); awaiting verifier; no Phase 2"
 progress:
   total_phases: 5
   completed_phases: 0
   total_plans: 11
-  completed_plans: 10
-  percent: 91
+  completed_plans: 11
+  percent: 100
 ---
 
 # Project State
@@ -21,22 +21,22 @@ progress:
 See: .planning/PROJECT.md (updated 2026-08-10)
 
 **Core value:** Oferecer diagnósticos técnicos úteis e honestos em uma interface clara, sem ocultar limitações de plataforma, método de medição ou falhas parciais.
-**Current focus:** Phase 1 — 01-11 visual APPROVED; TalkBack residual; re-verification; Phase 1 incomplete
+**Current focus:** Phase 1 — 01-11 approved; official re-verification; do not start Phase 2
 
 ## Current Position
 
 Phase: 1 of 5 (Contrato visual e fundação adaptativa)
-Plan: 11 of 11 (01-11 visual closed; TalkBack residual)
-Status: Gap-closure — visual human APPROVED; TalkBack not executed; Phase 1 incomplete
-Last activity: 2026-08-31 — re-verification human_needed 24/25; TalkBack residual exclusivo
+Plan: 11 of 11 (01-11 approved)
+Status: 01-11 closed with human `approved` (TalkBack emulator); Phase 1 awaits verifier
+Last activity: 2026-08-31 — 01-11 approved (TalkBack emulator); awaiting verifier; no Phase 2
 
-Progress: [█████████░] 91%
+Progress: [██████████] 100% of Phase 1 plans; phase not Complete until verifier passed
 
 ## Performance Metrics
 
 **Velocity:**
 
-- Total plans completed: 10
+- Total plans completed: 11
 - Average duration: ~7 min per plan
 - Total execution time: ~75 min
 
@@ -44,7 +44,7 @@ Progress: [█████████░] 91%
 
 | Phase | Plans | Completed | Status |
 |-------|-------|-----------|--------|
-| 1 | 11 | 10 | Visual APPROVED; TalkBack residual; Phase 1 incomplete |
+| 1 | 11 | 11 | 01-11 approved; Phase 1 awaits verifier |
 | Phase 01 P05 | 7 min | 1 tasks | 10 files |
 | Phase 1 P06 | 12min | 2 tasks | 2 files |
 | Phase 01 P07 | 12min | 2 tasks | 4 files |
@@ -79,12 +79,12 @@ Progress: [█████████░] 91%
 - [Phase 1]: PNG regenerado neste plano não constitui aprovação visual — isso é 01-11.
 - [Phase 1 Plan 11]: Usuário APPROVED evidência visual representativa (Android compacto, harness claro/escuro, Chrome largo). Boundaries 599/600/839/840 e 5 destinos ficam nos testes. Não exigir matriz extra de screenshots.
 - [Phase 1 Plan 11]: Headings de ToolStatusPanel usam onSurface; accent/error ficam no ícone (UI-SPEC).
-- [Phase 1 Plan 11]: TalkBack real não executado. Override GSD não aplicado (não suprime human_needed).
+- [Phase 1 Plan 11]: TalkBack no emulador Android aprovado (`approved`). Override GSD não aplicado.
 
 ### Blockers/Concerns
 
-- [Phase 1 Plan 11]: TalkBack real é residual. Copy no harness retestado: usuário colou `abc123def456`. 01-11 **não aprovado**. `Calcular rede`/`Limpar` na galeria são samples.
-- [Phase 1 verification]: Re-verificação oficial **human_needed**, score 24/25. Relatório novo em 01-VERIFICATION.md. Phase 1 não Complete. Phase 2 não iniciada.
+- [Phase 1 Plan 11]: Usuário `approved` após TalkBack no emulador Android (foco, labels, campos, Máscara inválida, galeria percorrível, copy `abc123def456`). 01-11 fechado. Phase 1 não Complete até verifier. Phase 2 não iniciada.
+- [Phase 1 verification]: Relatório anterior **human_needed** 24/25 (TalkBack residual). 01-11 agora `approved`. Re-verificação oficial pendente; não Complete até o verifier. Phase 2 não iniciada.
 - [Phase 1 gap planning]: Goal da Phase 1 reformatado para user story minima (`As a ..., I want to ..., so that ...`) sem alterar Success Criteria, Requirements nem o boundary da Phase 2. `/gsd mvp-phase 1` nao foi executado por completo porque a fase ja esta `mode: mvp` e `in_progress`/`Executed`, e o workflow delegaria a `plan-phase` sem `--gaps`.
 - [Phase 1 Plan 06 UI-03]: Inconsistência documental registrada, não expandida — Phase 1 owns primitives/galeria; Phase 2 owns adoção nas três telas. Não mover UI-03. Não desmarcar REQUIREMENTS.md. Não puxar PRES-*.
 
@@ -98,6 +98,6 @@ Progress: [█████████░] 91%
 
 ## Session Continuity
 
-Last session: 2026-08-31T17:20:00.000Z
-Stopped at: 01-11 visual APPROVED; TalkBack residual; official re-verification
-Resume with: Official gsd-verifier re-run. Do not start Phase 2. Do not use --auto. TalkBack remains residual unless a real Android TalkBack pass is recorded.
+Last session: 2026-08-31T17:40:00.000Z
+Stopped at: 01-11 approved; official Phase 1 re-verification
+Resume with: Show verifier result. Do not start Phase 2 or transition until the user sees it.
