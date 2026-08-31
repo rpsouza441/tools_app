@@ -32,9 +32,10 @@ Este milestone evolui o aplicativo sem reescrita total: primeiro estabelece e im
   3. Usuário pode operar a interface em tema claro ou escuro, sempre em português do Brasil, sem perder contraste, significado ou confirmação acessível ao copiar valores.
   4. Usuário pode usar alvos de toque acessíveis, leitor de tela e fonte ampliada sem perder conteúdo, ações ou compreensão em larguras compactas e largas.
 
-**Plans:** 11 plans (5 executed + 6 gap-closure)
+**Plans:** 6/11 plans executed
 
 Executed (original):
+
 - [x] 01-01-PLAN.md — Catálogo tipado e shell adaptativo
 - [x] 01-02-PLAN.md — Tokens e temas semânticos
 - [x] 01-03-PLAN.md — Primitives e sete estados
@@ -44,17 +45,21 @@ Executed (original):
 Gap-closure:
 
 **Wave 1**
-- [ ] 01-06-PLAN.md — Contrato MVP (docs) — gap-closure
+
+- [x] 01-06-PLAN.md — Contrato MVP (docs) — gap-closure
 - [ ] 01-07-PLAN.md — Navegação adaptativa e semântica — gap-closure
 - [ ] 01-08-PLAN.md — Tema canônico e sete estados — gap-closure
 
 **Wave 2** *(blocked on Wave 1 completion)*
+
 - [ ] 01-09-PLAN.md — Cópia, lifecycle e API pública — gap-closure
 
 **Wave 3** *(blocked on Wave 2 completion)*
+
 - [ ] 01-10-PLAN.md — Reflow, a11y real, galeria pt-BR e goldens — gap-closure
 
 **Wave 4** *(blocked on Wave 3 completion)*
+
 - [ ] 01-11-PLAN.md — Gate humano Android/TalkBack — gap-closure
 
 **UI hint:** yes
@@ -127,7 +132,7 @@ Gap-closure:
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Contrato visual e fundação adaptativa | 5/11 | Gap-closure pendente | - |
+| 1. Contrato visual e fundação adaptativa | 6/11 | In Progress | - |
 | 2. Migração segura das ferramentas atuais | 0/TBD | Not started | - |
 | 3. Diagnóstico de Internet completo e resiliente | 0/TBD | Not started | - |
 | 4. Validação Android e documentação transparente | 0/TBD | Not started | - |
