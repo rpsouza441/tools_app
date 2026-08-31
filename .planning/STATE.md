@@ -3,9 +3,9 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 01-10-PLAN.md
-last_updated: "2026-08-31T16:16:28.007Z"
-last_activity: "2026-08-31 — 01-10 completed: ToolMetric reflow, public a11y, gallery pt-BR, canonical goldens"
+stopped_at: 01-11 visual APPROVED; TalkBack residual; awaiting official re-verification
+last_updated: "2026-08-31T17:20:00.000Z"
+last_activity: "2026-08-31 — 01-11 visual APPROVED; headings onSurface; TalkBack residual; Phase 1 incompleta"
 progress:
   total_phases: 5
   completed_phases: 0
@@ -21,14 +21,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-08-10)
 
 **Core value:** Oferecer diagnósticos técnicos úteis e honestos em uma interface clara, sem ocultar limitações de plataforma, método de medição ou falhas parciais.
-**Current focus:** Phase 1 — gap-closure next 01-11; Phase 1 remains incomplete
+**Current focus:** Phase 1 — 01-11 visual APPROVED; TalkBack residual; re-verification; Phase 1 incomplete
 
 ## Current Position
 
 Phase: 1 of 5 (Contrato visual e fundação adaptativa)
-Plan: 11 of 11 (next: 01-11)
-Status: Gap-closure in progress — 01-10 complete; Phase 1 remains incomplete
-Last activity: 2026-08-31 — 01-10 completed: ToolMetric reflow, public a11y, gallery pt-BR, canonical goldens
+Plan: 11 of 11 (01-11 visual closed; TalkBack residual)
+Status: Gap-closure — visual human APPROVED; TalkBack not executed; Phase 1 incomplete
+Last activity: 2026-08-31 — 01-11 visual APPROVED; headings onSurface; TalkBack residual; Phase 1 incompleta
 
 Progress: [█████████░] 91%
 
@@ -44,7 +44,7 @@ Progress: [█████████░] 91%
 
 | Phase | Plans | Completed | Status |
 |-------|-------|-----------|--------|
-| 1 | 11 | 10 | Gap-closure in progress — 01-10 complete; Phase 1 incomplete |
+| 1 | 11 | 10 | Visual APPROVED; TalkBack residual; Phase 1 incomplete |
 | Phase 01 P05 | 7 min | 1 tasks | 10 files |
 | Phase 1 P06 | 12min | 2 tasks | 2 files |
 | Phase 01 P07 | 12min | 2 tasks | 4 files |
@@ -77,11 +77,14 @@ Progress: [█████████░] 91%
 - [Phase 1]: ToolMetric reflui com Wrap (gap 8) em vez de Row(mainAxisSize: min); sem maxLines:1 nem ellipsis em label/valor.
 - [Phase 1]: SelectableText de TechnicalValueRow não expõe longPress de 20 px na árvore semântica; CopyValueAction permanece o controle de 48 px.
 - [Phase 1]: PNG regenerado neste plano não constitui aprovação visual — isso é 01-11.
+- [Phase 1 Plan 11]: Usuário APPROVED evidência visual representativa (Android compacto, harness claro/escuro, Chrome largo). Boundaries 599/600/839/840 e 5 destinos ficam nos testes. Não exigir matriz extra de screenshots.
+- [Phase 1 Plan 11]: Headings de ToolStatusPanel usam onSurface; accent/error ficam no ícone (UI-SPEC).
+- [Phase 1 Plan 11]: TalkBack real não executado. Override GSD não aplicado (não suprime human_needed).
 
 ### Blockers/Concerns
 
-- [Phase 1 verification debt]: Sete checks manuais e TalkBack nao executados porque nao havia dispositivo/emulador Android conectado; verifier/UAT deve executa-los antes de concluir a fase.
-- [Phase 1 verification]: Goal MVP fechado em 01-06. Gaps A–D fechados em 01-07..01-09. Gaps E/F e WR-04/WR-05/WR-06 fechados em 01-10 (evidência automatizada; PNGs não aprovados visualmente). Resta 01-11 (revisão visual humana). Ver 01-VERIFICATION.md e 01-REVIEW.md.
+- [Phase 1 Plan 11]: TalkBack real é o único residual do 01-11. Visual APPROVED. Não inventar percurso TalkBack. Não aplicar override.
+- [Phase 1 verification]: Re-verificação oficial pendente após cruzamento 01-11. Não editar VERIFICATION.md/REVIEW.md manualmente. Phase 1 não Complete.
 - [Phase 1 gap planning]: Goal da Phase 1 reformatado para user story minima (`As a ..., I want to ..., so that ...`) sem alterar Success Criteria, Requirements nem o boundary da Phase 2. `/gsd mvp-phase 1` nao foi executado por completo porque a fase ja esta `mode: mvp` e `in_progress`/`Executed`, e o workflow delegaria a `plan-phase` sem `--gaps`.
 - [Phase 1 Plan 06 UI-03]: Inconsistência documental registrada, não expandida — Phase 1 owns primitives/galeria; Phase 2 owns adoção nas três telas. Não mover UI-03. Não desmarcar REQUIREMENTS.md. Não puxar PRES-*.
 
@@ -95,6 +98,6 @@ Progress: [█████████░] 91%
 
 ## Session Continuity
 
-Last session: 2026-08-31T16:16:28.000Z
-Stopped at: Completed 01-10-PLAN.md
-Resume with: /gsd-execute-phase 1 --gaps-only (next: 01-11; do not use --auto)
+Last session: 2026-08-31T17:20:00.000Z
+Stopped at: 01-11 visual APPROVED; TalkBack residual; official re-verification
+Resume with: Official gsd-verifier re-run. Do not start Phase 2. Do not use --auto. TalkBack remains residual unless a real Android TalkBack pass is recorded.
