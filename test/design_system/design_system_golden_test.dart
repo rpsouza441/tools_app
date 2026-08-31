@@ -36,7 +36,7 @@ void main() {
           home: const Scaffold(body: DesignSystemGallery()),
         ),
       );
-      await tester.pumpAndSettle();
+      await tester.pump();
 
       await expectLater(
         find.byType(MaterialApp),
@@ -59,7 +59,7 @@ void main() {
           home: const Scaffold(body: DesignSystemGallery()),
         ),
       );
-      await tester.pumpAndSettle();
+      await tester.pump();
 
       await expectLater(
         find.byType(MaterialApp),
@@ -82,7 +82,7 @@ void main() {
           home: AppShell(destinations: _fakeDestinations),
         ),
       );
-      await tester.pumpAndSettle();
+      await tester.pump();
 
       await expectLater(
         find.byType(MaterialApp),
@@ -105,7 +105,7 @@ void main() {
           home: AppShell(destinations: _fakeDestinations),
         ),
       );
-      await tester.pumpAndSettle();
+      await tester.pump();
 
       await expectLater(
         find.byType(MaterialApp),
