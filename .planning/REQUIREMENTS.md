@@ -34,32 +34,32 @@
 
 ### Diagnóstico de conectividade
 
-- [ ] **DIAG-01**: Usuário pode iniciar manualmente um único diagnóstico por vez.
-- [ ] **DIAG-02**: Usuário vê separadamente o transporte disponível, a capacidade INTERNET, a validação Android e indícios de portal cativo quando a plataforma os fornece.
-- [ ] **DIAG-03**: Usuário vê o endereço IPv4 local associado à rede ativa ou um estado explícito de indisponibilidade.
-- [ ] **DIAG-04**: Usuário vê o endereço do gateway padrão quando tecnicamente disponível, sem presumir um endereço convencional.
-- [ ] **DIAG-05**: Usuário vê o IP público consultado por HTTPS, junto do provedor, horário e falha independente quando o serviço não responde ou retorna conteúdo inválido.
-- [ ] **DIAG-06**: Usuário pode executar um teste de alcance e latência do gateway quando houver alvo e método tecnicamente disponíveis.
-- [ ] **DIAG-07**: Usuário pode executar um teste de alcance e latência de um alvo externo autorizado e substituível.
-- [ ] **DIAG-08**: Usuário vê método, alvo, porta ou URL, timeout e limitações reais de cada probe, sem TCP/HTTPS ser rotulado como ICMP.
-- [ ] **DIAG-09**: Usuário vê, para múltiplas amostras, mínimo, média, máximo, total de tentativas, sucessos e falhas com denominador explícito.
-- [ ] **DIAG-10**: Usuário vê resultados concluídos mesmo quando outra capability falha, fica indisponível ou é cancelada.
-- [ ] **DIAG-11**: Usuário vê progresso por etapa durante a execução sem que resultados parciais já obtidos desapareçam.
-- [ ] **DIAG-12**: Usuário pode cancelar a execução e impedir que respostas tardias alterem o estado cancelado.
-- [ ] **DIAG-13**: Usuário pode repetir o diagnóstico depois de sucesso, falha parcial ou cancelamento.
-- [ ] **DIAG-14**: Usuário vê o horário e o último resultado da sessão atual sem criação de histórico persistente.
-- [ ] **DIAG-15**: Usuário pode copiar e compartilhar um resumo textual com timestamp, contexto de rede, métricas, proveniência, falhas e limitações.
+- [x] **DIAG-01**: Usuário pode iniciar manualmente um único diagnóstico por vez.
+- [x] **DIAG-02**: Usuário vê separadamente o transporte disponível, a capacidade INTERNET, a validação Android e indícios de portal cativo quando a plataforma os fornece.
+- [x] **DIAG-03**: Usuário vê o endereço IPv4 local associado à rede ativa ou um estado explícito de indisponibilidade.
+- [x] **DIAG-04**: Usuário vê o endereço do gateway padrão quando tecnicamente disponível, sem presumir um endereço convencional.
+- [x] **DIAG-05**: Usuário vê o IP público consultado por HTTPS, junto do provedor, horário e falha independente quando o serviço não responde ou retorna conteúdo inválido.
+- [x] **DIAG-06**: Usuário pode executar um teste de alcance e latência do gateway quando houver alvo e método tecnicamente disponíveis.
+- [x] **DIAG-07**: Usuário pode executar um teste de alcance e latência de um alvo externo autorizado e substituível.
+- [x] **DIAG-08**: Usuário vê método, alvo, porta ou URL, timeout e limitações reais de cada probe, sem TCP/HTTPS ser rotulado como ICMP.
+- [x] **DIAG-09**: Usuário vê, para múltiplas amostras, mínimo, média, máximo, total de tentativas, sucessos e falhas com denominador explícito.
+- [x] **DIAG-10**: Usuário vê resultados concluídos mesmo quando outra capability falha, fica indisponível ou é cancelada.
+- [x] **DIAG-11**: Usuário vê progresso por etapa durante a execução sem que resultados parciais já obtidos desapareçam.
+- [x] **DIAG-12**: Usuário pode cancelar a execução e impedir que respostas tardias alterem o estado cancelado.
+- [x] **DIAG-13**: Usuário pode repetir o diagnóstico depois de sucesso, falha parcial ou cancelamento.
+- [x] **DIAG-14**: Usuário vê o horário e o último resultado da sessão atual sem criação de histórico persistente.
+- [x] **DIAG-15**: Usuário pode copiar e compartilhar um resumo textual com timestamp, contexto de rede, métricas, proveniência, falhas e limitações.
 
 ### Resiliência, privacidade e qualidade
 
-- [ ] **QUAL-01**: Usuário não enfrenta travamento ou spinner infinito em modo offline, dados móveis, gateway ausente, portal cativo ou serviço externo indisponível.
-- [ ] **QUAL-02**: Usuário pode interromper toda operação de rede, encerrando requests, sockets, timers, streams e callbacks subjacentes.
-- [ ] **QUAL-03**: Usuário não recebe métricas agregadas de redes diferentes quando a conectividade muda durante uma execução.
-- [ ] **QUAL-04**: Usuário retorna de pausa, troca de destino ou descarte da tela sem recursos órfãos, execução automática ou atualização de UI descartada.
-- [ ] **QUAL-05**: Usuário recebe apenas fatos suportados pela plataforma; capabilities ausentes aparecem como indisponíveis, e não como zero ou falha global.
-- [ ] **QUAL-06**: Usuário utiliza o diagnóstico sem conceder localização enquanto SSID/BSSID não fizerem parte do escopo.
-- [ ] **QUAL-07**: Usuário não tem identificadores, resultados ou conteúdo do diagnóstico enviados a analytics.
-- [ ] **QUAL-08**: Usuário recebe comportamento verificado por testes de sucesso, timeout, offline, resposta inválida, cancelamento, troca de rede, lifecycle e resultados parciais com dependências simuladas.
+- [x] **QUAL-01**: Usuário não enfrenta travamento ou spinner infinito em modo offline, dados móveis, gateway ausente, portal cativo ou serviço externo indisponível.
+- [x] **QUAL-02**: Usuário pode interromper toda operação de rede, encerrando requests, sockets, timers, streams e callbacks subjacentes.
+- [x] **QUAL-03**: Usuário não recebe métricas agregadas de redes diferentes quando a conectividade muda durante uma execução.
+- [x] **QUAL-04**: Usuário retorna de pausa, troca de destino ou descarte da tela sem recursos órfãos, execução automática ou atualização de UI descartada.
+- [x] **QUAL-05**: Usuário recebe apenas fatos suportados pela plataforma; capabilities ausentes aparecem como indisponíveis, e não como zero ou falha global.
+- [x] **QUAL-06**: Usuário utiliza o diagnóstico sem conceder localização enquanto SSID/BSSID não fizerem parte do escopo.
+- [x] **QUAL-07**: Usuário não tem identificadores, resultados ou conteúdo do diagnóstico enviados a analytics.
+- [x] **QUAL-08**: Usuário recebe comportamento verificado por testes de sucesso, timeout, offline, resposta inválida, cancelamento, troca de rede, lifecycle e resultados parciais com dependências simuladas.
 - [ ] **QUAL-09**: Usuário recebe comportamento verificado em Android real ou ambiente controlado nos cenários Wi-Fi, dados móveis e offline.
 
 ### Documentação e decisão externa
@@ -133,29 +133,29 @@
 | PRES-02 | Phase 2 | Complete |
 | PRES-03 | Phase 2 | Complete |
 | PRES-04 | Phase 2 | Complete |
-| DIAG-01 | Phase 3 | Pending |
-| DIAG-02 | Phase 3 | Pending |
-| DIAG-03 | Phase 3 | Pending |
-| DIAG-04 | Phase 3 | Pending |
-| DIAG-05 | Phase 3 | Pending |
-| DIAG-06 | Phase 3 | Pending |
-| DIAG-07 | Phase 3 | Pending |
-| DIAG-08 | Phase 3 | Pending |
-| DIAG-09 | Phase 3 | Pending |
-| DIAG-10 | Phase 3 | Pending |
-| DIAG-11 | Phase 3 | Pending |
-| DIAG-12 | Phase 3 | Pending |
-| DIAG-13 | Phase 3 | Pending |
-| DIAG-14 | Phase 3 | Pending |
-| DIAG-15 | Phase 3 | Pending |
-| QUAL-01 | Phase 3 | Pending |
-| QUAL-02 | Phase 3 | Pending |
-| QUAL-03 | Phase 3 | Pending |
-| QUAL-04 | Phase 3 | Pending |
-| QUAL-05 | Phase 3 | Pending |
-| QUAL-06 | Phase 3 | Pending |
-| QUAL-07 | Phase 3 | Pending |
-| QUAL-08 | Phase 3 | Pending |
+| DIAG-01 | Phase 3 | Complete |
+| DIAG-02 | Phase 3 | Complete |
+| DIAG-03 | Phase 3 | Complete |
+| DIAG-04 | Phase 3 | Complete |
+| DIAG-05 | Phase 3 | Complete |
+| DIAG-06 | Phase 3 | Complete |
+| DIAG-07 | Phase 3 | Complete |
+| DIAG-08 | Phase 3 | Complete |
+| DIAG-09 | Phase 3 | Complete |
+| DIAG-10 | Phase 3 | Complete |
+| DIAG-11 | Phase 3 | Complete |
+| DIAG-12 | Phase 3 | Complete |
+| DIAG-13 | Phase 3 | Complete |
+| DIAG-14 | Phase 3 | Complete |
+| DIAG-15 | Phase 3 | Complete |
+| QUAL-01 | Phase 3 | Complete |
+| QUAL-02 | Phase 3 | Complete |
+| QUAL-03 | Phase 3 | Complete |
+| QUAL-04 | Phase 3 | Complete |
+| QUAL-05 | Phase 3 | Complete |
+| QUAL-06 | Phase 3 | Complete |
+| QUAL-07 | Phase 3 | Complete |
+| QUAL-08 | Phase 3 | Complete |
 | QUAL-09 | Phase 4 | Pending |
 | DOC-01 | Phase 4 | Pending |
 | DOC-02 | Phase 4 | Pending |
