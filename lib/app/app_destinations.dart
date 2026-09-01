@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:tools_app/screen/network_calculator_screen.dart';
 import 'package:tools_app/screen/data_converter_screen.dart';
 import 'package:tools_app/screen/hash_generator_screen.dart';
+import 'package:tools_app/screen/internet_diagnostic_screen.dart';
 
 /// Categories for grouping destinations in overflow menus.
-enum AppDestinationCategory { rede, armazenamento, hash }
+enum AppDestinationCategory { rede, armazenamento, hash, diagnostico }
 
 /// A typed destination entry for the adaptive navigation shell.
 class AppDestination {
@@ -78,6 +79,16 @@ final List<AppDestination> appDestinations = List.unmodifiable([
     compactPriority: 3,
     pageBuilder: _buildHashGenerator,
   ),
+  AppDestination(
+    id: 'internet_diagnostic',
+    label: 'Diagnóstico',
+    semanticLabel: 'Diagnóstico de Internet',
+    icon: Icons.travel_explore_outlined,
+    selectedIcon: Icons.travel_explore,
+    category: AppDestinationCategory.diagnostico,
+    compactPriority: 4,
+    pageBuilder: _buildInternetDiagnostic,
+  ),
 ]);
 
 Widget _buildNetworkCalculator(BuildContext context) =>
@@ -86,3 +97,6 @@ Widget _buildNetworkCalculator(BuildContext context) =>
 Widget _buildDataConverter(BuildContext context) => const DataConverterScreen();
 
 Widget _buildHashGenerator(BuildContext context) => const HashGeneratorScreen();
+
+Widget _buildInternetDiagnostic(BuildContext context) =>
+    const InternetDiagnosticScreen();

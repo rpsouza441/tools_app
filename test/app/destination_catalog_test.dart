@@ -4,6 +4,7 @@ import 'package:tools_app/app/app_destinations.dart';
 import 'package:tools_app/screen/network_calculator_screen.dart';
 import 'package:tools_app/screen/data_converter_screen.dart';
 import 'package:tools_app/screen/hash_generator_screen.dart';
+import 'package:tools_app/screen/internet_diagnostic_screen.dart';
 
 void main() {
   group('AppDestination catalog contract', () {
@@ -20,12 +21,13 @@ void main() {
         'network_calculator',
         'data_converter',
         'hash_generator',
+        'internet_diagnostic',
       ]);
     });
 
     test('labels are the short pt-BR catalog names', () {
       final labels = appDestinations.map((d) => d.label).toList();
-      expect(labels, ['Rede', 'Armazenamento', 'Hash']);
+      expect(labels, ['Rede', 'Armazenamento', 'Hash', 'Diagnóstico']);
     });
 
     test('semanticLabels are the full pt-BR names', () {
@@ -36,6 +38,7 @@ void main() {
         'Calculadora de Rede',
         'Conversor de Dados',
         'Gerador de Hash',
+        'Diagnóstico de Internet',
       ]);
     });
 
@@ -65,10 +68,11 @@ void main() {
       }
     });
 
-    test('order is Rede, Armazenamento, Hash by category', () {
+    test('order is Rede, Armazenamento, Hash, Diagnóstico by category', () {
       expect(appDestinations[0].category, AppDestinationCategory.rede);
       expect(appDestinations[1].category, AppDestinationCategory.armazenamento);
       expect(appDestinations[2].category, AppDestinationCategory.hash);
+      expect(appDestinations[3].category, AppDestinationCategory.diagnostico);
     });
 
     test('pageBuilder factories produce the current screens', () {
@@ -77,12 +81,21 @@ void main() {
       expect(pages[0], isA<NetworkCalculatorScreen>());
       expect(pages[1], isA<DataConverterScreen>());
       expect(pages[2], isA<HashGeneratorScreen>());
+      expect(pages[3], isA<InternetDiagnosticScreen>());
     });
 
     test('compactPriority values are assigned', () {
       for (final dest in appDestinations) {
         expect(dest.compactPriority, isA<int>());
       }
+    });
+
+    test('internet_diagnostic is appended with compactPriority 4', () {
+      final diag = appDestinations.firstWhere(
+        (d) => d.id == 'internet_diagnostic',
+      );
+      expect(diag.compactPriority, 4);
+      expect(appDestinations.last.id, 'internet_diagnostic');
     });
   });
 }

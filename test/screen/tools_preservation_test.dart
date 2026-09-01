@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:tools_app/main.dart';
 import 'package:tools_app/screen/data_converter_screen.dart';
 import 'package:tools_app/screen/hash_generator_screen.dart';
+import 'package:tools_app/screen/internet_diagnostic_screen.dart';
 import 'package:tools_app/screen/network_calculator_screen.dart';
 import 'package:tools_app/theme/theme.dart';
 
@@ -112,6 +113,26 @@ void main() {
           find.descendant(
             of: find.byType(HashGeneratorScreen),
             matching: find.text('Limpar'),
+          ),
+          findsOneWidget,
+        );
+
+        // 4th destination: Diagnóstico de Internet is reachable and the three
+        // migrated tools remain intact (D-03, PRES).
+        await tester.tap(find.text('Diagnóstico'));
+        await tester.pumpAndSettle();
+
+        expect(
+          find.descendant(
+            of: find.byType(InternetDiagnosticScreen),
+            matching: find.text('Diagnóstico de Internet'),
+          ),
+          findsOneWidget,
+        );
+        expect(
+          find.descendant(
+            of: find.byType(InternetDiagnosticScreen),
+            matching: find.text('Iniciar diagnóstico'),
           ),
           findsOneWidget,
         );

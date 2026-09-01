@@ -321,6 +321,7 @@ void main() {
         expect(find.text('Rede'), findsOneWidget);
         expect(find.text('Armazenamento'), findsOneWidget);
         expect(find.text('Hash'), findsOneWidget);
+        expect(find.text('Diagnóstico'), findsOneWidget);
 
         final bar = tester.widget<NavigationBar>(find.byType(NavigationBar));
         final destinations = bar.destinations.cast<NavigationDestination>();
@@ -328,15 +329,18 @@ void main() {
           'Rede',
           'Armazenamento',
           'Hash',
+          'Diagnóstico',
         ]);
         expect(destinations.map((d) => d.tooltip).toList(), [
           'Calculadora de Rede',
           'Conversor de Dados',
           'Gerador de Hash',
+          'Diagnóstico de Internet',
         ]);
         expect(find.byTooltip('Calculadora de Rede'), findsOneWidget);
         expect(find.byTooltip('Conversor de Dados'), findsOneWidget);
         expect(find.byTooltip('Gerador de Hash'), findsOneWidget);
+        expect(find.byTooltip('Diagnóstico de Internet'), findsOneWidget);
 
         expect(
           find.descendant(
@@ -527,10 +531,16 @@ void main() {
           final rail = tester.widget<NavigationRail>(
             find.byType(NavigationRail),
           );
-          expect(_railLabels(rail), ['Rede', 'Armazenamento', 'Hash']);
+          expect(_railLabels(rail), [
+            'Rede',
+            'Armazenamento',
+            'Hash',
+            'Diagnóstico',
+          ]);
           expect(find.byTooltip('Calculadora de Rede'), findsOneWidget);
           expect(find.byTooltip('Conversor de Dados'), findsOneWidget);
           expect(find.byTooltip('Gerador de Hash'), findsOneWidget);
+          expect(find.byTooltip('Diagnóstico de Internet'), findsOneWidget);
           expect(
             find.bySemanticsLabel(RegExp('Calculadora de Rede')),
             findsWidgets,
@@ -541,6 +551,10 @@ void main() {
           );
           expect(
             find.bySemanticsLabel(RegExp('Gerador de Hash')),
+            findsWidgets,
+          );
+          expect(
+            find.bySemanticsLabel(RegExp('Diagnóstico de Internet')),
             findsWidgets,
           );
         } finally {
