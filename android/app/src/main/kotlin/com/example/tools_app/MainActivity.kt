@@ -25,5 +25,14 @@ class MainActivity : FlutterActivity() {
                 }
             }
         }
+
+        val sharePlugin = ShareTextPlugin(this)
+        val shareChannel = MethodChannel(
+            flutterEngine.dartExecutor.binaryMessenger,
+            ShareTextPlugin.CHANNEL,
+        )
+        shareChannel.setMethodCallHandler { call, result ->
+            sharePlugin.handle(call.method, call.arguments, result)
+        }
     }
 }

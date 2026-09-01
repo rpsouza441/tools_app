@@ -2,6 +2,30 @@ import 'package:flutter/material.dart';
 import 'package:tools_app/app/app_destinations.dart';
 import 'package:tools_app/design_system/app_breakpoints.dart';
 
+/// Exposes the currently-visible destination id to descendants so a preserved
+/// [IndexedStack] page can cancel background work when it is no longer visible
+/// (QUAL-04). The diagnostic screen listens to this to stop I/O when the user
+/// navigates away without disposing the page.
+class DiagnosticVisibilityScope extends InheritedWidget {
+  const DiagnosticVisibilityScope({
+    super.key,
+    required this.selectedId,
+    required super.child,
+  });
+
+  final String selectedId;
+
+  static String? of(BuildContext context) {
+    final scope = context
+        .dependOnInheritedWidgetOfExactType<DiagnosticVisibilityScope>();
+    return scope?.selectedId;
+  }
+
+  @override
+  bool updateShouldNotify(DiagnosticVisibilityScope oldWidget) =>
+      oldWidget.selectedId != selectedId;
+}
+
 /// Adaptive navigation shell that switches between NavigationBar (compact),
 /// collapsed NavigationRail (medium), and extended NavigationRail (expanded).
 ///
@@ -173,10 +197,13 @@ class _AppShellState extends State<AppShell> {
         final widthClass = AppBreakpoints.classify(constraints.maxWidth);
         final pageIndex = _catalogIndex;
 
-        final body = IndexedStack(
-          key: _stackKey,
-          index: pageIndex,
-          children: _pages,
+        final body = DiagnosticVisibilityScope(
+          selectedId: _selectedId,
+          child: IndexedStack(
+            key: _stackKey,
+            index: pageIndex,
+            children: _pages,
+          ),
         );
 
         switch (widthClass) {

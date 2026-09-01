@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tools_app/design_system/tool_status_panel.dart';
 import 'package:tools_app/diagnostic/contracts/diagnostic_session.dart';
+import 'package:tools_app/diagnostic/contracts/share_text_port.dart';
 import 'package:tools_app/diagnostic/models/diagnostic_fact.dart';
 import 'package:tools_app/diagnostic/models/diagnostic_run_state.dart';
 import 'package:tools_app/diagnostic/models/latency_aggregate.dart';
@@ -247,5 +248,74 @@ void main() {
 
       expect(find.textContaining('3 de 4'), findsWidgets);
     });
+
+    testWidgets('terminal: copiar resumo grava o texto do formatter (DIAG-15)',
+        (tester) async {
+      final session = FakeDiagnosticSession();
+      final copyWriter = FakeCopyWriter();
+      await tester.pumpWidget(
+        wrapScreen(
+          InternetDiagnosticScreen(session: session, copyWriter: copyWriter),
+        ),
+      );
+
+      session.emit(
+        DiagnosticRunState(
+          runId: 1,
+          phase: DiagnosticRunPhase.success,
+          startedAt: DateTime(2026, 9, 1, 10),
+          publicIpv4: const DiagnosticFact(
+            status: DiagnosticFactStatus.success,
+            value: '203.0.113.7',
+          ),
+        ),
+      );
+      await tester.pump();
+
+      await tester.ensureVisible(find.byTooltip('Copiar resumo'));
+      await tester.tap(find.byTooltip('Copiar resumo'));
+      await tester.pump();
+
+      expect(copyWriter.callCount, 1);
+      expect(copyWriter.lastValue, contains('Diagnóstico de Internet'));
+      expect(copyWriter.lastValue, contains('203.0.113.7'));
+    });
+
+    testWidgets('terminal: compartilhar chama o share port com o resumo (DIAG-15)',
+        (tester) async {
+      final session = FakeDiagnosticSession();
+      final sharePort = _FakeSharePort();
+      await tester.pumpWidget(
+        wrapScreen(
+          InternetDiagnosticScreen(session: session, sharePort: sharePort),
+        ),
+      );
+
+      session.emit(
+        const DiagnosticRunState(
+          runId: 1,
+          phase: DiagnosticRunPhase.success,
+        ),
+      );
+      await tester.pump();
+
+      await tester.ensureVisible(find.byTooltip('Compartilhar diagnóstico'));
+      await tester.tap(find.byTooltip('Compartilhar diagnóstico'));
+      await tester.pump();
+
+      expect(sharePort.calls, 1);
+      expect(sharePort.lastShared, contains('Diagnóstico de Internet'));
+    });
   });
+}
+
+class _FakeSharePort implements ShareTextPort {
+  int calls = 0;
+  String? lastShared;
+
+  @override
+  Future<void> share(String text) async {
+    calls++;
+    lastShared = text;
+  }
 }

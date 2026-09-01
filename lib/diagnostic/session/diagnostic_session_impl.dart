@@ -94,6 +94,11 @@ class DiagnosticSessionImpl implements DiagnosticSession {
     final gatewayFact = _gatewaySource.fromSnapshot(snapshot);
     _update(runId, (s) => s.copyWith(localIpv4: localFact, gateway: gatewayFact));
 
+    // Watch for a network change during the run. A different networkHandle or a
+    // wifi<->cellular transport switch aborts the remaining samples with a
+    // distinct reason; we never aggregate a mixed Wi-Fi+cellular batch (QUAL-03).
+    _startNetworkWatch(runId, scope, snapshot);
+
     // 2. Independent fan-out. Each branch captures its own error so a failure
     //    produces a failure fact instead of aborting the whole run (DIAG-10).
     final publicIpFuture = _runPublicIp(runId, scope);
@@ -112,17 +117,98 @@ class DiagnosticSessionImpl implements DiagnosticSession {
       gatewayProbeFuture,
     ]);
 
+    await _stopNetworkWatch();
+
+    if (_networkChangedDuringRun) {
+      // A network change aborted the run via the shared scope. This is a
+      // distinct terminal reason, not staleness (QUAL-03).
+      if (runId != _notifier.value.runId) return;
+      _rewriteCancelledToNetworkChanged(runId);
+      _notifier.value = _notifier.value.copyWith(
+        phase: DiagnosticRunPhase.partialFailure,
+        finishedAt: DateTime.now(),
+      );
+      return;
+    }
+
     if (_isStale(runId, scope)) return;
 
     _finish(runId, _deriveTerminalPhase(runId));
   }
 
+  /// When the abort was caused by a network change, in-flight facts that came
+  /// back as `cancelled` are relabelled `networkChanged` so the reason is
+  /// distinct from a user cancel (QUAL-03).
+  void _rewriteCancelledToNetworkChanged(int runId) {
+    if (runId != _notifier.value.runId) return;
+    DiagnosticFact fix(DiagnosticFact f) => f.status == DiagnosticFactStatus.cancelled
+        ? f.copyWith(status: DiagnosticFactStatus.networkChanged)
+        : f;
+    final s = _notifier.value;
+    _notifier.value = s.copyWith(
+      publicIpv4: fix(s.publicIpv4),
+      gatewayProbe: fix(s.gatewayProbe),
+      internetProbe: fix(s.internetProbe),
+    );
+  }
+
+  bool _networkChangedDuringRun = false;
+  bool _watching = false;
+
+  bool _isSameNetwork(NetworkSnapshot a, NetworkSnapshot b) {
+    if (a.networkHandle != null && b.networkHandle != null) {
+      if (a.networkHandle != b.networkHandle) return false;
+    }
+    final aWifi = a.transports.contains('wifi');
+    final bWifi = b.transports.contains('wifi');
+    final aCell = a.transports.contains('cellular');
+    final bCell = b.transports.contains('cellular');
+    return aWifi == bWifi && aCell == bCell;
+  }
+
+  void _startNetworkWatch(
+    int runId,
+    CancellationScope scope,
+    NetworkSnapshot initial,
+  ) {
+    _networkChangedDuringRun = false;
+    _watching = true;
+    _snapshotSource.startWatching((updated) {
+      if (!_watching || runId != _notifier.value.runId) return;
+      if (!_isSameNetwork(initial, updated)) {
+        _networkChangedDuringRun = true;
+        // Abort in-flight I/O; remaining samples become networkChanged.
+        scope.cancelAll();
+      }
+    });
+  }
+
+  Future<void> _stopNetworkWatch() async {
+    if (!_watching) return;
+    _watching = false;
+    await _snapshotSource.stopWatching();
+  }
+
   Future<void> _runPublicIp(int runId, CancellationScope scope) async {
     try {
       final fact = await _publicIpSource.fetch(runId: runId, scope: scope);
+      if (_writeNetworkChanged(runId, (s) => s.copyWith(
+            publicIpv4: fact.copyWith(
+              status: DiagnosticFactStatus.networkChanged,
+            ),
+          ))) {
+        return;
+      }
       if (_isStale(runId, scope)) return;
       _update(runId, (s) => s.copyWith(publicIpv4: fact));
     } catch (e) {
+      if (_writeNetworkChanged(runId, (s) => s.copyWith(
+            publicIpv4: const DiagnosticFact(
+              status: DiagnosticFactStatus.networkChanged,
+            ),
+          ))) {
+        return;
+      }
       if (_isStale(runId, scope)) return;
       _update(
         runId,
@@ -134,6 +220,20 @@ class DiagnosticSessionImpl implements DiagnosticSession {
         ),
       );
     }
+  }
+
+  /// When a network change aborted the run, write the given networkChanged
+  /// fact (bypassing the staleness guard) and report handled. Returns false
+  /// when there was no network change so callers fall through to normal logic.
+  bool _writeNetworkChanged(
+    int runId,
+    DiagnosticRunState Function(DiagnosticRunState) transform,
+  ) {
+    if (!_networkChangedDuringRun) return false;
+    if (runId != _notifier.value.runId) return true;
+    if (_notifier.value.phase == DiagnosticRunPhase.cancelled) return true;
+    _notifier.value = transform(_notifier.value);
+    return true;
   }
 
   Future<void> _runInternetProbe(int runId, CancellationScope scope) async {
@@ -263,6 +363,7 @@ class DiagnosticSessionImpl implements DiagnosticSession {
   Future<void> cancel() async {
     if (!_isRunning) return;
     final runId = _notifier.value.runId;
+    await _stopNetworkWatch();
     await _scope?.cancelAll();
     _update(
       runId,
@@ -293,6 +394,8 @@ class DiagnosticSessionImpl implements DiagnosticSession {
 
   @override
   void dispose() {
+    _watching = false;
+    _snapshotSource.stopWatching();
     _scope?.cancelAll();
     _notifier.dispose();
   }

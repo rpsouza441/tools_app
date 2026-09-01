@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tools_app/app/app_shell.dart' show DiagnosticVisibilityScope;
 import 'package:tools_app/design_system/copy_value_action.dart';
 import 'package:tools_app/design_system/tool_scaffold.dart';
 import 'package:tools_app/design_system/tool_sections.dart';
@@ -9,6 +10,7 @@ import 'package:tools_app/diagnostic/diagnostic_defaults.dart';
 import 'package:tools_app/diagnostic/models/diagnostic_fact.dart';
 import 'package:tools_app/diagnostic/models/diagnostic_run_state.dart';
 import 'package:tools_app/diagnostic/models/latency_aggregate.dart';
+import 'package:tools_app/diagnostic/session/diagnostic_summary_formatter.dart';
 
 /// Internet diagnostic screen. Observes an injected [DiagnosticSession] and
 /// renders immutable run state — the widget never runs HTTP/socket I/O and
@@ -39,7 +41,13 @@ class InternetDiagnosticScreen extends StatefulWidget {
 
 class _InternetDiagnosticScreenState extends State<InternetDiagnosticScreen> {
   late final DiagnosticSession _session;
+  late final ShareTextPort _sharePort;
   late final bool _ownsSession;
+  AppLifecycleListener? _lifecycleListener;
+  String? _lastVisibleId;
+
+  static const DiagnosticSummaryFormatter _formatter =
+      DiagnosticSummaryFormatter();
 
   CopyValueWriter get _copyWriter =>
       widget.copyWriter ?? const ClipboardCopyWriter();
@@ -54,10 +62,41 @@ class _InternetDiagnosticScreenState extends State<InternetDiagnosticScreen> {
       _session = DiagnosticDefaults.createSession();
       _ownsSession = true;
     }
+    _sharePort = widget.sharePort ?? DiagnosticDefaults.createSharePort();
+
+    // Pause/hide/detach cancel the run; resume only refreshes the snapshot and
+    // never auto-restarts (QUAL-04, D-08).
+    _lifecycleListener = AppLifecycleListener(
+      onPause: _cancelIfRunning,
+      onHide: _cancelIfRunning,
+      onDetach: _cancelIfRunning,
+      onResume: () => _session.refreshSnapshotOnly(),
+    );
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Cancel the run when this preserved IndexedStack page is no longer the
+    // visible destination (QUAL-04).
+    final visibleId = DiagnosticVisibilityScope.of(context);
+    if (_lastVisibleId == 'internet_diagnostic' &&
+        visibleId != null &&
+        visibleId != 'internet_diagnostic') {
+      _cancelIfRunning();
+    }
+    _lastVisibleId = visibleId;
+  }
+
+  void _cancelIfRunning() {
+    if (_session.state.phase == DiagnosticRunPhase.running) {
+      _session.cancel();
+    }
   }
 
   @override
   void dispose() {
+    _lifecycleListener?.dispose();
     _session.cancel();
     if (_ownsSession) {
       _session.dispose();
@@ -137,10 +176,48 @@ class _InternetDiagnosticScreenState extends State<InternetDiagnosticScreen> {
               const SizedBox(height: 24),
               factsCard,
             ],
+            if (terminal) ...[
+              const SizedBox(height: 16),
+              _shareActions(context, state),
+            ],
           ],
         );
       },
     );
+  }
+
+  Widget _shareActions(BuildContext context, DiagnosticRunState state) {
+    final summary = _formatter.format(state);
+    return Row(
+      children: [
+        // Reuses the existing CopyValueWriter (48x48) — no new clipboard path.
+        CopyValueAction(
+          label: 'resumo',
+          value: summary,
+          writer: _copyWriter,
+        ),
+        IconButton(
+          icon: const Icon(Icons.share, semanticLabel: 'Compartilhar diagnóstico'),
+          tooltip: 'Compartilhar diagnóstico',
+          constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
+          onPressed: () => _share(summary),
+        ),
+      ],
+    );
+  }
+
+  Future<void> _share(String summary) async {
+    final messenger = ScaffoldMessenger.maybeOf(context);
+    try {
+      await _sharePort.share(summary);
+    } catch (_) {
+      if (!mounted) return;
+      messenger?.showSnackBar(
+        const SnackBar(
+          content: Text('Não foi possível compartilhar neste dispositivo.'),
+        ),
+      );
+    }
   }
 
   Widget _buildFactsCard(BuildContext context, DiagnosticRunState state) {

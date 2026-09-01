@@ -46,7 +46,7 @@ void main() {
       expect(state.finishedAt, isNotNull);
     });
 
-    test('segundo start enquanto running é no-op: runId não muda (DIAG-01)',
+    test('segundo start enquanto running é no-op: runId não muda (DIAG-01, concurrent)',
         () async {
       final publicIp = FakePublicIpSource(hang: true);
       final session = buildSession(
