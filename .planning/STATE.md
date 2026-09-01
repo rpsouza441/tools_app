@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: planning
-stopped_at: Phase 4 context gathered
+stopped_at: Phase 4 executed — verification human_needed (mobile data residual)
 last_updated: "2026-09-01T19:20:14.771Z"
-last_activity: 2026-09-01 — Phase 3 executed & verified (23/23 requirements, 235 tests)
+last_activity: 2026-09-01 — Phase 4 executed & verified (DOC-01..04 done; QUAL-09 human_needed — real mobile data pending physical device)
 progress:
   total_phases: 5
   completed_phases: 3
-  total_plans: 22
-  completed_plans: 22
+  total_plans: 26
+  completed_plans: 26
   percent: 60
 ---
 
@@ -21,16 +21,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-08-31)
 
 **Core value:** Oferecer diagnósticos técnicos úteis e honestos em uma interface clara, sem ocultar limitações de plataforma, método de medição ou falhas parciais.
-**Current focus:** Phase 4 — Validação Android e documentação transparente (not started)
+**Current focus:** Phase 4 — Validação Android e documentação transparente (executada; verificação `human_needed`)
 
 ## Current Position
 
 Phase: 4 of 5 (validação android e documentação transparente)
-Plan: Not started
-Status: Ready to plan/execute — Phase 3 complete and verified
-Last activity: 2026-09-01 — Phase 3 executed & verified (23/23 requirements, 235 tests)
+Plan: 4/4 plans complete (04-01..04-04)
+Status: Executed — verification `human_needed`. DOC-01..04 VERIFIED; QUAL-09 verificado em emulador + automação, mas **dados móveis reais** pendem de Android físico com rede celular real (D-06/D-07). Phase 4 NÃO fechada. Phase 5 NÃO iniciada.
+Last activity: 2026-09-01 — Phase 4 executed & verified (human_needed: real mobile data)
 
-Progress: [██████░░░░] 60% (3 of 5 phases complete)
+Progress: [██████░░░░] 60% (3 of 5 phases complete; Phase 4 awaiting human mobile-data check)
 
 ## Performance Metrics
 
