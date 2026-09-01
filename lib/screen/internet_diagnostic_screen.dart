@@ -8,6 +8,7 @@ import 'package:tools_app/diagnostic/contracts/share_text_port.dart';
 import 'package:tools_app/diagnostic/diagnostic_defaults.dart';
 import 'package:tools_app/diagnostic/models/diagnostic_fact.dart';
 import 'package:tools_app/diagnostic/models/diagnostic_run_state.dart';
+import 'package:tools_app/diagnostic/models/latency_aggregate.dart';
 
 /// Internet diagnostic screen. Observes an injected [DiagnosticSession] and
 /// renders immutable run state — the widget never runs HTTP/socket I/O and
@@ -179,8 +180,18 @@ class _InternetDiagnosticScreenState extends State<InternetDiagnosticScreen> {
           _address(context, 'Gateway', state.gateway),
           _address(context, 'IPv4 público', state.publicIpv4),
           const SizedBox(height: 16),
-          _probe(context, 'Gateway (TCP connect)', state.gatewayProbe),
-          _probe(context, 'Internet (HTTPS)', state.internetProbe),
+          _probe(
+            context,
+            'Gateway (TCP connect)',
+            state.gatewayProbe,
+            state.gatewayLatency,
+          ),
+          _probe(
+            context,
+            'Internet (HTTPS)',
+            state.internetProbe,
+            state.internetLatency,
+          ),
           // ICMP is always unavailable in this MVP — never labelled "ping".
           ToolMetric(
             label: 'ICMP',
@@ -215,18 +226,36 @@ class _InternetDiagnosticScreenState extends State<InternetDiagnosticScreen> {
     );
   }
 
-  Widget _probe(BuildContext context, String label, DiagnosticFact fact) {
+  Widget _probe(
+    BuildContext context,
+    String label,
+    DiagnosticFact fact,
+    LatencyAggregate? aggregate,
+  ) {
     final provenance = fact.provenance;
+    String? ms(Duration? d) => d == null ? null : '${d.inMilliseconds} ms';
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ToolMetric(label: label, value: fact.isSuccess ? fact.value : null),
+          if (aggregate != null && aggregate.plannedAttempts > 0)
+            ToolMetricLayout(
+              metrics: [
+                ToolMetric(label: 'mín', value: ms(aggregate.min)),
+                ToolMetric(label: 'média', value: ms(aggregate.avg)),
+                ToolMetric(label: 'máx', value: ms(aggregate.max)),
+                ToolMetric(
+                  label: 'sucessos',
+                  value: aggregate.denominatorLabel,
+                ),
+              ],
+            ),
           if (provenance != null)
             Text(
               '${provenance.method} · ${provenance.portOrUrl} · '
-              'timeout ${provenance.timeout.inSeconds}s',
+              'timeout ${provenance.timeout.inSeconds}s\n${provenance.limitations}',
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
                     color: Theme.of(context).colorScheme.onSurfaceVariant,
                   ),

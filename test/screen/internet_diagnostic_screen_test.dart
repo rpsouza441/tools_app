@@ -7,6 +7,7 @@ import 'package:tools_app/design_system/tool_status_panel.dart';
 import 'package:tools_app/diagnostic/contracts/diagnostic_session.dart';
 import 'package:tools_app/diagnostic/models/diagnostic_fact.dart';
 import 'package:tools_app/diagnostic/models/diagnostic_run_state.dart';
+import 'package:tools_app/diagnostic/models/latency_aggregate.dart';
 import 'package:tools_app/screen/internet_diagnostic_screen.dart';
 
 import 'screen_test_harness.dart';
@@ -145,6 +146,106 @@ void main() {
 
       expect(find.textContaining('ICMP'), findsWidgets);
       expect(find.textContaining('ping', findRichText: true), findsNothing);
+    });
+
+    testWidgets('offline: variant offline, Repetir habilitado, sem spinner',
+        (tester) async {
+      final session = FakeDiagnosticSession();
+      await tester.pumpWidget(
+        wrapScreen(InternetDiagnosticScreen(session: session)),
+      );
+
+      session.emit(
+        const DiagnosticRunState(runId: 1, phase: DiagnosticRunPhase.offline),
+      );
+      await tester.pump();
+
+      expect(find.text('Sem conexão com a internet'), findsOneWidget);
+      expect(find.text('Repetir'), findsOneWidget);
+      expect(find.byType(CircularProgressIndicator), findsNothing);
+      final primary = tester.widget<ElevatedButton>(
+        find.byType(ElevatedButton),
+      );
+      expect(primary.onPressed, isNotNull);
+    });
+
+    testWidgets('parcial: IP público falha + HTTPS ok mostra os dois fatos',
+        (tester) async {
+      final session = FakeDiagnosticSession();
+      await tester.pumpWidget(
+        wrapScreen(InternetDiagnosticScreen(session: session)),
+      );
+
+      session.emit(
+        DiagnosticRunState(
+          runId: 1,
+          phase: DiagnosticRunPhase.partialFailure,
+          publicIpv4: const DiagnosticFact(
+            status: DiagnosticFactStatus.failure,
+            message: 'ipify indisponível',
+            provenance: ProbeProvenance(
+              method: 'HTTPS',
+              target: 'api.ipify.org',
+              portOrUrl: 'https://api.ipify.org?format=json',
+              timeout: Duration(seconds: 5),
+              limitations: 'x',
+              thirdParty: 'api.ipify.org',
+            ),
+          ),
+          internetProbe: const DiagnosticFact(
+            status: DiagnosticFactStatus.success,
+            value: '12 ms',
+            provenance: ProbeProvenance(
+              method: 'HTTPS',
+              target: 'www.gstatic.com',
+              portOrUrl: 'https://www.gstatic.com/generate_204',
+              timeout: Duration(seconds: 5),
+              limitations: 'x',
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+
+      // Provider ipify surfaces near the public IP fact.
+      expect(find.textContaining('api.ipify.org'), findsWidgets);
+      // No copy that claims full internet — failure fact shows its message.
+      expect(find.textContaining('ipify indisponível'), findsWidgets);
+    });
+
+    testWidgets('agregado 3/4 sucessos exibe denominador (DIAG-09)',
+        (tester) async {
+      final session = FakeDiagnosticSession();
+      await tester.pumpWidget(
+        wrapScreen(InternetDiagnosticScreen(session: session)),
+      );
+
+      session.emit(
+        const DiagnosticRunState(
+          runId: 1,
+          phase: DiagnosticRunPhase.success,
+          internetProbe: DiagnosticFact(
+            status: DiagnosticFactStatus.success,
+            value: '20 ms',
+          ),
+          internetLatency: LatencyAggregate(
+            min: Duration(milliseconds: 10),
+            avg: Duration(milliseconds: 20),
+            max: Duration(milliseconds: 30),
+            plannedAttempts: 4,
+            completedAttempts: 4,
+            successes: 3,
+            failures: 1,
+            timeouts: 0,
+            cancelledCount: 0,
+            networkChangedCount: 0,
+            denominatorLabel: '3 de 4',
+          ),
+        ),
+      );
+      await tester.pump();
+
+      expect(find.textContaining('3 de 4'), findsWidgets);
     });
   });
 }

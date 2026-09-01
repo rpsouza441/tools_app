@@ -127,7 +127,7 @@ void main() {
       install((call) async => null);
 
       final source = AndroidNetworkSnapshotSource();
-      await source.startWatching(() {});
+      await source.startWatching((_) {});
       await source.stopWatching();
 
       expect(calls.map((c) => c.method), containsAll(<String>[

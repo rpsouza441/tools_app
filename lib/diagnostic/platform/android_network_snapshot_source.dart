@@ -1,5 +1,8 @@
 import 'package:flutter/services.dart';
 
+import '../contracts/network_snapshot_source.dart';
+import '../models/network_snapshot.dart';
+
 /// MethodChannel name shared with the Kotlin NetworkSnapshotPlugin.
 const String kNetworkSnapshotChannel =
     'br.dev.rodrigopinheiro.tools_app/network_snapshot';
@@ -67,9 +70,9 @@ class NetworkSnapshotMapParser {
 }
 
 /// Reads the active-network snapshot from the Android plugin over a
-/// MethodChannel. Exposes [currentFacts] (pure facts) plus watch controls.
-/// 03-06 adapts this into a [NetworkSnapshotSource] implementation.
-class AndroidNetworkSnapshotSource {
+/// MethodChannel. Implements [NetworkSnapshotSource] by mapping the raw
+/// [AndroidSnapshotFacts] into the domain [NetworkSnapshot] (03-06 wiring).
+class AndroidNetworkSnapshotSource implements NetworkSnapshotSource {
   AndroidNetworkSnapshotSource({MethodChannel? channel})
       : _channel = channel ?? const MethodChannel(kNetworkSnapshotChannel);
 
@@ -82,12 +85,36 @@ class AndroidNetworkSnapshotSource {
     return NetworkSnapshotMapParser.parse(map);
   }
 
-  Future<void> startWatching(void Function() onChanged) async {
-    _onChanged = onChanged;
+  /// Maps the raw Android facts into the domain [NetworkSnapshot].
+  @override
+  Future<NetworkSnapshot> current() async {
+    final facts = await currentFacts();
+    return NetworkSnapshot(
+      hasActiveNetwork: facts.hasActiveNetwork,
+      transports: facts.transports,
+      hasInternet: facts.hasInternet,
+      validated: facts.validated,
+      captivePortal: facts.captive,
+      notMetered: facts.notMetered,
+      localIpv4: facts.localIpv4,
+      gatewayIpv4: facts.gatewayIpv4,
+      networkHandle: facts.networkHandle,
+    );
+  }
+
+  @override
+  Future<void> startWatching(
+    void Function(NetworkSnapshot snapshot) onChanged,
+  ) async {
+    _onChanged = () async {
+      final snapshot = await current();
+      onChanged(snapshot);
+    };
     _channel.setMethodCallHandler(_handleCall);
     await _channel.invokeMethod<void>('startWatching');
   }
 
+  @override
   Future<void> stopWatching() async {
     await _channel.invokeMethod<void>('stopWatching');
     _onChanged = null;
