@@ -5,8 +5,8 @@ Estado inicial: Phase 4 `human_needed`; dados móveis ainda não verificados.
 
 ## Preparação
 
-- [ ] Instalar o APK no Android físico e abrir o Tools App.
-- [ ] Anotar modelo, versão do Android, operadora, data/hora e se há VPN ativa. Para o teste básico, usar rede sem VPN.
+- [x] Instalar o APK no Android físico e abrir o Tools App.
+- [x] Anotar modelo, versão do Android, operadora, data/hora e se há VPN ativa. Para o teste básico, usar rede sem VPN.
 - [ ] Usar SIM/eSIM ativo, ligar dados móveis e desligar Wi-Fi. Confirmar acesso a uma página pelo navegador usando essa rede.
 
 ## Obrigatório — diagnóstico em dados móveis reais
