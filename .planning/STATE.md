@@ -4,8 +4,8 @@ milestone: v1.0
 milestone_name: milestone
 status: planning
 stopped_at: Phase 4 executed — verification human_needed (mobile data residual)
-last_updated: "2026-09-01T19:20:14.771Z"
-last_activity: 2026-09-01 — Phase 4 executed & verified (DOC-01..04 done; QUAL-09 human_needed — real mobile data pending physical device)
+last_updated: "2026-09-09"
+last_activity: 2026-09-09 — Quick 260909-m1g complete; APK debug e checklist prontos; QUAL-09 aguarda dados móveis reais
 progress:
   total_phases: 5
   completed_phases: 3
@@ -28,7 +28,7 @@ See: .planning/PROJECT.md (updated 2026-08-31)
 Phase: 4 of 5 (validação android e documentação transparente)
 Plan: 4/4 plans complete (04-01..04-04)
 Status: Executed — verification `human_needed`. DOC-01..04 VERIFIED; QUAL-09 verificado em emulador + automação, mas **dados móveis reais** pendem de Android físico com rede celular real (D-06/D-07). Phase 4 NÃO fechada. Phase 5 NÃO iniciada.
-Last activity: 2026-09-01 — Phase 4 executed & verified (human_needed: real mobile data)
+Last activity: 2026-09-09 — Completed quick task 260909-m1g: APK debug e checklist para teste físico; Phase 4 human_needed.
 
 Progress: [██████░░░░] 60% (3 of 5 phases complete; Phase 4 awaiting human mobile-data check)
 
@@ -66,6 +66,12 @@ Progress: [██████░░░░] 60% (3 of 5 phases complete; Phase 4 
 - [A1]: Sem license grant escrito para `gstatic.com/generate_204`; URL permanece injetável.
 - [A6]: Restrição LAN Android 16 vs TCP ao gateway — modelar `permissionDenied`; QUAL-09 na Phase 4.
 
+### Quick Tasks Completed
+
+| # | Description | Date | Commit | Directory |
+|---|-------------|------|--------|-----------|
+| 260909-m1g | APK debug e checklist de dados móveis | 2026-09-09 | 1b2f98c | [260909-m1g-gerar-apk-debug-e-checklist-de-dados-mov](./quick/260909-m1g-gerar-apk-debug-e-checklist-de-dados-mov/) |
+
 ## Deferred Items
 
 | Category | Item | Status | Deferred At |
@@ -77,7 +83,7 @@ Progress: [██████░░░░] 60% (3 of 5 phases complete; Phase 4 
 
 ## Session Continuity
 
-Last session: 2026-09-01T16:16:05.022Z
-Stopped at: Phase 4 context gathered
-Resume file: .planning/phases/04-valida-o-android-e-documenta-o-transparente/04-CONTEXT.md
-Resume with: `/gsd-execute-phase 3` when ready. Do not start Phase 4/5 or speed test.
+Last session: 2026-09-09
+Stopped at: APK debug gerado; aguardando teste físico em dados móveis (Phase 4 human_needed).
+Resume file: .planning/quick/260909-m1g-gerar-apk-debug-e-checklist-de-dados-mov/CHECKLIST-ANDROID.md
+Resume with: revisar evidência do teste em Android físico, atualizar matriz QUAL-09 e verificação da Phase 4. Não fechar a fase sem evidência; Phase 5 não iniciada.
