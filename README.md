@@ -76,8 +76,11 @@ Comportamento:
   e gateway reais, consulta de IP público por HTTPS, probes TCP/HTTPS com
   métricas, comportamento offline e ciclo de vida. Consulte
   `.planning/phases/04-*/04-ANDROID-VALIDATION.md` para a matriz de evidências.
-- **Dados móveis reais** ainda **não** foram verificados em Android físico com
-  rede celular real (marcado como *não verificado* na matriz).
+- **4G e Wi-Fi em Android físico:** teste relatado pelo usuário em um Redmi
+  Note 12 Pro em 2026-09-09, com IP público e HTTPS bem-sucedidos nas duas redes.
+  O gateway não respondeu ao TCP na porta 80. O teste identificou uma mensagem
+  geral inadequada para falhas parciais; a correção aguarda reteste no aparelho.
+  A versão do Android não foi informada.
 - Em plataformas não-Android, o diagnóstico usa implementações que reportam
   honestamente *indisponível* — este ciclo não promete paridade multiplataforma.
 

@@ -60,22 +60,25 @@ class FakeDiagnosticSession implements DiagnosticSession {
 
 void main() {
   group('InternetDiagnosticScreen', () {
-    testWidgets('idle: título, Iniciar diagnóstico, status empty, sem Calcular',
-        (tester) async {
-      final session = FakeDiagnosticSession();
-      await tester.pumpWidget(
-        wrapScreen(InternetDiagnosticScreen(session: session)),
-      );
+    testWidgets(
+      'idle: título, Iniciar diagnóstico, status empty, sem Calcular',
+      (tester) async {
+        final session = FakeDiagnosticSession();
+        await tester.pumpWidget(
+          wrapScreen(InternetDiagnosticScreen(session: session)),
+        );
 
-      expect(find.text('Diagnóstico de Internet'), findsOneWidget);
-      expect(find.text('Iniciar diagnóstico'), findsOneWidget);
-      expect(find.byType(ToolStatusPanel), findsOneWidget);
-      expect(find.text('Calcular'), findsNothing);
-      expect(find.textContaining('ping', findRichText: true), findsNothing);
-    });
+        expect(find.text('Diagnóstico de Internet'), findsOneWidget);
+        expect(find.text('Iniciar diagnóstico'), findsOneWidget);
+        expect(find.byType(ToolStatusPanel), findsOneWidget);
+        expect(find.text('Calcular'), findsNothing);
+        expect(find.textContaining('ping', findRichText: true), findsNothing);
+      },
+    );
 
-    testWidgets('running: primary desabilitado + Cancelar via onCancel',
-        (tester) async {
+    testWidgets('running: primary desabilitado + Cancelar via onCancel', (
+      tester,
+    ) async {
       final session = FakeDiagnosticSession();
       await tester.pumpWidget(
         wrapScreen(InternetDiagnosticScreen(session: session)),
@@ -98,38 +101,40 @@ void main() {
       expect(session.cancelCalls, 1);
     });
 
-    testWidgets('terminal: primary vira Repetir e dispara novo start (DIAG-13)',
-        (tester) async {
-      final session = FakeDiagnosticSession();
-      await tester.pumpWidget(
-        wrapScreen(InternetDiagnosticScreen(session: session)),
-      );
+    testWidgets(
+      'terminal: primary vira Repetir e dispara novo start (DIAG-13)',
+      (tester) async {
+        final session = FakeDiagnosticSession();
+        await tester.pumpWidget(
+          wrapScreen(InternetDiagnosticScreen(session: session)),
+        );
 
-      session.emit(
-        DiagnosticRunState(
-          runId: 1,
-          phase: DiagnosticRunPhase.success,
-          startedAt: DateTime(2026, 1, 1, 10),
-          finishedAt: DateTime(2026, 1, 1, 10, 0, 5),
-          publicIpv4: const DiagnosticFact(
-            status: DiagnosticFactStatus.success,
-            value: '203.0.113.7',
+        session.emit(
+          DiagnosticRunState(
+            runId: 1,
+            phase: DiagnosticRunPhase.success,
+            startedAt: DateTime(2026, 1, 1, 10),
+            finishedAt: DateTime(2026, 1, 1, 10, 0, 5),
+            publicIpv4: const DiagnosticFact(
+              status: DiagnosticFactStatus.success,
+              value: '203.0.113.7',
+            ),
           ),
-        ),
-      );
-      await tester.pump();
+        );
+        await tester.pump();
 
-      expect(find.text('Repetir'), findsOneWidget);
-      // onRetry on the status panel stays null — single retry is the primary.
-      final panel = tester.widget<ToolStatusPanel>(
-        find.byType(ToolStatusPanel),
-      );
-      expect(panel.onRetry, isNull);
+        expect(find.text('Repetir'), findsOneWidget);
+        // onRetry on the status panel stays null — single retry is the primary.
+        final panel = tester.widget<ToolStatusPanel>(
+          find.byType(ToolStatusPanel),
+        );
+        expect(panel.onRetry, isNull);
 
-      await tester.tap(find.text('Repetir'));
-      await tester.pump();
-      expect(session.startCalls, 1);
-    });
+        await tester.tap(find.text('Repetir'));
+        await tester.pump();
+        expect(session.startCalls, 1);
+      },
+    );
 
     testWidgets('ICMP aparece como Indisponível, nunca ping', (tester) async {
       final session = FakeDiagnosticSession();
@@ -138,10 +143,7 @@ void main() {
       );
 
       session.emit(
-        const DiagnosticRunState(
-          runId: 1,
-          phase: DiagnosticRunPhase.success,
-        ),
+        const DiagnosticRunState(runId: 1, phase: DiagnosticRunPhase.success),
       );
       await tester.pump();
 
@@ -149,8 +151,9 @@ void main() {
       expect(find.textContaining('ping', findRichText: true), findsNothing);
     });
 
-    testWidgets('offline: variant offline, Repetir habilitado, sem spinner',
-        (tester) async {
+    testWidgets('offline: variant offline, Repetir habilitado, sem spinner', (
+      tester,
+    ) async {
       final session = FakeDiagnosticSession();
       await tester.pumpWidget(
         wrapScreen(InternetDiagnosticScreen(session: session)),
@@ -170,8 +173,9 @@ void main() {
       expect(primary.onPressed, isNotNull);
     });
 
-    testWidgets('parcial: IP público falha + HTTPS ok mostra os dois fatos',
-        (tester) async {
+    testWidgets('parcial: IP público falha + HTTPS ok mostra os dois fatos', (
+      tester,
+    ) async {
       final session = FakeDiagnosticSession();
       await tester.pumpWidget(
         wrapScreen(InternetDiagnosticScreen(session: session)),
@@ -214,8 +218,61 @@ void main() {
       expect(find.textContaining('ipify indisponível'), findsWidgets);
     });
 
-    testWidgets('agregado 3/4 sucessos exibe denominador (DIAG-09)',
-        (tester) async {
+    testWidgets(
+      'gateway falha: conclusão parcial preserva HTTPS, IP e resumo',
+      (tester) async {
+        final session = FakeDiagnosticSession();
+        final copyWriter = FakeCopyWriter();
+        await tester.pumpWidget(
+          wrapScreen(
+            InternetDiagnosticScreen(session: session, copyWriter: copyWriter),
+          ),
+        );
+        session.emit(
+          const DiagnosticRunState(
+            runId: 1,
+            phase: DiagnosticRunPhase.partialFailure,
+            publicIpv4: DiagnosticFact(
+              status: DiagnosticFactStatus.success,
+              value: '203.0.113.7',
+            ),
+            gatewayProbe: DiagnosticFact(
+              status: DiagnosticFactStatus.timeout,
+              message: 'Sem resposta TCP do gateway',
+            ),
+            internetProbe: DiagnosticFact(
+              status: DiagnosticFactStatus.success,
+              value: '262 ms',
+            ),
+          ),
+        );
+        await tester.pump();
+
+        expect(find.text('Concluído com falhas parciais'), findsOneWidget);
+        expect(find.text('Não foi possível concluir'), findsNothing);
+        expect(find.text('Confira os dados e tente novamente.'), findsNothing);
+        expect(find.text('Sem resposta TCP do gateway'), findsOneWidget);
+        expect(find.text('203.0.113.7'), findsOneWidget);
+        expect(find.text('262 ms'), findsOneWidget);
+        expect(find.byType(CircularProgressIndicator), findsNothing);
+        expect(find.text('Repetir'), findsOneWidget);
+
+        await tester.ensureVisible(find.byTooltip('Copiar resumo'));
+        await tester.tap(find.byTooltip('Copiar resumo'));
+        await tester.pump();
+        expect(
+          copyWriter.lastValue,
+          contains('Situação: Concluído com falhas parciais'),
+        );
+        expect(copyWriter.lastValue, contains('Sem resposta TCP do gateway'));
+        expect(copyWriter.lastValue, contains('262 ms'));
+        expect(copyWriter.lastValue, contains('203.0.113.7'));
+      },
+    );
+
+    testWidgets('agregado 3/4 sucessos exibe denominador (DIAG-09)', (
+      tester,
+    ) async {
       final session = FakeDiagnosticSession();
       await tester.pumpWidget(
         wrapScreen(InternetDiagnosticScreen(session: session)),
@@ -249,63 +306,64 @@ void main() {
       expect(find.textContaining('3 de 4'), findsWidgets);
     });
 
-    testWidgets('terminal: copiar resumo grava o texto do formatter (DIAG-15)',
-        (tester) async {
-      final session = FakeDiagnosticSession();
-      final copyWriter = FakeCopyWriter();
-      await tester.pumpWidget(
-        wrapScreen(
-          InternetDiagnosticScreen(session: session, copyWriter: copyWriter),
-        ),
-      );
-
-      session.emit(
-        DiagnosticRunState(
-          runId: 1,
-          phase: DiagnosticRunPhase.success,
-          startedAt: DateTime(2026, 9, 1, 10),
-          publicIpv4: const DiagnosticFact(
-            status: DiagnosticFactStatus.success,
-            value: '203.0.113.7',
+    testWidgets(
+      'terminal: copiar resumo grava o texto do formatter (DIAG-15)',
+      (tester) async {
+        final session = FakeDiagnosticSession();
+        final copyWriter = FakeCopyWriter();
+        await tester.pumpWidget(
+          wrapScreen(
+            InternetDiagnosticScreen(session: session, copyWriter: copyWriter),
           ),
-        ),
-      );
-      await tester.pump();
+        );
 
-      await tester.ensureVisible(find.byTooltip('Copiar resumo'));
-      await tester.tap(find.byTooltip('Copiar resumo'));
-      await tester.pump();
+        session.emit(
+          DiagnosticRunState(
+            runId: 1,
+            phase: DiagnosticRunPhase.success,
+            startedAt: DateTime(2026, 9, 1, 10),
+            publicIpv4: const DiagnosticFact(
+              status: DiagnosticFactStatus.success,
+              value: '203.0.113.7',
+            ),
+          ),
+        );
+        await tester.pump();
 
-      expect(copyWriter.callCount, 1);
-      expect(copyWriter.lastValue, contains('Diagnóstico de Internet'));
-      expect(copyWriter.lastValue, contains('203.0.113.7'));
-    });
+        await tester.ensureVisible(find.byTooltip('Copiar resumo'));
+        await tester.tap(find.byTooltip('Copiar resumo'));
+        await tester.pump();
 
-    testWidgets('terminal: compartilhar chama o share port com o resumo (DIAG-15)',
-        (tester) async {
-      final session = FakeDiagnosticSession();
-      final sharePort = _FakeSharePort();
-      await tester.pumpWidget(
-        wrapScreen(
-          InternetDiagnosticScreen(session: session, sharePort: sharePort),
-        ),
-      );
+        expect(copyWriter.callCount, 1);
+        expect(copyWriter.lastValue, contains('Diagnóstico de Internet'));
+        expect(copyWriter.lastValue, contains('203.0.113.7'));
+      },
+    );
 
-      session.emit(
-        const DiagnosticRunState(
-          runId: 1,
-          phase: DiagnosticRunPhase.success,
-        ),
-      );
-      await tester.pump();
+    testWidgets(
+      'terminal: compartilhar chama o share port com o resumo (DIAG-15)',
+      (tester) async {
+        final session = FakeDiagnosticSession();
+        final sharePort = _FakeSharePort();
+        await tester.pumpWidget(
+          wrapScreen(
+            InternetDiagnosticScreen(session: session, sharePort: sharePort),
+          ),
+        );
 
-      await tester.ensureVisible(find.byTooltip('Compartilhar diagnóstico'));
-      await tester.tap(find.byTooltip('Compartilhar diagnóstico'));
-      await tester.pump();
+        session.emit(
+          const DiagnosticRunState(runId: 1, phase: DiagnosticRunPhase.success),
+        );
+        await tester.pump();
 
-      expect(sharePort.calls, 1);
-      expect(sharePort.lastShared, contains('Diagnóstico de Internet'));
-    });
+        await tester.ensureVisible(find.byTooltip('Compartilhar diagnóstico'));
+        await tester.tap(find.byTooltip('Compartilhar diagnóstico'));
+        await tester.pump();
+
+        expect(sharePort.calls, 1);
+        expect(sharePort.lastShared, contains('Diagnóstico de Internet'));
+      },
+    );
   });
 }
 

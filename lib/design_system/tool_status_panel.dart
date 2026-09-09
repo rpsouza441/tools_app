@@ -76,6 +76,8 @@ class ToolStatusPanel extends StatelessWidget {
   const ToolStatusPanel({
     super.key,
     required this.variant,
+    this.heading,
+    this.body,
     this.progress,
     this.onRetry,
     this.onSettings,
@@ -84,6 +86,10 @@ class ToolStatusPanel extends StatelessWidget {
 
   /// Which status to display.
   final ToolStatusVariant variant;
+
+  /// Tool-specific copy; omitted values use the variant's default message.
+  final String? heading;
+  final String? body;
 
   /// Optional progress value (0.0-1.0) for loading variant.
   final double? progress;
@@ -136,13 +142,13 @@ class ToolStatusPanel extends StatelessWidget {
           Icon(data.icon!, size: 48, color: color),
         SizedBox(height: tokens.spacing8),
         Text(
-          data.heading,
+          heading ?? data.heading,
           style: textTheme.titleLarge?.copyWith(color: colorScheme.onSurface),
           textAlign: TextAlign.center,
         ),
         SizedBox(height: tokens.spacing4),
         Text(
-          data.body,
+          body ?? data.body,
           style: textTheme.bodyMedium?.copyWith(
             color: colorScheme.onSurfaceVariant,
           ),

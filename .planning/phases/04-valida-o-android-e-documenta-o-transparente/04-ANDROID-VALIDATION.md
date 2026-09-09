@@ -3,7 +3,7 @@ requirement: QUAL-09
 phase: 04-valida-o-android-e-documenta-o-transparente
 created: "2026-09-01"
 status: in_progress
-mobile_data: NOT VERIFIED
+mobile_data: VERIFIED (Android físico, relato do usuário)
 ---
 
 # QUAL-09 — Matriz de Validação Android
@@ -29,7 +29,7 @@ permanece `human_needed` (D-07).
 
 - **AUTOMATED-FAKE:** `flutter test --no-pub` → 235/235 verdes (Phase 3), analyze limpo.
 - **VERIFIED (Android Emulator):** AVD `Medium_Phone_API_36.0` (API 36), rede via Wi-Fi virtual do host. Preenchido pelo plano 04-02 apenas quando realmente executado.
-- **Android físico com rede celular real:** indisponível nesta sessão → dados móveis fica NOT VERIFIED.
+- **Android físico com rede celular real:** Redmi Note 12 Pro, teste 4G relatado pelo usuário em 2026-09-09; resumo copiado registra `cellular`. Versão Android e operadora não informadas. Ver adendo físico abaixo.
 
 ---
 
@@ -51,7 +51,7 @@ desligada (`svc wifi/data disable`, "Active default network: none") terminou em
 | # | Cenário | Ambiente | Evidência | Resultado | Nível | Observações / Limitações |
 |---|---------|----------|-----------|-----------|-------|--------------------------|
 | 1 | Wi-Fi (transporte + capabilities) | Android Emulator + Fakes | Run real: Transporte wifi, INTERNET Sim, Validado Sim, Portal cativo Não. Fake: `diagnostic_session_test.dart`, `android_network_snapshot_source_test.dart` | Transporte/capabilities reais lidos via canal | **VERIFIED (Android Emulator)** + AUTOMATED-FAKE | Emulador usa Wi-Fi virtual do host. |
-| 2 | **Dados móveis** | — | Parser cobre `transports:['cellular']` em fake; runtime celular não reproduzível em emulador | NOT VERIFIED | **NOT VERIFIED — requer Android físico com rede celular real** | Emulador não fornece rádio celular real (D-06). Único residual humano. |
+| 2 | **Dados móveis** | Redmi Note 12 Pro, 4G informado pelo usuário | Resumo real 2026-09-09 16:40:06–16:40:14: cellular, INTERNET/Validado Sim, Portal cativo Não, IP público ok, HTTPS 4/4 (média 262 ms), gateway TCP 0/4 | Medições concluídas; defeito de mensagem geral identificado | **VERIFIED (Android físico, relato do usuário)** | Correção da mensagem parcial aguarda reteste; Android/operadora não informados. |
 | 3 | Offline (sem spinner infinito) | Android Emulator + Fakes | Run real com rede desligada → tela "Sem conexão com a internet", botão Repetir, sem spinner. Fake: `diagnostic_session_test.dart` (offline) | Fase termina offline sem travar | **VERIFIED (Android Emulator)** + AUTOMATED-FAKE | QUAL-01 comprovado em runtime. |
 | 4 | IPv4 local da rede ativa | Android Emulator + Fakes | Run real: IPv4 local **10.0.2.16** (link real). Fake: `android_network_snapshot_source_test.dart` | IPv4 local real do LinkProperties | **VERIFIED (Android Emulator)** + AUTOMATED-FAKE | DIAG-03: não-link-local preferido; null honesto. |
 | 5 | Gateway disponível (rota default) | Android Emulator + Fakes | Run real: Gateway **10.0.2.2** (rota default do emulador). Fake: `android_network_snapshot_source_test.dart` | Gateway real da rota default, não inventado | **VERIFIED (Android Emulator)** + AUTOMATED-FAKE | DIAG-04: da rota default `hasGateway`, nunca 192.168.1.1. |
@@ -72,7 +72,7 @@ desligada (`svc wifi/data disable`, "Active default network: none") terminou em
 | R2 | Manifest final instalado = INTERNET + ACCESS_NETWORK_STATE | Android Emulator | `adb shell dumpsys package` → requested permissions: android.permission.INTERNET, android.permission.ACCESS_NETWORK_STATE (+ DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION, signature). Sem localização ("location is error") | Confere com DOC-02 | **VERIFIED (Android Emulator)** | DYNAMIC_RECEIVER é auto-gerada pelo AndroidX (signature), não é privacidade. |
 | R3 | Captive portal real | — | Não reproduzível de forma confiável no emulador | NOT VERIFIED | NOT VERIFIED | Requer rede com portal cativo real. |
 
-**Defeitos de runtime encontrados:** nenhum. O runtime Android no emulador
+**Defeitos na rodada do emulador (2026-09-01):** nenhum. O runtime Android no emulador
 reproduziu o comportamento esperado sem crash, sem MissingPluginException, sem
 gateway inventado e sem spinner infinito offline.
 
@@ -108,11 +108,31 @@ Android (camada VERIFIED).
   HTTPS probe (#9), resultado parcial (#10), pause/resume/dispose (#13) e os
   itens de runtime R1 (canal registrado) e R2 (manifest instalado). Nenhum
   defeito de runtime encontrado.
-- **NOT VERIFIED (residual humano):** **dados móveis reais** (cenário #2) e
-  captive portal real (R3). Enquanto dados móveis não for executado em Android
-  físico com rede celular real, a Phase 4 permanece **`human_needed`** (D-07).
+- **VERIFIED (Android físico, relato do usuário em 2026-09-09):** dados móveis reais
+  (#2) e execução Wi-Fi no Redmi Note 12 Pro, com IP público e HTTPS bem-sucedidos.
+- **Residual humano atual:** retestar a mensagem corrigida de falhas parciais no APK
+  novo. Phase 4 permanece **`human_needed`**; o requisito inclui conclusão honesta.
+  Captive portal real (R3) continua NOT VERIFIED.
   Cancelamento (#11) e troca de rede mid-run (#12) permanecem AUTOMATED-FAKE
   (não reproduzíveis de forma confiável via automação no emulador), mas a
   lógica está coberta por testes determinísticos verdes.
 
 *Matriz criada em 2026-09-01 (plano 04-01). Seções VERIFIED preenchidas pelo plano 04-02 com execução real no emulador.*
+
+## Adendo — teste físico de 2026-09-09
+
+Fonte: resumos copiados pelo usuário nesta conversa; aparelho informado: Redmi Note 12 Pro.
+Versão Android, operadora e VPN não informadas. IPs públicos omitidos deste adendo.
+
+| Rede | Início / fim | Capacidades | IP público | Gateway TCP | HTTPS |
+|------|--------------|-------------|------------|-------------|-------|
+| 4G (`cellular`) | 16:40:06 / 16:40:14 | INTERNET Sim, Validado Sim, Portal cativo Não | Sucesso via ipify | 0/4, porta 80, timeout 2s | 4/4; mín 251 / média 262 / máx 267 ms |
+| Wi-Fi (`wifi`) | 16:41:50 / 16:41:58 | INTERNET Sim, Validado Sim, Portal cativo Não | Sucesso via ipify | 0/4, porta 80, timeout 2s | 4/4; mín 150 / média 168 / máx 182 ms |
+
+As duas execuções terminaram em 8 segundos e preservaram as medições HTTPS e IP público
+apesar da falha TCP. Não é possível determinar por esse resultado por que a porta não respondeu.
+O usuário identificou a mensagem genérica "Não foi possível concluir / Confira os dados e tente
+novamente". A investigação confirmou mapeamento inadequado do estado parcial e ausência do
+motivo de falha do probe na tela. Correção e regressão registradas em
+`../../debug/diagnostico-falha-parcial.md`. Aguardar confirmação visual da nova mensagem;
+não promover cancelamento/troca de rede para runtime verificado com esses dois resumos.

@@ -133,9 +133,8 @@ class _InternetDiagnosticScreenState extends State<InternetDiagnosticScreen> {
     };
   }
 
-  String _factValue(DiagnosticFact fact) => fact.isSuccess
-      ? (fact.value ?? '')
-      : (fact.message ?? 'Indisponível');
+  String _factValue(DiagnosticFact fact) =>
+      fact.isSuccess ? (fact.value ?? '') : (fact.message ?? 'Indisponível');
 
   @override
   Widget build(BuildContext context) {
@@ -166,6 +165,13 @@ class _InternetDiagnosticScreenState extends State<InternetDiagnosticScreen> {
             const SizedBox(height: 24),
             ToolStatusPanel(
               variant: variant,
+              heading: variant == ToolStatusVariant.failure
+                  ? 'Concluído com falhas parciais'
+                  : null,
+              body: variant == ToolStatusVariant.failure
+                  ? 'Algumas etapas falharam. Confira os resultados e as '
+                        'limitações abaixo.'
+                  : null,
               // Single retry is the primary "Repetir" button; no duplicate.
               onRetry: null,
               preservedChild: factsCard,
@@ -191,13 +197,12 @@ class _InternetDiagnosticScreenState extends State<InternetDiagnosticScreen> {
     return Row(
       children: [
         // Reuses the existing CopyValueWriter (48x48) — no new clipboard path.
-        CopyValueAction(
-          label: 'resumo',
-          value: summary,
-          writer: _copyWriter,
-        ),
+        CopyValueAction(label: 'resumo', value: summary, writer: _copyWriter),
         IconButton(
-          icon: const Icon(Icons.share, semanticLabel: 'Compartilhar diagnóstico'),
+          icon: const Icon(
+            Icons.share,
+            semanticLabel: 'Compartilhar diagnóstico',
+          ),
           tooltip: 'Compartilhar diagnóstico',
           constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
           onPressed: () => _share(summary),
@@ -296,8 +301,8 @@ class _InternetDiagnosticScreenState extends State<InternetDiagnosticScreen> {
         metadata: provenance == null
             ? null
             : '${provenance.method} · ${provenance.target} · '
-                'timeout ${provenance.timeout.inSeconds}s'
-                '${provenance.thirdParty != null ? ' · ${provenance.thirdParty}' : ''}',
+                  'timeout ${provenance.timeout.inSeconds}s'
+                  '${provenance.thirdParty != null ? ' · ${provenance.thirdParty}' : ''}',
         copyWriter: fact.isSuccess ? _copyWriter : null,
       ),
     );
@@ -317,6 +322,8 @@ class _InternetDiagnosticScreenState extends State<InternetDiagnosticScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ToolMetric(label: label, value: fact.isSuccess ? fact.value : null),
+          if (!fact.isSuccess && fact.message != null)
+            Text(fact.message!),
           if (aggregate != null && aggregate.plannedAttempts > 0)
             ToolMetricLayout(
               metrics: [
@@ -334,8 +341,8 @@ class _InternetDiagnosticScreenState extends State<InternetDiagnosticScreen> {
               '${provenance.method} · ${provenance.portOrUrl} · '
               'timeout ${provenance.timeout.inSeconds}s\n${provenance.limitations}',
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  ),
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
             ),
         ],
       ),

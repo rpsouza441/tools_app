@@ -2,17 +2,40 @@
 status: human_needed
 phase: 04-valida-o-android-e-documenta-o-transparente
 verified: "2026-09-01"
+updated: "2026-09-09"
 plans_complete: 4
 plans_total: 4
 requirements_verified: 4
 requirements_total: 5
 requirements_human_needed: [QUAL-09]
-tests_passing: 235
+tests_passing: 236
 analyze: clean
 previous_status: human_needed
 ---
 
 # Phase 4 Verification — Validação Android e documentação transparente
+
+## Atualização vigente — 2026-09-09
+
+**Status: human_needed.** Dados móveis reais foram exercitados pelo usuário em
+Redmi Note 12 Pro: 4G (`cellular`) e Wi-Fi com IP público e HTTPS 4/4 bem-sucedidos,
+gateway TCP 0/4, resultados preservados e conclusão em 8 segundos nas duas redes.
+Fonte e métricas estão no adendo de `04-ANDROID-VALIDATION.md`; versão Android e
+operadora não informadas. Não houve execução física pelo agente.
+
+O teste revelou um defeito de apresentação: a tela usava uma mensagem genérica
+de falha total para `partialFailure` e omitia o motivo de falha do probe.
+Correção coberta por teste de regressão (falhou antes/passou depois),
+`flutter analyze --no-pub` limpo e `flutter test --no-pub` com **236/236** passando.
+**Residual atual: conferir no aparelho o texto "Concluído com falhas parciais",
+o motivo da falha TCP e a preservação dos resultados no novo APK.**
+QUAL-09 e Phase 4 aguardam esse reteste; Phase 5 não iniciada.
+
+As seções abaixo preservam a verificação histórica de 2026-09-01. Referências
+a dados móveis ainda não testados e a zero alterações de código valem apenas
+para aquela rodada e são substituídas pela atualização acima.
+
+## Histórico — 2026-09-01
 
 ## Goal
 
