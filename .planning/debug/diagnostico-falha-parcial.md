@@ -1,5 +1,5 @@
 ---
-status: awaiting_human_verification
+status: resolved
 trigger: 'No Wi-Fi: Não foi possivel concluir confira os dados e tente novamente'
 created: 2026-09-09
 updated: 2026-09-09
@@ -20,9 +20,11 @@ device: Redmi Note 12 Pro; versão Android e operadora não informadas.
 hypothesis: partialFailure usa ToolStatusVariant.failure e herda título/corpo genéricos.
 test: Reproduzir em widget com gateway timeout e HTTPS/IP público válidos, verificar texto, fatos preservados e resumo.
 expecting: Teste falha antes da correção e passa com mensagem específica de diagnóstico.
-next_action: Usuário instala APK atualizado e confirma mensagem parcial e falha TCP visível com resultados preservados.
+next_action: Correção visual confirmada nas capturas do usuário. Acompanhar defeito distinto em diagnostico-rede-ao-retomar.md.
 
 ## Evidence
+
+- Reteste físico confirmado visualmente em 2026-09-09: duas capturas mostram "Concluído com falhas parciais", explicação, "Sem resposta TCP do gateway" e resultados HTTPS. As mesmas capturas revelam mistura posterior de contexto de rede, investigada separadamente em `diagnostico-rede-ao-retomar.md`.
 
 - 4G informado pelo usuário: 2026-09-09 16:40:06–16:40:14; transporte cellular; INTERNET/Validado Sim; Portal cativo Não; IPv4 público via ipify bem-sucedido; gateway TCP 0/4; HTTPS 4/4, mín 251 / média 262 / máx 267 ms. Endereços públicos omitidos do registro.
 - Wi-Fi informado pelo usuário: 16:41:50–16:41:58; transporte wifi; INTERNET/Validado Sim; Portal cativo Não; IPv4 público via ipify bem-sucedido; gateway TCP 0/4; HTTPS 4/4, mín 150 / média 168 / máx 182 ms. Endereços públicos omitidos do registro.
@@ -34,7 +36,7 @@ next_action: Usuário instala APK atualizado e confirma mensagem parcial e falha
 
 root_cause: Mensagem genérica inadequada no painel de resultado parcial, divergente do resumo.
 fix: ToolStatusPanel aceita título/corpo opcionais; diagnóstico usa "Concluído com falhas parciais" e explicação específica. Motivo de falha do probe agora aparece na tela. Métodos, timeouts e derivação das medições preservados.
-verification: Regressão reproduziu título incorreto antes da correção. Teste também detectou motivo de falha ausente na tela, corrigido. 57 testes focados passaram; analyze limpo; suíte completa 236/236 passou; APK debug compilado com exit code 0. Reteste físico pendente.
+verification: Regressão reproduziu título incorreto antes da correção. Teste também detectou motivo de falha ausente na tela, corrigido. 57 testes focados passaram; analyze limpo; suíte completa 236/236 passou; APK debug compilado com exit code 0. Reteste visual confirmado nas capturas fornecidas pelo usuário em 2026-09-09.
 files_changed: lib/design_system/tool_status_panel.dart; lib/screen/internet_diagnostic_screen.dart; test/screen/internet_diagnostic_screen_test.dart; documentação de evidência/estado.
 
 ## APK de reteste

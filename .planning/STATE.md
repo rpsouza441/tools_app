@@ -3,9 +3,9 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: planning
-stopped_at: Phase 4 human_needed — 4G/Wi-Fi físicos relatados; correção da mensagem parcial aguarda reteste
+stopped_at: Phase 4 human_needed — mensagem parcial confirmada; preservação da rede ao retomar aguarda reteste
 last_updated: "2026-09-09"
-last_activity: 2026-09-09 — Corrigida mensagem parcial após teste físico; 236 testes passam; novo APK disponível
+last_activity: 2026-09-09 — Contexto ao retomar corrigido; 242 testes passam, analyze limpo e APK gerado; reteste físico pendente
 progress:
   total_phases: 5
   completed_phases: 3
@@ -27,8 +27,8 @@ See: .planning/PROJECT.md (updated 2026-08-31)
 
 Phase: 4 of 5 (validação android e documentação transparente)
 Plan: 4/4 plans complete (04-01..04-04)
-Status: Executed — verification `human_needed`. DOC-01..04 VERIFIED. Usuário relatou testes físicos 4G e Wi-Fi no Redmi Note 12 Pro, ambos com IP público e HTTPS 4/4, gateway TCP 0/4 e conclusão em 8s. Mensagem geral inadequada corrigida; QUAL-09 aguarda reteste visual do APK novo. Phase 4 NÃO fechada. Phase 5 NÃO iniciada.
-Last activity: 2026-09-09 — Debug da conclusão parcial: 236 testes passam, analyze limpo, APK atualizado gerado.
+Status: Executed — verification `human_needed`. DOC-01..04 VERIFIED. Testes físicos 4G e Wi-Fi no Redmi Note 12 Pro com IP público/HTTPS 4/4 e gateway TCP 0/4. Capturas confirmam mensagem parcial corrigida, mas revelam contexto Wi-Fi misturado com resultado cellular ao retomar. Correção desse defeito aguarda reteste físico. Phase 4 NÃO fechada. Phase 5 NÃO iniciada.
+Last activity: 2026-09-09 — Contexto ao retomar corrigido; 242 testes passam, analyze limpo, APK gerado. Mensagem parcial confirmada visualmente.
 
 Progress: [██████░░░░] 60% (3 of 5 phases complete; Phase 4 awaiting physical UI retest)
 
@@ -47,7 +47,7 @@ Progress: [██████░░░░] 60% (3 of 5 phases complete; Phase 4 
 | 1 | 11 | 11 | Complete (2026-08-31) |
 | 2 | 4 | 4 | Complete (2026-08-31) |
 | 3 | 7 | 7 | Complete (2026-09-01) — 235 tests, analyze clean |
-| 4 | 4 | 4 | Executed — human_needed (reteste da mensagem parcial) |
+| 4 | 4 | 4 | Executed — human_needed (reteste de contexto ao retomar) |
 | 5 | TBD | 0 | Not started |
 
 ## Accumulated Context
@@ -62,7 +62,7 @@ Progress: [██████░░░░] 60% (3 of 5 phases complete; Phase 4 
 
 ### Blockers/Concerns
 
-- [Phase 4 debug]: 4G/Wi-Fi físicos relatados no Redmi Note 12 Pro; aguardar reteste da mensagem parcial corrigida. Sessão: `.planning/debug/diagnostico-falha-parcial.md`. Android/operadora não informados.
+- [Phase 4 debug]: Mensagem parcial confirmada. Aguardar reteste de preservação do contexto ao retomar após troca de rede. Sessão: `.planning/debug/diagnostico-rede-ao-retomar.md`. Android/operadora não informados.
 
 - [CLI]: `phase.complete` continua avisando UAT por `previous_status: human_needed` em relatórios `passed`.
 - [A1]: Sem license grant escrito para `gstatic.com/generate_204`; URL permanece injetável.
@@ -86,6 +86,6 @@ Progress: [██████░░░░] 60% (3 of 5 phases complete; Phase 4 
 ## Session Continuity
 
 Last session: 2026-09-09
-Stopped at: APK debug corrigido gerado; aguardar confirmação da mensagem parcial e falha TCP visíveis no aparelho.
-Resume file: .planning/debug/diagnostico-falha-parcial.md
-Resume with: revisar reteste do APK corrigido, resolver sessão de debug e concluir verificação QUAL-09 se aprovada. Phase 5 não iniciada.
+Stopped at: Correção de contexto da rede ao retomar; aguardar reteste físico após troca 4G para Wi-Fi.
+Resume file: .planning/debug/diagnostico-rede-ao-retomar.md
+Resume with: revisar resultado preservado após retomar e nova rede após Repetir; resolver debug e concluir QUAL-09 se aprovado. Phase 5 não iniciada.

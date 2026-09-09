@@ -50,6 +50,7 @@ class DiagnosticSessionImpl implements DiagnosticSession {
       ValueNotifier<DiagnosticRunState>(DiagnosticRunState.initial);
 
   int _runId = 0;
+  bool _disposed = false;
   CancellationScope? _scope;
 
   @override
@@ -63,7 +64,7 @@ class DiagnosticSessionImpl implements DiagnosticSession {
   @override
   Future<void> start() async {
     // One run at a time: a second start while running is a no-op (DIAG-01).
-    if (_isRunning) return;
+    if (_disposed || _isRunning) return;
 
     final runId = ++_runId;
     final scope = CancellationScope();
@@ -376,24 +377,29 @@ class DiagnosticSessionImpl implements DiagnosticSession {
 
   @override
   Future<void> refreshSnapshotOnly() async {
-    // Fresh platform facts without starting probes (QUAL-04 preparation).
+    // Resume reads fresh platform state, but a run keeps the network context
+    // captured at its start. Repeating obtains a new snapshot in start().
+    if (_disposed || _isRunning) return;
     final runId = _notifier.value.runId;
     final snapshot = await _snapshotSource.current();
-    if (runId != _notifier.value.runId) return;
-    _publishSnapshotFacts(runId, snapshot);
-    if (snapshot.hasActiveNetwork) {
-      _update(
-        runId,
-        (s) => s.copyWith(
-          localIpv4: _localIpv4Source.fromSnapshot(snapshot),
-          gateway: _gatewaySource.fromSnapshot(snapshot),
-        ),
-      );
+    if (_disposed ||
+        runId != _notifier.value.runId ||
+        _notifier.value.phase != DiagnosticRunPhase.idle) {
+      return;
     }
+    _publishSnapshotFacts(runId, snapshot);
+    _update(
+      runId,
+      (s) => s.copyWith(
+        localIpv4: _localIpv4Source.fromSnapshot(snapshot),
+        gateway: _gatewaySource.fromSnapshot(snapshot),
+      ),
+    );
   }
 
   @override
   void dispose() {
+    _disposed = true;
     _watching = false;
     _snapshotSource.stopWatching();
     _scope?.cancelAll();

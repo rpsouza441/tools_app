@@ -110,8 +110,9 @@ Android (camada VERIFIED).
   defeito de runtime encontrado.
 - **VERIFIED (Android físico, relato do usuário em 2026-09-09):** dados móveis reais
   (#2) e execução Wi-Fi no Redmi Note 12 Pro, com IP público e HTTPS bem-sucedidos.
-- **Residual humano atual:** retestar a mensagem corrigida de falhas parciais no APK
-  novo. Phase 4 permanece **`human_needed`**; o requisito inclui conclusão honesta.
+- **Residual humano atual:** mensagem parcial confirmada nas capturas; retestar
+  preservação do contexto da execução ao trocar rede e retomar no APK novo.
+  Phase 4 permanece **`human_needed`**; as capturas revelaram mistura de redes após resume.
   Captive portal real (R3) continua NOT VERIFIED.
   Cancelamento (#11) e troca de rede mid-run (#12) permanecem AUTOMATED-FAKE
   (não reproduzíveis de forma confiável via automação no emulador), mas a
@@ -134,5 +135,14 @@ apesar da falha TCP. Não é possível determinar por esse resultado por que a p
 O usuário identificou a mensagem genérica "Não foi possível concluir / Confira os dados e tente
 novamente". A investigação confirmou mapeamento inadequado do estado parcial e ausência do
 motivo de falha do probe na tela. Correção e regressão registradas em
-`../../debug/diagnostico-falha-parcial.md`. Aguardar confirmação visual da nova mensagem;
+`../../debug/diagnostico-falha-parcial.md`. Nova mensagem confirmada nas capturas de 16:52;
 não promover cancelamento/troca de rede para runtime verificado com esses dois resumos.
+
+### Reteste e capturas — 16:51–16:52
+
+- Resumo Wi-Fi: 16:51:26–16:51:34; IP público ok; TCP 0/4; HTTPS 4/4, mín 192/média 298/máx 579 ms.
+- Resumo cellular: 16:51:49–16:51:57; IP público ok; TCP 0/4; HTTPS 4/4, mín 185/média 248/máx 348 ms.
+- As capturas mostram título parcial correto, mensagem da falha TCP e medições preservadas: defeito de apresentação anterior resolvido.
+- Novo defeito visível: cabeçalho wifi/gateway 192.168.22.1 com probe 192.0.0.1:80 e horários/métricas da execução cellular. Não é evidência de agregação durante uma execução: investigação local identificou sobrescrita do snapshot no `refreshSnapshotOnly` ao retomar, mantendo medições antigas.
+- Correção: snapshot de execução permanece associado aos resultados. `Repetir` coleta nova rede; refresh só publica fatos enquanto idle, com proteção contra resultado tardio e descarte. Sessão: `../../debug/diagnostico-rede-ao-retomar.md`.
+- Reteste necessário: concluir em 4G, mudar para Wi-Fi e retomar; último resultado deve continuar cellular com gateway celular e mesmos horários/métricas. Depois de Repetir, todo o novo resultado deve ser Wi-Fi.

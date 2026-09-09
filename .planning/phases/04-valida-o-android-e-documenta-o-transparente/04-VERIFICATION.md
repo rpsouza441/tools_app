@@ -8,7 +8,7 @@ plans_total: 4
 requirements_verified: 4
 requirements_total: 5
 requirements_human_needed: [QUAL-09]
-tests_passing: 236
+tests_passing: 242
 analyze: clean
 previous_status: human_needed
 ---
@@ -26,9 +26,15 @@ operadora não informadas. Não houve execução física pelo agente.
 O teste revelou um defeito de apresentação: a tela usava uma mensagem genérica
 de falha total para `partialFailure` e omitia o motivo de falha do probe.
 Correção coberta por teste de regressão (falhou antes/passou depois),
-`flutter analyze --no-pub` limpo e `flutter test --no-pub` com **236/236** passando.
-**Residual atual: conferir no aparelho o texto "Concluído com falhas parciais",
-o motivo da falha TCP e a preservação dos resultados no novo APK.**
+confirmada visualmente nas capturas fornecidas pelo usuário às 16:52.
+As capturas revelaram outro defeito: contexto local Wi-Fi substituiu o contexto
+cellular do resultado ao retomar, mantendo probes e horários antigos.
+A correção limita a publicação do refresh ao estado idle e preserva execuções;
+Repetir obtém uma nova rede. Regressões reproduziram o defeito antes e passaram
+depois. `flutter analyze --no-pub` limpo, **242/242 testes** passando e APK gerado.
+**Residual atual: concluir em 4G, mudar para Wi-Fi e voltar ao app; confirmar
+que todo o último resultado permanece cellular. Ao Repetir, confirmar que o
+novo resultado usa Wi-Fi e um gateway coerente com o alvo TCP.**
 QUAL-09 e Phase 4 aguardam esse reteste; Phase 5 não iniciada.
 
 As seções abaixo preservam a verificação histórica de 2026-09-01. Referências

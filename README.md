@@ -79,7 +79,9 @@ Comportamento:
 - **4G e Wi-Fi em Android físico:** teste relatado pelo usuário em um Redmi
   Note 12 Pro em 2026-09-09, com IP público e HTTPS bem-sucedidos nas duas redes.
   O gateway não respondeu ao TCP na porta 80. O teste identificou uma mensagem
-  geral inadequada para falhas parciais; a correção aguarda reteste no aparelho.
+  geral inadequada para falhas parciais, já corrigida e confirmada em capturas.
+  As capturas revelaram também atualização indevida do contexto do último
+  resultado ao retomar após mudança de rede; essa correção aguarda reteste físico.
   A versão do Android não foi informada.
 - Em plataformas não-Android, o diagnóstico usa implementações que reportam
   honestamente *indisponível* — este ciclo não promete paridade multiplataforma.
