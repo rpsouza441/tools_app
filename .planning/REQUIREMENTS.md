@@ -39,9 +39,9 @@
 - [x] **DIAG-03**: Usuário vê o endereço IPv4 local associado à rede ativa ou um estado explícito de indisponibilidade.
 - [x] **DIAG-04**: Usuário vê o endereço do gateway padrão quando tecnicamente disponível, sem presumir um endereço convencional.
 - [x] **DIAG-05**: Usuário vê o IP público consultado por HTTPS, junto do provedor, horário e falha independente quando o serviço não responde ou retorna conteúdo inválido.
-- [x] **DIAG-06**: Usuário pode executar um teste de alcance e latência do gateway quando houver alvo e método tecnicamente disponíveis.
+- [x] **DIAG-06**: ~~Usuário pode executar um teste de alcance e latência do gateway quando houver alvo e método tecnicamente disponíveis.~~ **Descopado na Phase 4 (2026-09-09)**: implementado na Phase 3 como probe TCP connect, mas o teste físico mostrou que reportava quase sempre *indisponível* (roteadores filtram portas; TCP connect cru não prova que a página do gateway abre) e confundia o usuário sem agregar valor. Probe removido; o endereço do gateway (DIAG-04) permanece. Latência útil coberta por DIAG-07 (HTTPS). ICMP fora do escopo do MVP.
 - [x] **DIAG-07**: Usuário pode executar um teste de alcance e latência de um alvo externo autorizado e substituível.
-- [x] **DIAG-08**: Usuário vê método, alvo, porta ou URL, timeout e limitações reais de cada probe, sem TCP/HTTPS ser rotulado como ICMP.
+- [x] **DIAG-08**: Usuário vê método, alvo, porta ou URL, timeout e limitações reais de cada probe, sem HTTPS ser rotulado como ICMP.
 - [x] **DIAG-09**: Usuário vê, para múltiplas amostras, mínimo, média, máximo, total de tentativas, sucessos e falhas com denominador explícito.
 - [x] **DIAG-10**: Usuário vê resultados concluídos mesmo quando outra capability falha, fica indisponível ou é cancelada.
 - [x] **DIAG-11**: Usuário vê progresso por etapa durante a execução sem que resultados parciais já obtidos desapareçam.
@@ -138,7 +138,7 @@
 | DIAG-03 | Phase 3 | Complete |
 | DIAG-04 | Phase 3 | Complete |
 | DIAG-05 | Phase 3 | Complete |
-| DIAG-06 | Phase 3 | Complete |
+| DIAG-06 | Phase 3 | Descopado na Phase 4 (probe removido; endereço mantido) |
 | DIAG-07 | Phase 3 | Complete |
 | DIAG-08 | Phase 3 | Complete |
 | DIAG-09 | Phase 3 | Complete |

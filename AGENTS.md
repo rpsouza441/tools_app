@@ -6,7 +6,7 @@
 
 O Tools App é um aplicativo Flutter, Android-first e offline sempre que possível, voltado a utilidades para profissionais e estudantes de TI. Este ciclo moderniza a interface das ferramentas existentes e adiciona uma área de Diagnóstico de Internet com medições transparentes, canceláveis e resilientes, seguida por uma extensão separada de teste de velocidade quando houver uma solução técnica e legal confiável.
 
-**Core Value:** Oferecer diagnósticos técnicos úteis e honestos em uma interface clara, sem ocultar limitações de plataforma, método de medição ou falhas parciais.
+**Core Value:** Oferecer diagnósticos técnicos úteis e honestos em uma interface clara, sem ocultar limitações de plataforma, método de medição ou falhas parciais. O Diagnóstico de Internet é um resumo honesto da rede para apoiar a avaliação técnica (ex.: um técnico avaliando um Wi-Fi), não um teste pass/fail.
 
 ### Constraints
 

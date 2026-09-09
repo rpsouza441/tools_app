@@ -6,7 +6,7 @@ O Tools App é um aplicativo Flutter, Android-first e offline sempre que possív
 
 ## Core Value
 
-Oferecer diagnósticos técnicos úteis e honestos em uma interface clara, sem ocultar limitações de plataforma, método de medição ou falhas parciais.
+Oferecer diagnósticos técnicos úteis e honestos em uma interface clara, sem ocultar limitações de plataforma, método de medição ou falhas parciais. O Diagnóstico de Internet é um **resumo honesto da rede** para apoiar a avaliação técnica (ex.: um técnico avaliando um Wi-Fi), não um teste pass/fail.
 
 ## Requirements
 
@@ -18,7 +18,7 @@ Oferecer diagnósticos técnicos úteis e honestos em uma interface clara, sem o
 
 ### Active
 
-- [ ] Entregar diagnóstico básico de conectividade com transporte, IPv4 local, IP público, gateway quando disponível e testes de alcance/latência com método explicitado.
+- [ ] Entregar diagnóstico básico de conectividade com transporte, IPv4 local, IP público, endereço do gateway quando disponível e teste HTTPS de alcance/latência com método explicitado (sem probe TCP ao gateway; sem ICMP).
 - [ ] Suportar múltiplas amostras, mínimo/média/máximo, perdas ou falhas, resultados parciais, última execução e resumo copiável/compartilhável.
 - [ ] Garantir timeout, cancelamento, lifecycle Android e lógica de medição testável fora dos widgets.
 - [ ] Pesquisar e, somente se viável, entregar teste de velocidade separado com limites claros de dados, duração, precisão, privacidade e infraestrutura sustentável.
@@ -40,7 +40,8 @@ Oferecer diagnósticos técnicos úteis e honestos em uma interface clara, sem o
 - As três ferramentas atuais são calculadora de rede IPv4, conversor decimal/binário de armazenamento e gerador de hashes MD5, SHA-1, SHA-256 e SHA-512.
 - A quantidade crescente de ferramentas exige reavaliar a navegação: home em grade/categorias, NavigationBar, NavigationRail e adaptação por largura devem ser comparadas no design contract.
 - O diagnóstico deve continuar útil em Wi-Fi, dados móveis, modo offline, ausência de gateway, captive portal e indisponibilidade do serviço de IP público.
-- ICMP não pode ser presumido. A pesquisa deve comparar ICMP, TCP e HTTPS e a UI deve nomear com precisão o método realmente usado.
+- ICMP não pode ser presumido. A pesquisa comparou ICMP, TCP e HTTPS; ICMP e latência de roteamento real ficaram **fora do escopo do MVP** (exigiriam subprocesso `ping` ou plugin nativo não confiável). A UI nomeia com precisão o método realmente usado (HTTPS), nunca "ping".
+- Decisão validada em teste físico (Redmi Note 12 Pro, HyperOS 1.0.33, 4G e Wi-Fi): o probe TCP ao gateway quase sempre reportava *indisponível* (roteadores/gateways de operadora filtram as portas 80/443 e um TCP connect cru não prova que a página administrativa abre), confundindo o usuário sem agregar valor. O **probe TCP do gateway foi removido**; o **endereço** do gateway permanece como fato. A latência que importa ("a internet responde?") é coberta pelo probe HTTPS.
 - Resultados parciais permanecem visíveis quando uma medição falha; nenhum erro de rede pode travar o aplicativo.
 - O speed test é uma extensão posterior e condicionada à decisão sobre infraestrutura, termos, custos, seleção geográfica, consumo de dados e precisão alcançável.
 - A definição global de pronto inclui análise estática limpa, testes aprovados, verificação Android em Wi-Fi/dados móveis/offline, responsividade e ausência de regressões.
@@ -63,10 +64,12 @@ Oferecer diagnósticos técnicos úteis e honestos em uma interface clara, sem o
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
 | Evoluir a UI antes ou em fatias compatíveis com o diagnóstico, sem reescrita total | Reduz risco e mantém as ferramentas atuais utilizáveis durante a migração | Phase 1 fundação; Phase 2 migrou Rede, Armazenamento e Hash para ToolScaffold |
-| Tratar conectividade, gateway, IP público e probes como adaptadores independentes | Isola limitações de plataforma e torna falhas, fallbacks e testes controláveis | — Pending |
-| Exibir o método real de latência em vez de chamar todo probe de ping | Evita alegações tecnicamente incorretas e melhora a confiança do usuário | — Pending |
-| Condicionar speed test a infraestrutura legal, estável e testável | Evita dependência frágil, custos imprevistos e resultados enganosos | — Pending |
-| Usar consentimento explícito e limites de dados no speed test | Protege usuários em rede móvel e mantém o consumo previsível | — Pending |
+| Tratar conectividade, gateway, IP público e probes como adaptadores independentes | Isola limitações de plataforma e torna falhas, fallbacks e testes controláveis | ✓ Phase 3 — sete contratos D-05 injetáveis, sem NetworkService |
+| Exibir o método real de latência em vez de chamar todo probe de ping | Evita alegações tecnicamente incorretas e melhora a confiança do usuário | ✓ Phase 3 — rotulado "HTTPS"; ICMP sempre "indisponível", nunca "ping" |
+| Remover o probe TCP do gateway, mantendo o endereço | Em teste físico (4G/Wi-Fi) reportava quase sempre *indisponível* e confundia o usuário; TCP connect cru não prova que a página do gateway abre; latência de roteamento real (ICMP) está fora do escopo do MVP | ✓ Phase 4 (2026-09-09) — probe removido, endereço mantido; app definido como resumo honesto da rede |
+| Padronizar o alinhamento dos estados do diagnóstico ao centro | "Concluído" ficava à esquerda e "Processando" ao centro; inconsistência apontada em teste físico | ✓ Phase 4 (2026-09-09) — ToolStatusPanel renderiza o card de resultados centralizado em todos os estados |
+| Condicionar speed test a infraestrutura legal, estável e testável | Evita dependência frágil, custos imprevistos e resultados enganosos | — Pending (Phase 5 GO/NO-GO) |
+| Usar consentimento explícito e limites de dados no speed test | Protege usuários em rede móvel e mantém o consumo previsível | — Pending (Phase 5) |
 
 ## Evolution
 
@@ -86,4 +89,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-08-31 after Phase 2*
+*Last updated: 2026-09-09 durante a Phase 4 — probe TCP do gateway removido, alinhamento centralizado, propósito definido como resumo honesto da rede.*

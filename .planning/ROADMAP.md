@@ -151,6 +151,12 @@ Gap-closure:
   4. Usuário identifica o serviço externo de IP público, os dados que ele recebe e a política de privacidade aplicável.
   5. Usuário consulta uma política de privacidade coerente com a ausência de conta, telemetria e histórico persistente.
 
+**Refinamentos durante a validação física (2026-09-09, Redmi Note 12 Pro / HyperOS 1.0.33):**
+  - Mensagem genérica de falha em conclusões parciais corrigida para "Concluído com falhas parciais", preservando as falhas por etapa.
+  - Contexto de rede do último resultado preservado ao retomar após troca de rede (Repetir coleta a nova rede).
+  - **Probe TCP do gateway removido** (mantido apenas o endereço): reportava quase sempre *indisponível*, confundia o usuário e não agregava valor; ICMP/latência de roteamento estão fora do escopo do MVP. DIAG-06 descopado.
+  - Alinhamento dos estados do diagnóstico padronizado ao centro.
+
 **Plans:** TBD
 
 ### Phase 5: Gate de viabilidade do speed test
