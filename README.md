@@ -36,9 +36,6 @@ O que é medido:
 - **IP público** — consultado por HTTPS a `api.ipify.org`, exibindo o provedor,
   o horário e uma falha independente se o serviço não responder ou retornar
   conteúdo inválido. Uma falha aqui **não** significa "sem internet".
-- **Probe TCP do gateway** — tentativa de conexão TCP ao gateway (`TCP connect`).
-  Falha TCP não prova que o gateway está inalcançável em L3 (roteadores costumam
-  filtrar portas).
 - **Probe HTTPS externo** — requisição HTTPS a
   `https://www.gstatic.com/generate_204` esperando HTTP 204. É um sinal
   best-effort de conectividade da aplicação, **não** um ping e **não** ICMP.
@@ -62,8 +59,8 @@ Comportamento:
 
 ### Limitações
 
-- **ICMP indisponível** — o aplicativo não realiza ping ICMP; probes TCP e HTTPS
-  nunca são rotulados como ICMP.
+- **ICMP indisponível** — o aplicativo não realiza ping ICMP; o probe HTTPS
+  nunca é rotulado como ICMP.
 - **Teste de velocidade** — não faz parte deste milestone.
 - **Sem varredura de LAN, traceroute ou DNS avançado.**
 - Um probe HTTPS bem-sucedido comprova que aquela requisição funcionou; não prova
@@ -73,16 +70,16 @@ Comportamento:
 
 - **Android** é a plataforma-alvo. O comportamento de runtime foi verificado em
   **emulador Android (API 36)**: leitura de transporte/capabilities, IPv4 local
-  e gateway reais, consulta de IP público por HTTPS, probes TCP/HTTPS com
-  métricas, comportamento offline e ciclo de vida. Consulte
+  e gateway reais, consulta de IP público por HTTPS, probe HTTPS com métricas,
+  comportamento offline e ciclo de vida. Consulte
   `.planning/phases/04-*/04-ANDROID-VALIDATION.md` para a matriz de evidências.
 - **4G e Wi-Fi em Android físico:** teste relatado pelo usuário em um Redmi
-  Note 12 Pro em 2026-09-09, com IP público e HTTPS bem-sucedidos nas duas redes.
-  O gateway não respondeu ao TCP na porta 80. O teste identificou uma mensagem
-  geral inadequada para falhas parciais, já corrigida e confirmada em capturas.
-  As capturas revelaram também atualização indevida do contexto do último
-  resultado ao retomar após mudança de rede; essa correção aguarda reteste físico.
-  A versão do Android não foi informada.
+  Note 12 Pro (HyperOS 1.0.33) em 2026-09-09, com IP público e HTTPS bem-sucedidos
+  nas duas redes. O diagnóstico incluía um probe TCP ao gateway que quase sempre
+  reportava *indisponível* (roteadores/gateways de operadora costumam filtrar as
+  portas 80/443) e confundia o usuário sem agregar valor; ele foi **removido**,
+  mantendo apenas o endereço do gateway como fato. O app foi definido como um
+  resumo honesto da rede, não um teste pass/fail.
 - Em plataformas não-Android, o diagnóstico usa implementações que reportam
   honestamente *indisponível* — este ciclo não promete paridade multiplataforma.
 
