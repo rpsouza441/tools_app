@@ -3,7 +3,6 @@ import 'package:flutter/foundation.dart';
 import '../aggregation/latency_aggregator.dart';
 import '../contracts/default_gateway_source.dart';
 import '../contracts/diagnostic_session.dart';
-import '../contracts/gateway_probe.dart';
 import '../contracts/internet_probe.dart';
 import '../contracts/local_ipv4_source.dart';
 import '../contracts/network_snapshot_source.dart';
@@ -25,14 +24,12 @@ class DiagnosticSessionImpl implements DiagnosticSession {
     required LocalIpv4Source localIpv4Source,
     required DefaultGatewaySource gatewaySource,
     required PublicIpSource publicIpSource,
-    required GatewayProbe gatewayProbe,
     required InternetProbe internetProbe,
     required LatencyAggregator aggregator,
   })  : _snapshotSource = snapshotSource,
         _localIpv4Source = localIpv4Source,
         _gatewaySource = gatewaySource,
         _publicIpSource = publicIpSource,
-        _gatewayProbe = gatewayProbe,
         _internetProbe = internetProbe,
         // aggregator kept for symmetry; probes own their own aggregation.
         _aggregator = aggregator;
@@ -41,7 +38,6 @@ class DiagnosticSessionImpl implements DiagnosticSession {
   final LocalIpv4Source _localIpv4Source;
   final DefaultGatewaySource _gatewaySource;
   final PublicIpSource _publicIpSource;
-  final GatewayProbe _gatewayProbe;
   final InternetProbe _internetProbe;
   // ignore: unused_field
   final LatencyAggregator _aggregator;
@@ -104,18 +100,10 @@ class DiagnosticSessionImpl implements DiagnosticSession {
     //    produces a failure fact instead of aborting the whole run (DIAG-10).
     final publicIpFuture = _runPublicIp(runId, scope);
     final internetFuture = _runInternetProbe(runId, scope);
-    final Future<void> gatewayProbeFuture;
-    if (snapshot.gatewayIpv4 != null) {
-      gatewayProbeFuture = _runGatewayProbe(runId, scope, snapshot.gatewayIpv4!);
-    } else {
-      _markGatewayProbeUnavailable(runId);
-      gatewayProbeFuture = Future<void>.value();
-    }
 
     await Future.wait<void>([
       publicIpFuture,
       internetFuture,
-      gatewayProbeFuture,
     ]);
 
     await _stopNetworkWatch();
@@ -148,7 +136,6 @@ class DiagnosticSessionImpl implements DiagnosticSession {
     final s = _notifier.value;
     _notifier.value = s.copyWith(
       publicIpv4: fix(s.publicIpv4),
-      gatewayProbe: fix(s.gatewayProbe),
       internetProbe: fix(s.internetProbe),
     );
   }
@@ -262,52 +249,6 @@ class DiagnosticSessionImpl implements DiagnosticSession {
     }
   }
 
-  Future<void> _runGatewayProbe(
-    int runId,
-    CancellationScope scope,
-    String gatewayIpv4,
-  ) async {
-    try {
-      final outcome = await _gatewayProbe.probe(
-        gatewayIpv4: gatewayIpv4,
-        runId: runId,
-        scope: scope,
-      );
-      if (_isStale(runId, scope)) return;
-      _update(
-        runId,
-        (s) => s.copyWith(
-          gatewayProbe: outcome.summary,
-          gatewayLatency: outcome.aggregate,
-          gatewayPorts: outcome.portResults,
-        ),
-      );
-    } catch (e) {
-      if (_isStale(runId, scope)) return;
-      _update(
-        runId,
-        (s) => s.copyWith(
-          gatewayProbe: DiagnosticFact(
-            status: DiagnosticFactStatus.failure,
-            message: 'Falha no probe de gateway: $e',
-          ),
-        ),
-      );
-    }
-  }
-
-  void _markGatewayProbeUnavailable(int runId) {
-    _update(
-      runId,
-      (s) => s.copyWith(
-        gatewayProbe: const DiagnosticFact(
-          status: DiagnosticFactStatus.unavailable,
-          message: 'Sem gateway: probe não executado',
-        ),
-      ),
-    );
-  }
-
   void _publishSnapshotFacts(int runId, NetworkSnapshot snapshot) {
     DiagnosticFact boolFact(bool? value, String label) {
       if (value == null) {
@@ -348,7 +289,6 @@ class DiagnosticSessionImpl implements DiagnosticSession {
       s.localIpv4,
       s.gateway,
       s.publicIpv4,
-      s.gatewayProbe,
       s.internetProbe,
     ];
     final anyFailure = facts.any(

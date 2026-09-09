@@ -119,7 +119,6 @@ class _InternetDiagnosticScreenState extends State<InternetDiagnosticScreen> {
     final hasPermissionDenied = [
       state.localIpv4,
       state.gateway,
-      state.gatewayProbe,
     ].any((f) => f.status == DiagnosticFactStatus.permissionDenied);
     if (hasPermissionDenied) return ToolStatusVariant.permissionDenied;
 
@@ -176,12 +175,6 @@ class _InternetDiagnosticScreenState extends State<InternetDiagnosticScreen> {
               onRetry: null,
               preservedChild: factsCard,
             ),
-            // In success the facts card is a sibling below the panel (the panel
-            // hides preservedChild for success/empty).
-            if (variant == ToolStatusVariant.success) ...[
-              const SizedBox(height: 24),
-              factsCard,
-            ],
             if (terminal) ...[
               const SizedBox(height: 16),
               _shareActions(context, state),
@@ -262,12 +255,6 @@ class _InternetDiagnosticScreenState extends State<InternetDiagnosticScreen> {
           _address(context, 'Gateway', state.gateway),
           _address(context, 'IPv4 público', state.publicIpv4),
           const SizedBox(height: 16),
-          _probe(
-            context,
-            'Gateway (TCP connect)',
-            state.gatewayProbe,
-            state.gatewayLatency,
-          ),
           _probe(
             context,
             'Internet (HTTPS)',

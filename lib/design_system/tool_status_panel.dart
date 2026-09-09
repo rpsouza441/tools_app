@@ -69,7 +69,8 @@ const _statusMap = <ToolStatusVariant, _StatusData>{
 ///   on the icon, not the heading).
 /// - Loading uses an indeterminate [CircularProgressIndicator] when
 ///   [ToolStatusPanel.progress] is null; otherwise the indicator is determinate.
-/// - preservedChild: shown below status for loading, failure, and cancelled.
+/// - preservedChild: shown below status for loading, success, failure, and
+///   cancelled.
 /// - onRetry: shows retry button only when provided.
 /// - onSettings: shows settings button only when provided.
 class ToolStatusPanel extends StatelessWidget {
@@ -114,6 +115,7 @@ class ToolStatusPanel extends StatelessWidget {
 
   bool get _showsPreservedChild =>
       variant == ToolStatusVariant.loading ||
+      variant == ToolStatusVariant.success ||
       variant == ToolStatusVariant.failure ||
       variant == ToolStatusVariant.cancelled;
 
@@ -172,7 +174,9 @@ class ToolStatusPanel extends StatelessWidget {
         ],
         if (_showsPreservedChild && preservedChild != null) ...[
           SizedBox(height: tokens.spacing24),
-          preservedChild!,
+          // Full-width so cards/rows keep their layout while the panel itself
+          // stays centered (consistent alignment across all states).
+          SizedBox(width: double.infinity, child: preservedChild!),
         ],
       ],
     );

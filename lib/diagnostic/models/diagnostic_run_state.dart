@@ -1,7 +1,6 @@
 import 'diagnostic_fact.dart';
 import 'latency_aggregate.dart';
 import 'network_snapshot.dart';
-import 'tcp_port_result.dart';
 
 /// Coarse phase of a run, observed by the UI (D-06).
 enum DiagnosticRunPhase { idle, running, success, partialFailure, cancelled, offline }
@@ -22,11 +21,8 @@ class DiagnosticRunState {
     this.localIpv4 = DiagnosticFact.unavailable,
     this.gateway = DiagnosticFact.unavailable,
     this.publicIpv4 = DiagnosticFact.unavailable,
-    this.gatewayProbe = DiagnosticFact.unavailable,
     this.internetProbe = DiagnosticFact.unavailable,
     this.icmp = _icmpUnavailable,
-    this.gatewayLatency,
-    this.gatewayPorts = const [],
     this.internetLatency,
   });
 
@@ -43,14 +39,11 @@ class DiagnosticRunState {
   final DiagnosticFact localIpv4;
   final DiagnosticFact gateway;
   final DiagnosticFact publicIpv4;
-  final DiagnosticFact gatewayProbe;
   final DiagnosticFact internetProbe;
 
   /// ICMP is always unavailable in the MVP (D-10).
   final DiagnosticFact icmp;
 
-  final LatencyAggregate? gatewayLatency;
-  final List<TcpPortResult> gatewayPorts;
   final LatencyAggregate? internetLatency;
 
   static const DiagnosticFact _icmpUnavailable = DiagnosticFact(
@@ -76,11 +69,8 @@ class DiagnosticRunState {
     DiagnosticFact? localIpv4,
     DiagnosticFact? gateway,
     DiagnosticFact? publicIpv4,
-    DiagnosticFact? gatewayProbe,
     DiagnosticFact? internetProbe,
     DiagnosticFact? icmp,
-    LatencyAggregate? gatewayLatency,
-    List<TcpPortResult>? gatewayPorts,
     LatencyAggregate? internetLatency,
   }) {
     return DiagnosticRunState(
@@ -96,11 +86,8 @@ class DiagnosticRunState {
       localIpv4: localIpv4 ?? this.localIpv4,
       gateway: gateway ?? this.gateway,
       publicIpv4: publicIpv4 ?? this.publicIpv4,
-      gatewayProbe: gatewayProbe ?? this.gatewayProbe,
       internetProbe: internetProbe ?? this.internetProbe,
       icmp: icmp ?? this.icmp,
-      gatewayLatency: gatewayLatency ?? this.gatewayLatency,
-      gatewayPorts: gatewayPorts ?? this.gatewayPorts,
       internetLatency: internetLatency ?? this.internetLatency,
     );
   }

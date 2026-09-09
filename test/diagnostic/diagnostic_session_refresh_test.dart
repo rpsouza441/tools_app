@@ -30,7 +30,6 @@ DiagnosticSessionImpl createSession(
   localIpv4Source: FakeLocalIpv4Source(),
   gatewaySource: FakeDefaultGatewaySource(),
   publicIpSource: publicIp ?? FakePublicIpSource(),
-  gatewayProbe: FakeGatewayProbe(),
   internetProbe: FakeInternetProbe(),
   aggregator: const LatencyAggregator(),
 );
@@ -66,19 +65,14 @@ void main() {
         expect(session.state, same(completed));
         expect(formatter.format(session.state), summary);
         expect(session.state.transport.value, 'cellular');
-        expect(
-          session.state.gatewayProbe.provenance!.portOrUrl,
-          '192.0.0.1:80',
-        );
+        // The completed run keeps its original network context (gateway
+        // address included) even after a fresh snapshot arrives on resume.
+        expect(session.state.gateway.value, '192.0.0.1');
 
         await session.start();
         expect(session.state.runId, completed.runId + 1);
         expect(session.state.transport.value, 'wifi');
         expect(session.state.gateway.value, '192.168.0.1');
-        expect(
-          session.state.gatewayProbe.provenance!.portOrUrl,
-          '192.168.0.1:80',
-        );
       },
     );
   }

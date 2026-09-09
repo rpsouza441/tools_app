@@ -3,7 +3,6 @@
 import 'dart:async';
 
 import 'package:tools_app/diagnostic/contracts/default_gateway_source.dart';
-import 'package:tools_app/diagnostic/contracts/gateway_probe.dart';
 import 'package:tools_app/diagnostic/contracts/internet_probe.dart';
 import 'package:tools_app/diagnostic/contracts/local_ipv4_source.dart';
 import 'package:tools_app/diagnostic/contracts/network_snapshot_source.dart';
@@ -94,26 +93,6 @@ class FakePublicIpSource implements PublicIpSource {
           status: DiagnosticFactStatus.success,
           value: '203.0.113.7',
         );
-  }
-}
-
-/// Fake gateway probe. Records whether it was invoked (DIAG-06 gateway-absent case).
-class FakeGatewayProbe implements GatewayProbe {
-  FakeGatewayProbe({this.outcome});
-
-  ProbeOutcome? outcome;
-  int calls = 0;
-  String? lastGateway;
-
-  @override
-  Future<ProbeOutcome> probe({
-    required String gatewayIpv4,
-    required int runId,
-    required CancellationScope scope,
-  }) async {
-    calls++;
-    lastGateway = gatewayIpv4;
-    return outcome ?? _successOutcome('TCP connect', '$gatewayIpv4:80');
   }
 }
 

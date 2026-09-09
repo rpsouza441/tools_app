@@ -29,7 +29,6 @@ class DiagnosticSummaryFormatter {
     _line(b, 'IPv4 público', state.publicIpv4);
     b.writeln('');
 
-    _probe(b, 'Gateway (TCP connect)', state.gatewayProbe, state.gatewayLatency);
     _probe(b, 'Internet (HTTPS)', state.internetProbe, state.internetLatency);
 
     _line(b, 'ICMP', state.icmp);

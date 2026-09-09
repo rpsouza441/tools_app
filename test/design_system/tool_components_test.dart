@@ -552,17 +552,17 @@ void main() {
       expect(find.text('Partial result'), findsOneWidget);
     });
 
-    testWidgets('preservedChild NOT shown for success variant', (tester) async {
+    testWidgets('preservedChild shown for success variant', (tester) async {
       await tester.pumpWidget(
         _wrap(
           const ToolStatusPanel(
             variant: ToolStatusVariant.success,
-            preservedChild: Text('Should not appear'),
+            preservedChild: Text('Result appears centered'),
           ),
         ),
       );
 
-      expect(find.text('Should not appear'), findsNothing);
+      expect(find.text('Result appears centered'), findsOneWidget);
     });
 
     testWidgets('preservedChild NOT shown for empty variant', (tester) async {

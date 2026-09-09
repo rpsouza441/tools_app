@@ -11,7 +11,6 @@ import 'fakes.dart';
 DiagnosticSessionImpl buildSession({
   required FakeNetworkSnapshotSource snapshot,
   FakePublicIpSource? publicIp,
-  FakeGatewayProbe? gatewayProbe,
   FakeInternetProbe? internetProbe,
 }) {
   return DiagnosticSessionImpl(
@@ -19,7 +18,6 @@ DiagnosticSessionImpl buildSession({
     localIpv4Source: FakeLocalIpv4Source(),
     gatewaySource: FakeDefaultGatewaySource(),
     publicIpSource: publicIp ?? FakePublicIpSource(),
-    gatewayProbe: gatewayProbe ?? FakeGatewayProbe(),
     internetProbe: internetProbe ?? FakeInternetProbe(),
     aggregator: const LatencyAggregator(),
   );
@@ -89,25 +87,18 @@ void main() {
       expect(session.state.gateway.status, DiagnosticFactStatus.success);
     });
 
-    test('snapshot sem gateway → GatewayProbe nunca chamado (DIAG-06)',
+    test('snapshot sem gateway → endereço do gateway indisponível (DIAG-06)',
         () async {
-      final gatewayProbe = FakeGatewayProbe();
       final session = buildSession(
         snapshot: FakeNetworkSnapshotSource(
           onlineSnapshot(gatewayIpv4: null),
         ),
-        gatewayProbe: gatewayProbe,
       );
       addTearDown(session.dispose);
 
       await session.start();
 
-      expect(gatewayProbe.calls, 0);
       expect(session.state.gateway.status, DiagnosticFactStatus.unavailable);
-      expect(
-        session.state.gatewayProbe.status,
-        DiagnosticFactStatus.unavailable,
-      );
     });
 
     test('cancel no meio e resposta tardia mantém cancelled (DIAG-12, QUAL-02)',

@@ -219,7 +219,7 @@ void main() {
     });
 
     testWidgets(
-      'gateway falha: conclusão parcial preserva HTTPS, IP e resumo',
+      'falha parcial: mensagem de conclusão parcial preserva HTTPS, IP e resumo',
       (tester) async {
         final session = FakeDiagnosticSession();
         final copyWriter = FakeCopyWriter();
@@ -236,13 +236,9 @@ void main() {
               status: DiagnosticFactStatus.success,
               value: '203.0.113.7',
             ),
-            gatewayProbe: DiagnosticFact(
-              status: DiagnosticFactStatus.timeout,
-              message: 'Sem resposta TCP do gateway',
-            ),
             internetProbe: DiagnosticFact(
-              status: DiagnosticFactStatus.success,
-              value: '262 ms',
+              status: DiagnosticFactStatus.failure,
+              message: 'Falha no probe de internet',
             ),
           ),
         );
@@ -251,9 +247,8 @@ void main() {
         expect(find.text('Concluído com falhas parciais'), findsOneWidget);
         expect(find.text('Não foi possível concluir'), findsNothing);
         expect(find.text('Confira os dados e tente novamente.'), findsNothing);
-        expect(find.text('Sem resposta TCP do gateway'), findsOneWidget);
+        expect(find.text('Falha no probe de internet'), findsOneWidget);
         expect(find.text('203.0.113.7'), findsOneWidget);
-        expect(find.text('262 ms'), findsOneWidget);
         expect(find.byType(CircularProgressIndicator), findsNothing);
         expect(find.text('Repetir'), findsOneWidget);
 
@@ -264,8 +259,7 @@ void main() {
           copyWriter.lastValue,
           contains('Situação: Concluído com falhas parciais'),
         );
-        expect(copyWriter.lastValue, contains('Sem resposta TCP do gateway'));
-        expect(copyWriter.lastValue, contains('262 ms'));
+        expect(copyWriter.lastValue, contains('Falha no probe de internet'));
         expect(copyWriter.lastValue, contains('203.0.113.7'));
       },
     );

@@ -21,7 +21,6 @@ void main() {
           message: 'ipify indisponível',
         ),
       ),
-      gatewayProbe: FakeGatewayProbe(),
       internetProbe: FakeInternetProbe(),
       aggregator: const LatencyAggregator(),
     );

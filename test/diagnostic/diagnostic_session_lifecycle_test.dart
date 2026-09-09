@@ -21,7 +21,6 @@ void main() {
       localIpv4Source: FakeLocalIpv4Source(),
       gatewaySource: FakeDefaultGatewaySource(),
       publicIpSource: publicIp,
-      gatewayProbe: FakeGatewayProbe(),
       internetProbe: FakeInternetProbe(),
       aggregator: const LatencyAggregator(),
     );
@@ -64,7 +63,6 @@ void main() {
       localIpv4Source: FakeLocalIpv4Source(),
       gatewaySource: FakeDefaultGatewaySource(),
       publicIpSource: publicIp,
-      gatewayProbe: FakeGatewayProbe(),
       internetProbe: FakeInternetProbe(),
       aggregator: const LatencyAggregator(),
     );
