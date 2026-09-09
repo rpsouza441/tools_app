@@ -3,9 +3,9 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: planning
-stopped_at: Phase 4 human_needed — mensagem parcial confirmada; preservação da rede ao retomar aguarda reteste
+stopped_at: Phase 4 human_needed — worktree quebrado (refactor incompleto do gateway probe) encontrado e corrigido; reteste físico de preservação de rede ainda pendente
 last_updated: "2026-09-09"
-last_activity: 2026-09-09 — Contexto ao retomar corrigido; 242 testes passam, analyze limpo e APK gerado; reteste físico pendente
+last_activity: 2026-09-09 — Retomado após sessão anterior (Codex) ficar sem tokens; worktree não compilava (GatewayProbeConfig.port removido, 3 usos pendentes). Migração para múltiplas portas (80+443) concluída, bypass não confirmado para cellular revertido, 242 testes passam, analyze limpo. Reteste físico (preservação de contexto ao trocar de rede) continua pendente.
 progress:
   total_phases: 5
   completed_phases: 3
@@ -62,7 +62,8 @@ Progress: [██████░░░░] 60% (3 of 5 phases complete; Phase 4 
 
 ### Blockers/Concerns
 
-- [Phase 4 debug]: Mensagem parcial confirmada. Aguardar reteste de preservação do contexto ao retomar após troca de rede. Sessão: `.planning/debug/diagnostico-rede-ao-retomar.md`. Android/operadora não informados.
+- [Phase 4 debug]: Preservação de contexto ao retomar após troca de rede — corrigida no código, aguarda reteste físico (mensagem parcial já confirmada visualmente pelo usuário). Sessão: `.planning/debug/diagnostico-rede-ao-retomar.md`.
+- [Phase 4 debug]: Semântica do gateway TCP — decisão de escopo pendente com o usuário (resposta HTTP/HTTPS real vs. apenas conexão TCP 80/443). Extensão de baixo risco (unavailable em vez de failure, portas 80+443, TcpPortResult) já aplicada e testada; nada exposto na UI ainda. Sessão: `.planning/debug/gateway-servico-indisponivel.md`. Android/operadora não informados.
 
 - [CLI]: `phase.complete` continua avisando UAT por `previous_status: human_needed` em relatórios `passed`.
 - [A1]: Sem license grant escrito para `gstatic.com/generate_204`; URL permanece injetável.
@@ -86,6 +87,6 @@ Progress: [██████░░░░] 60% (3 of 5 phases complete; Phase 4 
 ## Session Continuity
 
 Last session: 2026-09-09
-Stopped at: Correção de contexto da rede ao retomar; aguardar reteste físico após troca 4G para Wi-Fi.
+Stopped at: Worktree corrigido (compilava novamente); reteste físico de preservação de rede ainda não confirmado.
 Resume file: .planning/debug/diagnostico-rede-ao-retomar.md
-Resume with: revisar resultado preservado após retomar e nova rede após Repetir; resolver debug e concluir QUAL-09 se aprovado. Phase 5 não iniciada.
+Resume with: obter confirmação textual/capturas do reteste de preservação de rede ao retomar; decidir com o usuário o escopo da verificação de gateway (HTTP/HTTPS vs. TCP) antes de expor a segunda porta na UI. Phase 5 não iniciada.
