@@ -4,6 +4,7 @@ import 'dart:io';
 import '../aggregation/latency_aggregator.dart';
 import '../contracts/gateway_probe.dart';
 import '../models/diagnostic_fact.dart';
+import '../models/tcp_port_result.dart';
 import '../models/latency_aggregate.dart';
 import '../session/cancellation_scope.dart';
 import 'probe_config.dart';
@@ -49,11 +50,33 @@ class TcpConnectGatewayProbe implements GatewayProbe {
       throw ArgumentError('gatewayIpv4 must not be empty');
     }
 
+    final ports = config.ports.isEmpty ? const [80] : config.ports;
+    final portResults = <TcpPortResult>[];
+    for (final port in ports) {
+      portResults.add(await _probePort(gatewayIpv4, port, scope));
+    }
+
+    // The first port's samples/aggregate/summary stay the primary outcome for
+    // backward compatibility with single-port callers and provenance.
+    final primary = portResults.first;
+    return ProbeOutcome(
+      samples: primary.samples,
+      aggregate: primary.aggregate,
+      summary: primary.summary,
+      portResults: portResults,
+    );
+  }
+
+  Future<TcpPortResult> _probePort(
+    String gatewayIpv4,
+    int port,
+    CancellationScope scope,
+  ) async {
     final address = InternetAddress(gatewayIpv4);
     final provenance = ProbeProvenance(
       method: 'TCP connect',
       target: gatewayIpv4,
-      portOrUrl: '$gatewayIpv4:${config.port}',
+      portOrUrl: '$gatewayIpv4:$port',
       timeout: config.timeout,
       limitations: config.limitations,
     );
@@ -64,19 +87,25 @@ class TcpConnectGatewayProbe implements GatewayProbe {
         samples.add(_sample(DiagnosticFactStatus.cancelled, provenance));
         continue;
       }
-      samples.add(await _oneSample(address, scope, provenance));
+      samples.add(await _oneSample(address, port, scope, provenance));
     }
 
     final aggregate = _aggregator.aggregate(
       samples,
       plannedAttempts: config.sampleCount,
     );
-    final summary = _summaryFrom(samples, aggregate, provenance);
-    return ProbeOutcome(samples: samples, aggregate: aggregate, summary: summary);
+    final summary = _summaryFrom(samples, aggregate, provenance, port);
+    return TcpPortResult(
+      port: port,
+      samples: samples,
+      aggregate: aggregate,
+      summary: summary,
+    );
   }
 
   Future<DiagnosticFact> _oneSample(
     InternetAddress address,
+    int port,
     CancellationScope scope,
     ProbeProvenance provenance,
   ) async {
@@ -94,7 +123,7 @@ class TcpConnectGatewayProbe implements GatewayProbe {
     scope.register(abort);
 
     try {
-      task = await _start(address, config.port);
+      task = await _start(address, port);
       timer = Timer(config.timeout, () {
         timedOut = true;
         task?.cancel();
@@ -140,6 +169,7 @@ class TcpConnectGatewayProbe implements GatewayProbe {
     List<DiagnosticFact> samples,
     LatencyAggregate aggregate,
     ProbeProvenance provenance,
+    int port,
   ) {
     final anySuccess = samples.any(
       (s) => s.status == DiagnosticFactStatus.success,
@@ -161,8 +191,10 @@ class TcpConnectGatewayProbe implements GatewayProbe {
     return DiagnosticFact(
       status: anyCancelled
           ? DiagnosticFactStatus.cancelled
-          : DiagnosticFactStatus.failure,
-      message: 'Sem resposta TCP do gateway',
+          : DiagnosticFactStatus.unavailable,
+      message: anyCancelled
+          ? 'Verificação TCP cancelada'
+          : 'Serviço TCP indisponível na porta $port',
       provenance: provenance,
       occurredAt: DateTime.now(),
     );

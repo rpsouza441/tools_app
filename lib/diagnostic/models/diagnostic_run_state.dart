@@ -1,6 +1,7 @@
 import 'diagnostic_fact.dart';
 import 'latency_aggregate.dart';
 import 'network_snapshot.dart';
+import 'tcp_port_result.dart';
 
 /// Coarse phase of a run, observed by the UI (D-06).
 enum DiagnosticRunPhase { idle, running, success, partialFailure, cancelled, offline }
@@ -25,6 +26,7 @@ class DiagnosticRunState {
     this.internetProbe = DiagnosticFact.unavailable,
     this.icmp = _icmpUnavailable,
     this.gatewayLatency,
+    this.gatewayPorts = const [],
     this.internetLatency,
   });
 
@@ -48,6 +50,7 @@ class DiagnosticRunState {
   final DiagnosticFact icmp;
 
   final LatencyAggregate? gatewayLatency;
+  final List<TcpPortResult> gatewayPorts;
   final LatencyAggregate? internetLatency;
 
   static const DiagnosticFact _icmpUnavailable = DiagnosticFact(
@@ -77,6 +80,7 @@ class DiagnosticRunState {
     DiagnosticFact? internetProbe,
     DiagnosticFact? icmp,
     LatencyAggregate? gatewayLatency,
+    List<TcpPortResult>? gatewayPorts,
     LatencyAggregate? internetLatency,
   }) {
     return DiagnosticRunState(
@@ -96,6 +100,7 @@ class DiagnosticRunState {
       internetProbe: internetProbe ?? this.internetProbe,
       icmp: icmp ?? this.icmp,
       gatewayLatency: gatewayLatency ?? this.gatewayLatency,
+      gatewayPorts: gatewayPorts ?? this.gatewayPorts,
       internetLatency: internetLatency ?? this.internetLatency,
     );
   }

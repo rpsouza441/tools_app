@@ -1,15 +1,18 @@
 /// Injectable config for the TCP-connect gateway probe (DIAG-06, D-10).
 class GatewayProbeConfig {
   const GatewayProbeConfig({
-    this.port = 80,
+    this.ports = const [80, 443],
     this.sampleCount = 4,
     this.timeout = const Duration(seconds: 2),
     this.limitations =
-        'Falha TCP não prova que o gateway está inalcançável em L3; '
-        'roteadores costumam filtrar portas.',
+        'Verifica apenas conexão TCP; não abre uma página HTTP/HTTPS nem '
+        'valida certificado. Porta fechada, filtrada ou sem resposta não '
+        'significa falta de Internet nem gateway inalcançável.',
   });
 
-  final int port;
+  /// Ports probed sequentially (never concurrently); each keeps its own
+  /// independent samples/aggregate — never mixed into one statistic.
+  final List<int> ports;
   final int sampleCount;
   final Duration timeout;
   final String limitations;

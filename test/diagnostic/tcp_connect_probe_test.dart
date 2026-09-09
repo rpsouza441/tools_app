@@ -69,6 +69,8 @@ void main() {
           DiagnosticFactStatus.failure,
         ),
       );
+      expect(outcome.summary.status, DiagnosticFactStatus.unavailable);
+      expect(outcome.summary.message, 'Serviço TCP indisponível na porta 80');
     });
 
     test('scope cancelado → amostras cancelled', () async {

@@ -1,5 +1,6 @@
 import '../models/diagnostic_fact.dart';
 import '../models/latency_aggregate.dart';
+import '../models/tcp_port_result.dart';
 import '../session/cancellation_scope.dart';
 
 /// The result of running a probe: raw samples, an aggregate, and a summary fact.
@@ -8,11 +9,15 @@ class ProbeOutcome {
     required this.samples,
     required this.aggregate,
     required this.summary,
+    this.portResults = const [],
   });
 
   final List<DiagnosticFact> samples;
   final LatencyAggregate aggregate;
   final DiagnosticFact summary;
+
+  /// Separate TCP-port measurements; aggregate is empty for multiple ports.
+  final List<TcpPortResult> portResults;
 }
 
 /// Contract 5a (D-05): TCP-connect probe against the default gateway. Only

@@ -279,6 +279,7 @@ class DiagnosticSessionImpl implements DiagnosticSession {
         (s) => s.copyWith(
           gatewayProbe: outcome.summary,
           gatewayLatency: outcome.aggregate,
+          gatewayPorts: outcome.portResults,
         ),
       );
     } catch (e) {
