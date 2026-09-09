@@ -146,3 +146,18 @@ não promover cancelamento/troca de rede para runtime verificado com esses dois 
 - Novo defeito visível: cabeçalho wifi/gateway 192.168.22.1 com probe 192.0.0.1:80 e horários/métricas da execução cellular. Não é evidência de agregação durante uma execução: investigação local identificou sobrescrita do snapshot no `refreshSnapshotOnly` ao retomar, mantendo medições antigas.
 - Correção: snapshot de execução permanece associado aos resultados. `Repetir` coleta nova rede; refresh só publica fatos enquanto idle, com proteção contra resultado tardio e descarte. Sessão: `../../debug/diagnostico-rede-ao-retomar.md`.
 - Reteste necessário: concluir em 4G, mudar para Wi-Fi e retomar; último resultado deve continuar cellular com gateway celular e mesmos horários/métricas. Depois de Repetir, todo o novo resultado deve ser Wi-Fi.
+
+### Reteste — 17:04–17:05
+
+Quatro capturas e dois resumos fornecidos pelo usuário confirmam consistência
+entre a tela e o resumo em novas execuções no Redmi Note 12 Pro:
+
+| Rede | Início / fim | Gateway e alvo TCP | HTTPS |
+|------|--------------|-------------------|-------|
+| Wi-Fi | 17:04:11 / 17:04:20 | 192.168.22.1 / 192.168.22.1:80 | 4/4; mín 148 / média 302 / máx 663 ms |
+| Cellular | 17:05:02 / 17:05:11 | 192.0.0.1 / 192.0.0.1:80 | 4/4; mín 220 / média 1096 / máx 3647 ms |
+
+Ambas: IP público obtido, gateway TCP 0/4, mensagem parcial correta e motivo TCP
+visível. Nenhuma mistura observada nessas execuções. Ainda falta confirmação do
+passo específico de retomar após mudar a rede, sem Repetir; as imagens não
+documentam esse intervalo. Phase 4 permanece human_needed até essa confirmação.
