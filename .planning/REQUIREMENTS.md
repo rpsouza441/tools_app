@@ -60,14 +60,14 @@
 - [x] **QUAL-06**: Usuário utiliza o diagnóstico sem conceder localização enquanto SSID/BSSID não fizerem parte do escopo.
 - [x] **QUAL-07**: Usuário não tem identificadores, resultados ou conteúdo do diagnóstico enviados a analytics.
 - [x] **QUAL-08**: Usuário recebe comportamento verificado por testes de sucesso, timeout, offline, resposta inválida, cancelamento, troca de rede, lifecycle e resultados parciais com dependências simuladas.
-- [ ] **QUAL-09**: Usuário recebe comportamento verificado em Android real ou ambiente controlado nos cenários Wi-Fi, dados móveis e offline.
+- [x] **QUAL-09**: Usuário recebe comportamento verificado em Android real ou ambiente controlado nos cenários Wi-Fi, dados móveis e offline. — **Complete (Phase 4, 2026-09-19)**: VERIFIED em Android físico (Wi-Fi, dados móveis 4G, offline) + emulador + automação; checks finais PF-1/PF-2/PF-3.
 
 ### Documentação e decisão externa
 
-- [ ] **DOC-01**: Usuário pode consultar no README as capacidades, limitações e plataformas realmente verificadas.
-- [ ] **DOC-02**: Usuário pode consultar quais permissões Android são usadas e por que são necessárias.
-- [ ] **DOC-03**: Usuário pode consultar qual serviço externo fornece IP público, quais dados recebe e qual política de privacidade se aplica.
-- [ ] **DOC-04**: Usuário recebe uma política de privacidade coerente com a ausência de conta, telemetria e histórico persistente.
+- [x] **DOC-01**: Usuário pode consultar no README as capacidades, limitações e plataformas realmente verificadas. — Complete (Phase 4)
+- [x] **DOC-02**: Usuário pode consultar quais permissões Android são usadas e por que são necessárias. — Complete (Phase 4)
+- [x] **DOC-03**: Usuário pode consultar qual serviço externo fornece IP público, quais dados recebe e qual política de privacidade se aplica. — Complete (Phase 4)
+- [x] **DOC-04**: Usuário recebe uma política de privacidade coerente com a ausência de conta, telemetria e histórico persistente. — Complete (Phase 4)
 - [ ] **GATE-01**: Usuário só recebe um plano de speed test após decisão documentada sobre provedor ou protocolo, licença e termos, custos e capacidade, geografia, privacidade, retenção/publicação, metodologia, precisão, testabilidade e seleção de servidor.
 - [ ] **GATE-02**: Usuário recebe uma decisão explícita de adiar o speed test quando qualquer critério obrigatório de viabilidade não tiver evidência suficiente.
 
@@ -156,11 +156,11 @@
 | QUAL-06 | Phase 3 | Complete |
 | QUAL-07 | Phase 3 | Complete |
 | QUAL-08 | Phase 3 | Complete |
-| QUAL-09 | Phase 4 | Pending |
-| DOC-01 | Phase 4 | Pending |
-| DOC-02 | Phase 4 | Pending |
-| DOC-03 | Phase 4 | Pending |
-| DOC-04 | Phase 4 | Pending |
+| QUAL-09 | Phase 4 | Complete (2026-09-19) |
+| DOC-01 | Phase 4 | Complete |
+| DOC-02 | Phase 4 | Complete |
+| DOC-03 | Phase 4 | Complete |
+| DOC-04 | Phase 4 | Complete |
 | GATE-01 | Phase 5 | Pending |
 | GATE-02 | Phase 5 | Pending |
 
