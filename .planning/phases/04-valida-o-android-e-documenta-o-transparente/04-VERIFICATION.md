@@ -1,21 +1,64 @@
 ---
-status: human_needed
+status: passed
 phase: 04-valida-o-android-e-documenta-o-transparente
-verified: "2026-09-01"
-updated: "2026-09-09"
+verified: "2026-09-19"
+updated: "2026-09-19"
 plans_complete: 4
 plans_total: 4
-requirements_verified: 4
+requirements_verified: 5
 requirements_total: 5
-requirements_human_needed: [QUAL-09]
-tests_passing: 242
+tests_passing: 235
 analyze: clean
 previous_status: human_needed
 ---
 
 # Phase 4 Verification — Validação Android e documentação transparente
 
-## Atualização vigente — 2026-09-09
+## Verdict vigente — 2026-09-19
+
+**Status: passed.** O único residual humano (preservação do contexto da execução
+ao trocar de rede e retomar **sem** Repetir) foi confirmado em Android físico
+(Redmi Note 12 Pro) em 2026-09-19, junto dos outros dois checks finais:
+
+1. **PF-1** — "Gateway (TCP connect)" não aparece mais; o endereço do gateway
+   continua exibido. (VERIFIED — Android físico)
+2. **PF-2** — "Concluído" e "Processando" centralizados corretamente. (VERIFIED — Android físico)
+3. **PF-3** — 4G → sair → ativar Wi-Fi → voltar sem tocar em Repetir preservou o
+   resultado cellular, sem mistura de resultados entre redes. (VERIFIED — Android físico)
+
+Matriz e evidências detalhadas em `04-ANDROID-VALIDATION.md`
+("Validação física final — 2026-09-19").
+
+**Evidência de verificação oficial (reexecutada 2026-09-19):**
+
+- `flutter analyze --no-pub` → **No issues found!** (limpo).
+- `flutter test --no-pub` → **235/235 — All tests passed!** (EXIT=0; reexecutado
+  duas vezes para determinismo).
+- *Contagem de testes:* relatos intermediários de 2026-09-09 citaram 242 durante a
+  correção do contexto de rede; a suíte autoritativa atual reporta **235** verdes.
+  Registra-se 235 como a contagem de fechamento.
+
+**Traceability final:** DOC-01..04 VERIFIED (rodada de 2026-09-01) e QUAL-09 agora
+**VERIFIED** (emulador + automação + Android físico, incluindo PF-1/PF-2/PF-3).
+5/5 requisitos verificados.
+
+DIAG-06 (Phase 3) permanece **descopado na Phase 4** após a validação física — o
+probe TCP do gateway foi removido e o endereço mantido. O histórico da Phase 3
+(implementação original do probe) **não** é reescrito; a mudança de escopo está
+rastreada em REQUIREMENTS.md, ROADMAP.md e PROJECT.md.
+
+Captive portal real (R3) permanece NOT VERIFIED — fora da Definition of Done desta
+fase (requer rede com portal cativo real) e registrado como limitação honesta, não
+como pendência de fechamento.
+
+**Verdict: passed.** Phase 4 fechada.
+
+---
+
+_As seções abaixo preservam a verificação histórica. O status `human_needed`
+registrado nelas foi superado pelo verdict `passed` acima em 2026-09-19._
+
+## Atualização — 2026-09-09 (histórico)
 
 **Status: human_needed.** Dados móveis reais foram exercitados pelo usuário em
 Redmi Note 12 Pro: 4G (`cellular`) e Wi-Fi com IP público e HTTPS 4/4 bem-sucedidos,

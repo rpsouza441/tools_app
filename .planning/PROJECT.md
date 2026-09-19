@@ -15,14 +15,14 @@ Oferecer diagnósticos técnicos úteis e honestos em uma interface clara, sem o
 - ✓ Modernizar a arquitetura visual e a navegação do aplicativo com Material 3, temas claro/escuro, responsividade e acessibilidade, sem reescrita total. — Phase 1
 - ✓ Criar componentes reutilizáveis para entrada, execução, métricas, resultados, cópia, carregamento e estados de falha. — Phase 1
 - ✓ Preservar e migrar sem regressões a calculadora IPv4, o conversor de armazenamento e o gerador de hashes. — Phase 2
+- ✓ Entregar diagnóstico básico de conectividade com transporte, IPv4 local, IP público, endereço do gateway quando disponível e teste HTTPS de alcance/latência com método explicitado (sem probe TCP ao gateway; sem ICMP). — Phase 3 (DIAG-06 descopado na Phase 4)
+- ✓ Suportar múltiplas amostras, mínimo/média/máximo, perdas ou falhas, resultados parciais, última execução e resumo copiável/compartilhável. — Phase 3
+- ✓ Garantir timeout, cancelamento, lifecycle Android e lógica de medição testável fora dos widgets. — Phase 3
+- ✓ Atualizar README, política de privacidade e documentação das permissões Android realmente necessárias. — Phase 4 (verificada em Android físico 2026-09-19)
 
 ### Active
 
-- [ ] Entregar diagnóstico básico de conectividade com transporte, IPv4 local, IP público, endereço do gateway quando disponível e teste HTTPS de alcance/latência com método explicitado (sem probe TCP ao gateway; sem ICMP).
-- [ ] Suportar múltiplas amostras, mínimo/média/máximo, perdas ou falhas, resultados parciais, última execução e resumo copiável/compartilhável.
-- [ ] Garantir timeout, cancelamento, lifecycle Android e lógica de medição testável fora dos widgets.
-- [ ] Pesquisar e, somente se viável, entregar teste de velocidade separado com limites claros de dados, duração, precisão, privacidade e infraestrutura sustentável.
-- [ ] Atualizar README, política de privacidade e documentação das permissões Android realmente necessárias.
+- [ ] Pesquisar e, somente se viável, entregar teste de velocidade separado com limites claros de dados, duração, precisão, privacidade e infraestrutura sustentável. — Phase 5 (gate GO/NO-GO; não implementar antes da decisão)
 
 ### Out of Scope
 
@@ -89,4 +89,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-09-09 durante a Phase 4 — probe TCP do gateway removido, alinhamento centralizado, propósito definido como resumo honesto da rede.*
+*Last updated: 2026-09-19 — Phase 4 fechada como `passed` (QUAL-09 VERIFIED em Android físico: probe TCP do gateway removido/endereço mantido, estados centralizados, preservação de contexto ao retomar após troca de rede; DOC-01..04 VERIFIED; analyze limpo; 235 testes). Transição para Phase 5 (gate de viabilidade do speed test — GO/NO-GO; speed test ainda não implementado).*

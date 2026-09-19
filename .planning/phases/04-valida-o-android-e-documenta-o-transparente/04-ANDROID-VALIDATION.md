@@ -2,8 +2,10 @@
 requirement: QUAL-09
 phase: 04-valida-o-android-e-documenta-o-transparente
 created: "2026-09-01"
-status: in_progress
+updated: "2026-09-19"
+status: verified
 mobile_data: VERIFIED (Android físico, relato do usuário)
+physical_final_checks: VERIFIED (2026-09-19 — gateway probe removido, alinhamento centralizado, preservação de contexto ao retomar)
 ---
 
 # QUAL-09 — Matriz de Validação Android
@@ -57,7 +59,7 @@ desligada (`svc wifi/data disable`, "Active default network: none") terminou em
 | 5 | Gateway disponível (rota default) | Android Emulator + Fakes | Run real: Gateway **10.0.2.2** (rota default do emulador). Fake: `android_network_snapshot_source_test.dart` | Gateway real da rota default, não inventado | **VERIFIED (Android Emulator)** + AUTOMATED-FAKE | DIAG-04: da rota default `hasGateway`, nunca 192.168.1.1. |
 | 6 | Gateway indisponível | Fakes | `diagnostic_session_test.dart` + `diagnostic_session_probes_test.dart` (sem gateway → probe count 0, status unavailable) | probe pulado, unavailable | AUTOMATED-FAKE | Emulador sempre tem gateway 10.0.2.2; ausência coberta por fake. |
 | 7 | IP público (HTTPS ipify) | Android Emulator + Fakes | Run real: IPv4 público **200.101.151.97** via HTTPS api.ipify.org (sucesso). Fake: `public_ip_source_test.dart` (9), `diagnostic_session_public_ip_test.dart` | HTTPS a api.ipify.org bem-sucedido | **VERIFIED (Android Emulator)** + AUTOMATED-FAKE | DIAG-05: proveniência exibida; falha ≠ "sem internet". |
-| 8 | TCP connect ao gateway | Android Emulator + Fakes | Run real: Gateway (TCP connect) Indisponível, `10.0.2.2:80`, sucessos 0 de 4, limitação honesta. Fake: `tcp_connect_probe_test.dart` (5) | Probe TCP executado; falha honesta (porta filtrada) | **VERIFIED (Android Emulator)** + AUTOMATED-FAKE | DIAG-06/08: rotulado "TCP connect", nunca ping/ICMP; denominador exibido. |
+| 8 | TCP connect ao gateway | Android Emulator + Fakes | Run real: Gateway (TCP connect) Indisponível, `10.0.2.2:80`, sucessos 0 de 4, limitação honesta. Fake: `tcp_connect_probe_test.dart` (5) | Probe TCP executado; falha honesta (porta filtrada) | **VERIFIED (Android Emulator)** *(histórico 2026-09-01)* | DIAG-06/08: rotulado "TCP connect", nunca ping/ICMP; denominador exibido. **Nota (2026-09-09):** este probe foi **removido da UI** após a validação física (DIAG-06 descopado na Phase 4). A linha permanece como registro histórico da rodada de emulador; a build atual não exibe o probe TCP do gateway — só o endereço (PF-1). |
 | 9 | HTTPS probe externo (gstatic 204) | Android Emulator + Fakes | Run real: Internet (HTTPS) média 1016 ms (mín 264/máx 1847), sucessos 4 de 4, `gstatic.com/generate_204`. Fake: `dio_https_probe_test.dart` (6) | HTTPS GET 204 real com métricas | **VERIFIED (Android Emulator)** + AUTOMATED-FAKE | DIAG-07/08: HTTPS esperando 204; nunca ICMP; limitação exibida. |
 | 10 | Resultado parcial preservado | Android Emulator + Fakes | Run real: gateway TCP falhou mas todos os demais fatos (IP local/gateway/público/HTTPS) preservados e exibidos. Fake: `diagnostic_session_test.dart`, `diagnostic_session_probes_test.dart` | Fatos concluídos sobrevivem a falha independente | **VERIFIED (Android Emulator)** + AUTOMATED-FAKE | DIAG-10: verdict parcial sem apagar fatos. |
 | 11 | Cancelamento (aborta I/O em voo) | Fakes | `diagnostic_session_test.dart` (cancel + resposta tardia mantém cancelled; publicIp.aborted) | abort físico; tardio não reverte | AUTOMATED-FAKE | DIAG-12/QUAL-02. Emulador conclui rápido demais para cancelar de forma confiável via adb; lógica coberta por fake determinístico. |
@@ -110,13 +112,17 @@ Android (camada VERIFIED).
   defeito de runtime encontrado.
 - **VERIFIED (Android físico, relato do usuário em 2026-09-09):** dados móveis reais
   (#2) e execução Wi-Fi no Redmi Note 12 Pro, com IP público e HTTPS bem-sucedidos.
-- **Residual humano atual:** mensagem parcial confirmada nas capturas; retestar
-  preservação do contexto da execução ao trocar rede e retomar no APK novo.
-  Phase 4 permanece **`human_needed`**; as capturas revelaram mistura de redes após resume.
-  Captive portal real (R3) continua NOT VERIFIED.
-  Cancelamento (#11) e troca de rede mid-run (#12) permanecem AUTOMATED-FAKE
-  (não reproduzíveis de forma confiável via automação no emulador), mas a
-  lógica está coberta por testes determinísticos verdes.
+- **VERIFIED (Android físico, 2026-09-19):** checks finais PF-1 (probe TCP do gateway
+  removido, endereço mantido), PF-2 (estados "Concluído"/"Processando" centralizados)
+  e PF-3 (4G → Wi-Fi → retomar sem Repetir preserva o resultado cellular, sem mistura
+  de redes). Ver "Validação física final — 2026-09-19".
+- **Residual humano:** **RESOLVIDO** em 2026-09-19. A preservação do contexto da
+  execução ao trocar rede e retomar (sem Repetir) foi confirmada em device físico
+  (PF-3). QUAL-09 = **verified**; Phase 4 pode ser fechada como `passed`.
+  Captive portal real (R3) permanece NOT VERIFIED (fora da Definition of Done da fase;
+  requer rede com portal cativo real). Cancelamento (#11) e troca de rede mid-run (#12)
+  permanecem AUTOMATED-FAKE (não reproduzíveis de forma confiável por automação), com
+  a lógica coberta por testes determinísticos verdes.
 
 *Matriz criada em 2026-09-01 (plano 04-01). Seções VERIFIED preenchidas pelo plano 04-02 com execução real no emulador.*
 
@@ -160,4 +166,38 @@ entre a tela e o resumo em novas execuções no Redmi Note 12 Pro:
 Ambas: IP público obtido, gateway TCP 0/4, mensagem parcial correta e motivo TCP
 visível. Nenhuma mistura observada nessas execuções. Ainda falta confirmação do
 passo específico de retomar após mudar a rede, sem Repetir; as imagens não
-documentam esse intervalo. Phase 4 permanece human_needed até essa confirmação.
+documentam esse intervalo. Phase 4 permanecia human_needed até essa confirmação
+— **superado em 2026-09-19** pela seção "Validação física final" abaixo (PF-3
+confirmou o passo de retomar após troca de rede sem Repetir).
+
+## Validação física final — 2026-09-19 (residual humano resolvido)
+
+Fonte: confirmação textual do usuário nesta conversa (2026-09-19). Os três checks
+físicos que faltavam para fechar a Phase 4 passaram no Android físico
+(Redmi Note 12 Pro). Estes checks eliminam o residual humano remanescente e não
+podiam ser reproduzidos por automação (troca real de transporte 4G↔Wi-Fi e
+renderização visual em device).
+
+| # | Check físico | Resultado observado pelo usuário | Nível | Cobertura em código |
+|---|--------------|----------------------------------|-------|---------------------|
+| PF-1 | "Gateway (TCP connect)" não aparece mais; endereço do gateway continua exibido | Linha do probe TCP ausente; endereço do gateway presente como fato | **VERIFIED (Android físico)** | `lib/screen/internet_diagnostic_screen.dart` — `_address(context, 'Gateway', state.gateway)` (endereço mantido); nenhum `_probe` de gateway; único probe é `Internet (HTTPS)` |
+| PF-2 | "Concluído" e "Processando" centralizados corretamente | Ambos os cabeçalhos aparecem centralizados em todos os estados | **VERIFIED (Android físico)** | `lib/design_system/tool_status_panel.dart` — headings `Processando`/`Concluído` com `textAlign: TextAlign.center` em coluna centralizada; `preservedChild` full-width preserva o card |
+| PF-3 | 4G → sair → ativar Wi-Fi → voltar **sem tocar em Repetir** preserva o resultado 4G, sem mistura de resultados entre redes | Último resultado permaneceu cellular ao retomar; nenhuma sobrescrita de contexto observada | **VERIFIED (Android físico)** | Correção `refreshSnapshotOnly` — refresh só publica fatos enquanto `idle`, com proteção contra resultado tardio/descarte; snapshot da execução permanece associado ao resultado. Sessão: `../../debug/diagnostico-rede-ao-retomar.md` |
+
+PF-3 é exatamente o passo que faltava documentar nos retestes anteriores
+(retomar após mudar a rede **sem** Repetir). Com ele confirmado, não há mistura
+de redes na apresentação do último resultado.
+
+**Evidência de verificação oficial (2026-09-19), reexecutada localmente:**
+
+- `flutter analyze --no-pub` → **No issues found!** (limpo).
+- `flutter test --no-pub` → **235/235 — All tests passed!** (EXIT=0, reexecutado
+  duas vezes para determinismo).
+
+*Nota de contagem de testes:* relatos intermediários de 2026-09-09 citaram 242
+testes durante o trabalho de correção do contexto de rede; a suíte autoritativa
+atual reporta **235** verdes. Registra-se 235 como a contagem de fechamento da
+Phase 4.
+
+Com PF-1/PF-2/PF-3 VERIFIED em Android físico e a suíte verde, o **residual
+humano de QUAL-09 está resolvido** e a Phase 4 pode ser fechada como `passed`.
