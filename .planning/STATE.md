@@ -2,10 +2,10 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: in_progress
-stopped_at: Phase 5 complete (2026-09-19) — gate de viabilidade do speed test: veredito NO-GO — ADIADO. Todas as 5 fases do milestone v1.0 concluídas. Pronto para auditoria/fechamento do milestone.
+status: shipped
+stopped_at: Milestone v1.0 arquivado e tagueado (2026-09-19). ROADMAP colapsado; REQUIREMENTS arquivado; PROJECT.md com Current State. Nenhum milestone novo iniciado.
 last_updated: "2026-09-19"
-last_activity: 2026-09-19 — Phase 5 EXECUTADA e verificada (passed). Gate formal 05-SPEED-TEST-GATE.md com veredito NO-GO — ADIADO (nenhum candidato atende todos os 20 critérios obrigatórios). SPD-* diferidos; nenhum código de speed test. 5/5 fases completas.
+last_activity: 2026-09-19 — Milestone v1.0 concluído e arquivado (audit passed). Tag v1.0 criada localmente (sem push). Próximo ciclo via /gsd-new-milestone (fases a partir de 6).
 progress:
   total_phases: 5
   completed_phases: 5
@@ -21,16 +21,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-08-31)
 
 **Core value:** Oferecer diagnósticos técnicos úteis e honestos em uma interface clara, sem ocultar limitações de plataforma, método de medição ou falhas parciais.
-**Current focus:** Milestone v1.0 — todas as 5 fases concluídas. Phase 5 (gate do speed test) fechada com `NO-GO — ADIADO`. Próximo: auditoria/fechamento do milestone.
+**Current focus:** Milestone v1.0 **SHIPPED e arquivado** (2026-09-19). Nenhum milestone ativo — iniciar o próximo com `/gsd-new-milestone` (fases a partir de 6).
 
 ## Current Position
 
-Phase: 5 of 5 (gate de viabilidade do speed test) — **Complete**
-Plan: 4/4 plans complete (05-01..05-04), executados e verificados
-Status: **Milestone v1.0 completo (5/5 fases).** Phase 5 executada e verificada `passed` (2026-09-19). Gate formal `05-SPEED-TEST-GATE.md`: veredito global **`NO-GO — ADIADO`** — nenhum candidato (Cloudflare/Ookla/M-Lab/LibreSpeed próprio) atende todos os 20 critérios obrigatórios; bloqueios = ausência de evidência/termos/autorização/infra (não inviabilidade estrutural). GATE-01/02 verificados. SPD-01..09 permanecem diferidos; nenhum código de speed test criado.
-Last activity: 2026-09-19 — execute-phase 5 concluído (4 waves: pesquisa → comparação → gate → verificação).
+Phase: — (nenhum milestone ativo)
+Plan: — 
+Status: **Milestone v1.0 arquivado e tagueado (2026-09-19).** 5/5 fases, 30 planos, audit `passed`. ROADMAP colapsado para uma linha com link; REQUIREMENTS arquivado em `milestones/v1.0-REQUIREMENTS.md`; PROJECT.md com Current State/Next Milestone Goals; tag `v1.0` criada localmente (sem push). Speed test = `NO-GO — ADIADO`; SPD-* diferidos.
+Last activity: 2026-09-19 — complete-milestone v1.0 concluído.
 
-Progress: [██████████] 100% (5 of 5 phases complete)
+Progress: [██████████] 100% (milestone v1.0 concluído)
 
 ## Performance Metrics
 

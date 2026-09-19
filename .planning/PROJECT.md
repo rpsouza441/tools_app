@@ -8,6 +8,33 @@ O Tools App é um aplicativo Flutter, Android-first e offline sempre que possív
 
 Oferecer diagnósticos técnicos úteis e honestos em uma interface clara, sem ocultar limitações de plataforma, método de medição ou falhas parciais. O Diagnóstico de Internet é um **resumo honesto da rede** para apoiar a avaliação técnica (ex.: um técnico avaliando um Wi-Fi), não um teste pass/fail.
 
+## Current State
+
+**Shipped:** v1.0 — Diagnóstico de Internet e Evolução da UI (2026-09-19).
+
+- 5 fases concluídas (Phases 1–5, 30 planos); auditoria de milestone `passed`.
+- Fundação visual adaptativa (Material 3, temas, acessibilidade); três ferramentas
+  migradas (Rede/Armazenamento/Hash); Diagnóstico de Internet honesto, cancelável e
+  resiliente; validação em Android físico (Wi-Fi/4G/offline) + emulador; README e
+  PRIVACY.md fiéis ao implementado.
+- **Gate do speed test:** `NO-GO — ADIADO` — nenhum candidato (Cloudflare/Ookla/M-Lab/
+  LibreSpeed próprio) atende todos os critérios obrigatórios; SPD-* diferidos.
+- Arquivos: [`milestones/v1.0-ROADMAP.md`](./milestones/v1.0-ROADMAP.md),
+  [`milestones/v1.0-REQUIREMENTS.md`](./milestones/v1.0-REQUIREMENTS.md),
+  [`v1.0-MILESTONE-AUDIT.md`](./v1.0-MILESTONE-AUDIT.md).
+
+## Next Milestone Goals
+
+_A definir._ Candidatos naturais (não comprometidos):
+
+- Reavaliar o speed test se algum gatilho de `05-SPEED-TEST-GATE.md §8` passar a ter
+  evidência (SDK/API oficial com termos claros; custo/termos aceitáveis; infraestrutura
+  própria orçada; metodologia/testabilidade demonstrável).
+- Evoluções EVO-01..EVO-03 (repetir etapa do diagnóstico; recomendações auditáveis;
+  fallback adicional de IP/probe sob termos aprovados).
+
+Inicie o próximo ciclo com `/gsd-new-milestone` (numeração de fases continua a partir de 6).
+
 ## Requirements
 
 ### Validated
@@ -68,8 +95,8 @@ Oferecer diagnósticos técnicos úteis e honestos em uma interface clara, sem o
 | Exibir o método real de latência em vez de chamar todo probe de ping | Evita alegações tecnicamente incorretas e melhora a confiança do usuário | ✓ Phase 3 — rotulado "HTTPS"; ICMP sempre "indisponível", nunca "ping" |
 | Remover o probe TCP do gateway, mantendo o endereço | Em teste físico (4G/Wi-Fi) reportava quase sempre *indisponível* e confundia o usuário; TCP connect cru não prova que a página do gateway abre; latência de roteamento real (ICMP) está fora do escopo do MVP | ✓ Phase 4 (2026-09-09) — probe removido, endereço mantido; app definido como resumo honesto da rede |
 | Padronizar o alinhamento dos estados do diagnóstico ao centro | "Concluído" ficava à esquerda e "Processando" ao centro; inconsistência apontada em teste físico | ✓ Phase 4 (2026-09-09) — ToolStatusPanel renderiza o card de resultados centralizado em todos os estados |
-| Condicionar speed test a infraestrutura legal, estável e testável | Evita dependência frágil, custos imprevistos e resultados enganosos | — Pending (Phase 5 GO/NO-GO) |
-| Usar consentimento explícito e limites de dados no speed test | Protege usuários em rede móvel e mantém o consumo previsível | — Pending (Phase 5) |
+| Condicionar speed test a infraestrutura legal, estável e testável | Evita dependência frágil, custos imprevistos e resultados enganosos | ✓ Phase 5 (2026-09-19) — gate formal `NO-GO — ADIADO`; nenhum candidato (Cloudflare/Ookla/M-Lab/LibreSpeed próprio) atende todos os critérios; SPD-* diferidos |
+| Usar consentimento explícito e limites de dados no speed test | Protege usuários em rede móvel e mantém o consumo previsível | — Diferido (condicionado a um futuro `GO`; ver `05-SPEED-TEST-GATE.md §8`) |
 
 ## Evolution
 
@@ -89,4 +116,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-09-19 — Phase 4 fechada como `passed` (QUAL-09 VERIFIED em Android físico: probe TCP do gateway removido/endereço mantido, estados centralizados, preservação de contexto ao retomar após troca de rede; DOC-01..04 VERIFIED; analyze limpo; 235 testes). Transição para Phase 5 (gate de viabilidade do speed test — GO/NO-GO; speed test ainda não implementado).*
+*Last updated: 2026-09-19 — Milestone v1.0 SHIPPED e arquivado (audit passed; tag v1.0 local, sem push). Speed test em `NO-GO — ADIADO`; SPD-* diferidos. Próximo ciclo via `/gsd-new-milestone` (fases a partir de 6).*
