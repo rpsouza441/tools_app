@@ -119,14 +119,18 @@ de um futuro teste de velocidade (GATE-01, GATE-02).
   test deve ser implementado nesta sessão.
 
 ### 5. Forma da fase (orientação ao planner)
-- **D-21:** O planner deve produzir uma fase **curta e focada**, sem feature
-  implementation, com quatro blocos de trabalho:
-  1. Pesquisa/evidência (atualizada, documental, por candidato)
-  2. Comparação dos candidatos (tabela critério por critério)
+- **D-21 [informational — satisfeita estruturalmente]:** O planner deve produzir uma
+  fase **curta e focada**, sem feature implementation, com quatro blocos de trabalho.
+  *Satisfeita pela estrutura de planos:* 05-01 (pesquisa/evidência), 05-02 (comparação
+  de candidatos), 05-03 (gate formal `05-SPEED-TEST-GATE.md`), 05-04 (verificação
+  GATE-01/GATE-02). É uma decisão de processo sobre a forma da fase, não uma capacidade
+  a implementar — por isso marcada `[informational]` para o gate de cobertura de decisão.
+  1. Pesquisa/evidência (atualizada, documental, por candidato) → 05-01
+  2. Comparação dos candidatos (tabela critério por critério) → 05-02
   3. Gate formal (`05-SPEED-TEST-GATE.md` com veredito global e condições de
-     reavaliação)
+     reavaliação) → 05-03
   4. Verificação de GATE-01/GATE-02 (a decisão cobre todos os critérios
-     obrigatórios e o veredito segue a regra de agregação D-07/D-08)
+     obrigatórios e o veredito segue a regra de agregação D-07/D-08) → 05-04
 
 ### Claude's Discretion
 - Layout exato da tabela critério por critério (colunas, ordenação), desde que

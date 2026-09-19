@@ -170,7 +170,28 @@ Gap-closure:
   1. Usuário pode consultar uma decisão formal que cobre provedor ou protocolo, licença e termos, custos e capacidade, geografia, privacidade, retenção ou publicação, metodologia, precisão, testabilidade e seleção de servidor antes de qualquer plano de implementação.
   2. Usuário vê um resultado explícito `NO-GO` com o speed test adiado quando qualquer critério obrigatório carece de evidência; somente um `GO` integral pode liberar requisitos `SPD-*` para um milestone posterior.
 
-**Plans:** TBD
+**Plans:** 4/4 plans planned (não executados) — gate de decisão, sem feature implementation.
+
+**Wave 1**
+
+- [ ] 05-01-PLAN.md — Pesquisa/evidência atualizada por candidato (Cloudflare/Ookla/M-Lab + alternativas) → `05-EVIDENCE.md`
+
+**Wave 2** *(blocked on 05-01)*
+
+- [ ] 05-02-PLAN.md — Comparação dos candidatos (matriz critério × candidato) → `05-COMPARISON.md`
+
+**Wave 3** *(blocked on 05-02)*
+
+- [ ] 05-03-PLAN.md — Gate formal (veredito GO / NO-GO — ADIADO / NO-GO — DESCARTADO) → `05-SPEED-TEST-GATE.md`
+
+**Wave 4** *(blocked on 05-03)*
+
+- [ ] 05-04-PLAN.md — Verificação formal de GATE-01/GATE-02 → `05-VERIFICATION.md`
+
+**Cross-cutting constraints:**
+- Nenhuma implementação de speed test; sem SDK/plugin; sem alterar `lib/`/`android/`; SPD-* diferidos até `GO` integral (D-14, D-20).
+- Licença de SDK ≠ autorização de infraestrutura; endpoint público ≠ endpoint autorizado (D-13).
+- GO só com todos os critérios obrigatórios PASS; preferir `NO-GO — ADIADO` por ausência de evidência (D-07, D-09, D-18).
 
 ## Progress
 
@@ -182,7 +203,7 @@ Gap-closure:
 | 2. Migração segura das ferramentas atuais | 4/4 | Complete    | 2026-08-31 |
 | 3. Diagnóstico de Internet completo e resiliente | 7/7 | Complete    | 2026-09-01 |
 | 4. Validação Android e documentação transparente | 4/4 | Complete    | 2026-09-19 |
-| 5. Gate de viabilidade do speed test | 0/TBD | Not started | - |
+| 5. Gate de viabilidade do speed test | 0/4 | Planned | - |
 
 ---
 *Roadmap created: 2026-08-10*

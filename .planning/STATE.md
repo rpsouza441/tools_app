@@ -5,7 +5,7 @@ milestone_name: milestone
 status: in_progress
 stopped_at: Phase 4 complete (2026-09-19) — QUAL-09 VERIFIED em Android físico (PF-1/PF-2/PF-3); Phase 5 pronta para discussão (speed test NÃO implementado)
 last_updated: "2026-09-19"
-last_activity: 2026-09-19 — Phase 4 fechada (passed). Phase 5 discutida: CONTEXT.md do gate de viabilidade do speed test capturado (artefato canônico 05-SPEED-TEST-GATE.md; régua GATE-01/02; pesquisa atualizada; neutralidade com preferência por NO-GO — ADIADO). Nenhum speed test implementado.
+last_activity: 2026-09-19 — Phase 4 fechada (passed). Phase 5 discutida e PLANEJADA: 4 planos (05-01 pesquisa/evidência, 05-02 comparação, 05-03 gate formal, 05-04 verificação GATE-01/02), RESEARCH framing + coverage gates OK. NÃO executada; nenhum speed test implementado.
 progress:
   total_phases: 5
   completed_phases: 4
@@ -26,11 +26,11 @@ See: .planning/PROJECT.md (updated 2026-08-31)
 ## Current Position
 
 Phase: 5 of 5 (gate de viabilidade do speed test)
-Plan: 0 plans — CONTEXT.md capturado (discuss-phase concluído 2026-09-19), pronto para `/gsd-plan-phase 5`
-Status: Phase 4 **Complete** (2026-09-19, verdict `passed`). Phase 5 **discutida**: `05-CONTEXT.md` locka as decisões do gate (documento canônico `05-SPEED-TEST-GATE.md`; status por critério PASS/FAIL/INSUFFICIENT/N/A; GO só com todos os obrigatórios PASS; vereditos GO / NO-GO — ADIADO / NO-GO — DESCARTADO; pesquisa atualizada de Cloudflare/Ookla/M-Lab; sem implementação de speed test). Pronta para planejamento.
-Last activity: 2026-09-19 — discuss-phase 5 concluído; CONTEXT.md + DISCUSSION-LOG.md escritos.
+Plan: 4/4 plans planned (05-01..05-04), NÃO executados — pronto para `/gsd-execute-phase 5`
+Status: Phase 4 **Complete** (2026-09-19, `passed`). Phase 5 **Planned** (não executada): 4 planos em 4 waves sequenciais — 05-01 pesquisa/evidência (`05-EVIDENCE.md`), 05-02 comparação de candidatos (`05-COMPARISON.md`), 05-03 gate formal (`05-SPEED-TEST-GATE.md`), 05-04 verificação GATE-01/02 (`05-VERIFICATION.md`). Coverage gates OK (GATE-01/02 cobertos; D-01..D-20 rastreados; D-21 informational). Nenhum código de speed test; SPD-* diferidos.
+Last activity: 2026-09-19 — plan-phase 5 concluído (RESEARCH framing + 4 PLANs + coverage/verification gates). Parado antes da execução por instrução do usuário.
 
-Progress: [████████░░] 80% (4 of 5 phases complete; Phase 5 discutida, aguardando planejamento)
+Progress: [████████░░] 80% (4 of 5 phases complete; Phase 5 planned, aguardando execução)
 
 ## Performance Metrics
 
@@ -48,7 +48,7 @@ Progress: [████████░░] 80% (4 of 5 phases complete; Phase 5 
 | 2 | 4 | 4 | Complete (2026-08-31) |
 | 3 | 7 | 7 | Complete (2026-09-01) — 235 tests, analyze clean |
 | 4 | 4 | 4 | Complete (2026-09-19) — QUAL-09 VERIFIED (Android físico), 235 tests, analyze clean |
-| 5 | TBD | 0 | Not started / Ready |
+| 5 | 4 | 0 | Planned (2026-09-19) — não executada |
 
 ## Accumulated Context
 
@@ -89,6 +89,6 @@ Progress: [████████░░] 80% (4 of 5 phases complete; Phase 5 
 ## Session Continuity
 
 Last session: 2026-09-19
-Stopped at: Phase 5 context gathered — decisões do gate de viabilidade do speed test capturadas em `05-CONTEXT.md` (artefato canônico `05-SPEED-TEST-GATE.md`; régua GATE-01/02; pesquisa atualizada de Cloudflare/Ookla/M-Lab; neutralidade com preferência por `NO-GO — ADIADO`). Nenhum speed test implementado.
-Resume file: .planning/phases/05-gate-de-viabilidade-do-speed-test/05-CONTEXT.md
-Resume with: `/gsd-plan-phase 5` para planejar a fase curta (pesquisa/evidência → comparação de candidatos → gate formal → verificação GATE-01/GATE-02). Sem feature implementation. `NO-GO`/adiamento são resultados válidos.
+Stopped at: Phase 5 PLANEJADA (4 planos, não executados). RESEARCH framing + coverage/verification gates OK. Parado antes da execução por instrução do usuário.
+Resume file: .planning/phases/05-gate-de-viabilidade-do-speed-test/05-01-PLAN.md
+Resume with: `/gsd-execute-phase 5` para executar os 4 blocos (pesquisa → comparação → gate → verificação). Regras duras: sem implementar speed test, sem SDK/plugin, sem alterar lib/ ou android/, sem liberar SPD- antes do veredito, sem forçar GO nem assumir NO-GO. `NO-GO — ADIADO` é conclusão válida (GATE-02).
