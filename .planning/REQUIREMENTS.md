@@ -68,8 +68,8 @@
 - [x] **DOC-02**: Usuário pode consultar quais permissões Android são usadas e por que são necessárias. — Complete (Phase 4)
 - [x] **DOC-03**: Usuário pode consultar qual serviço externo fornece IP público, quais dados recebe e qual política de privacidade se aplica. — Complete (Phase 4)
 - [x] **DOC-04**: Usuário recebe uma política de privacidade coerente com a ausência de conta, telemetria e histórico persistente. — Complete (Phase 4)
-- [ ] **GATE-01**: Usuário só recebe um plano de speed test após decisão documentada sobre provedor ou protocolo, licença e termos, custos e capacidade, geografia, privacidade, retenção/publicação, metodologia, precisão, testabilidade e seleção de servidor.
-- [ ] **GATE-02**: Usuário recebe uma decisão explícita de adiar o speed test quando qualquer critério obrigatório de viabilidade não tiver evidência suficiente.
+- [x] **GATE-01**: Usuário só recebe um plano de speed test após decisão documentada sobre provedor ou protocolo, licença e termos, custos e capacidade, geografia, privacidade, retenção/publicação, metodologia, precisão, testabilidade e seleção de servidor. — **Complete (Phase 5, 2026-09-19)**: decisão documentada em `05-SPEED-TEST-GATE.md` cobrindo 20 critérios obrigatórios × 4 candidatos.
+- [x] **GATE-02**: Usuário recebe uma decisão explícita de adiar o speed test quando qualquer critério obrigatório de viabilidade não tiver evidência suficiente. — **Complete (Phase 5, 2026-09-19)**: veredito global `NO-GO — ADIADO`; SPD-* diferidos; nenhum código criado.
 
 ## v2 Requirements
 
@@ -161,8 +161,8 @@
 | DOC-02 | Phase 4 | Complete |
 | DOC-03 | Phase 4 | Complete |
 | DOC-04 | Phase 4 | Complete |
-| GATE-01 | Phase 5 | Pending |
-| GATE-02 | Phase 5 | Pending |
+| GATE-01 | Phase 5 | Complete (2026-09-19) |
+| GATE-02 | Phase 5 | Complete (2026-09-19 — NO-GO — ADIADO) |
 
 **Coverage:**
 

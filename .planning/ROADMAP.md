@@ -15,7 +15,7 @@ Este milestone evolui o aplicativo sem reescrita total: primeiro estabelece e im
 - [x] **Phase 2: Migração segura das ferramentas atuais** - Levar as três ferramentas existentes à nova fundação sem perda funcional. (completed 2026-08-31)
 - [x] **Phase 3: Diagnóstico de Internet completo e resiliente** - Entregar o fluxo de diagnóstico transparente, progressivo, cancelável e testável de ponta a ponta. (planned 2026-08-31; not executed) (completed 2026-09-01)
 - [x] **Phase 4: Validação Android e documentação transparente** - Comprovar os cenários Android reais e documentar capacidades, permissões, terceiros e privacidade. (completed 2026-09-19)
-- [ ] **Phase 5: Gate de viabilidade do speed test** - Registrar uma decisão formal `GO` ou `NO-GO` antes de qualquer plano de implementação de teste de velocidade.
+- [x] **Phase 5: Gate de viabilidade do speed test** - Registrar uma decisão formal `GO` ou `NO-GO` antes de qualquer plano de implementação de teste de velocidade. (completed 2026-09-19 — veredito `NO-GO — ADIADO`)
 
 ## Phase Details
 
@@ -170,23 +170,23 @@ Gap-closure:
   1. Usuário pode consultar uma decisão formal que cobre provedor ou protocolo, licença e termos, custos e capacidade, geografia, privacidade, retenção ou publicação, metodologia, precisão, testabilidade e seleção de servidor antes de qualquer plano de implementação.
   2. Usuário vê um resultado explícito `NO-GO` com o speed test adiado quando qualquer critério obrigatório carece de evidência; somente um `GO` integral pode liberar requisitos `SPD-*` para um milestone posterior.
 
-**Plans:** 4/4 plans planned (não executados) — gate de decisão, sem feature implementation.
+**Plans:** 4/4 plans complete — gate de decisão, sem feature implementation. Verificada `passed` em 2026-09-19; veredito global **`NO-GO — ADIADO`** (nenhum candidato atende todos os critérios obrigatórios; bloqueios = ausência de evidência/termos/autorização/infra, não inviabilidade estrutural). SPD-* permanecem diferidos; nenhum código de speed test criado.
 
 **Wave 1**
 
-- [ ] 05-01-PLAN.md — Pesquisa/evidência atualizada por candidato (Cloudflare/Ookla/M-Lab + alternativas) → `05-EVIDENCE.md`
+- [x] 05-01-PLAN.md — Pesquisa/evidência atualizada por candidato (Cloudflare/Ookla/M-Lab + LibreSpeed) → `05-EVIDENCE.md`
 
 **Wave 2** *(blocked on 05-01)*
 
-- [ ] 05-02-PLAN.md — Comparação dos candidatos (matriz critério × candidato) → `05-COMPARISON.md`
+- [x] 05-02-PLAN.md — Comparação dos candidatos (matriz critério × candidato) → `05-COMPARISON.md`
 
 **Wave 3** *(blocked on 05-02)*
 
-- [ ] 05-03-PLAN.md — Gate formal (veredito GO / NO-GO — ADIADO / NO-GO — DESCARTADO) → `05-SPEED-TEST-GATE.md`
+- [x] 05-03-PLAN.md — Gate formal (veredito `NO-GO — ADIADO`) → `05-SPEED-TEST-GATE.md`
 
 **Wave 4** *(blocked on 05-03)*
 
-- [ ] 05-04-PLAN.md — Verificação formal de GATE-01/GATE-02 → `05-VERIFICATION.md`
+- [x] 05-04-PLAN.md — Verificação formal de GATE-01/GATE-02 → `05-VERIFICATION.md`
 
 **Cross-cutting constraints:**
 - Nenhuma implementação de speed test; sem SDK/plugin; sem alterar `lib/`/`android/`; SPD-* diferidos até `GO` integral (D-14, D-20).
@@ -203,7 +203,7 @@ Gap-closure:
 | 2. Migração segura das ferramentas atuais | 4/4 | Complete    | 2026-08-31 |
 | 3. Diagnóstico de Internet completo e resiliente | 7/7 | Complete    | 2026-09-01 |
 | 4. Validação Android e documentação transparente | 4/4 | Complete    | 2026-09-19 |
-| 5. Gate de viabilidade do speed test | 0/4 | Planned | - |
+| 5. Gate de viabilidade do speed test | 4/4 | Complete | 2026-09-19 |
 
 ---
 *Roadmap created: 2026-08-10*
